@@ -1,6 +1,8 @@
 import { UserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
-import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
+import { ResponseObject, ResponseToolkit } from "@hapi/hapi";
+import { Request } from "@hapi/hapi/lib/types/request.js";
+
 
 export const accountsController = {
   index: {
@@ -36,6 +38,7 @@ export const accountsController = {
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const user = request.payload;
+      // @ts-ignore
       await db.userStore.addUser(user);
       return h.redirect("/");
     },
