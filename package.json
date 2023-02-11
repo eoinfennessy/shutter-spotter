@@ -2,13 +2,15 @@
   "name": "shutter-spotter",
   "version": "0.1.0",
   "description": "A location-based social app for photographers",
+  "type": "module",
   "main": "src/server.ts",
   "scripts": {
     "dev:tsc": "tsc --watch",
-    "dev:serve": "node --watch --watch-preserve-output lib/server.js",
+    "dev:serve": "node --watch --watch-preserve-output ./src/server.js",
     "dev": "run-p dev:*",
     "lint": "./node_modules/.bin/eslint . --ext .ts",
-    "start": "node lib/server.ts",
+    "build": "tsc --outDir build",
+    "start": "node build/server.ts",
     "test": "NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts"
   },
   "repository": {

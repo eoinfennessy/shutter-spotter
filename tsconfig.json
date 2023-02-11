@@ -11,11 +11,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "rootDir": "./src"
   },
   "exclude": [
     "test"
-  ],
-  "outDir": "./lib",
-  "rootDir": "./src"
+  ]
 }
