@@ -5,7 +5,7 @@ export const isNewPhoto = function (input: any): input is Omit<Photo, "_id" | "l
   return (
     typeof input === 'object' &&
     input !== null &&
-    typeof input.name === 'string' &&
+    typeof input.title === 'string' &&
     typeof input.description === 'string'
   );
 }

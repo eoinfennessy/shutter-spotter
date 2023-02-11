@@ -6,9 +6,11 @@ export const locationController = {
   index: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const location = await db.locationStore.getLocationById(request.params.id);
+      const photos = await db.photoStore.getPhotosByLocationId(request.params.id);
       const viewData = {
         title: "Location",
         location: location,
+        photos: photos
       };
       return h.view("location-view", viewData);
     },

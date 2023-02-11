@@ -1,5 +1,6 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
+import { Location } from "../models/store-types.js";
 import { isNewLocation } from "../utils/type-gaurds.js";
 
 export const dashboardController = {
@@ -23,18 +24,14 @@ export const dashboardController = {
   addLocation: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const loggedInUser = request.auth.credentials;
+      const payload = request.payload as Omit<Location, "_id" | "userId">
       const newLocation = {
         userId: loggedInUser._id,
-        // @ts-ignore
-        name: request.payload.name,
-        // @ts-ignore
-        latitude: request.payload.latitude,
-        // @ts-ignore
-        longitude: request.payload.longitude,
-      };
-      if (isNewLocation(newLocation)) {
-        await db.locationStore.addLocation(newLocation);
-      }
+        name: payload.name,
+        latitude: Number(payload.latitude),
+        longitude: Number(payload.longitude),
+      } as Omit<Location, "_id">;
+      await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
     },
   },
