@@ -1,3 +1,5 @@
+*.js
+
 # IDE
 .idea
 .vscode
