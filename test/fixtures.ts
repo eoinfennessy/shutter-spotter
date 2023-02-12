@@ -1,10 +1,3 @@
-export const maggie = {
-  firstName: "Maggie",
-  lastName: "Simpson",
-  email: "maggie@simpson.com",
-  password: "secret",
-};
-
 export const testUsers = [
   {
     firstName: "Homer",
@@ -25,6 +18,13 @@ export const testUsers = [
     password: "secret",
   },
 ];
+
+export const maggie = {
+  firstName: "Maggie",
+  lastName: "Simpson",
+  email: "maggie@simpson.com",
+  password: "secret",
+};
 
 export const testLocations = [
   {
@@ -48,4 +48,24 @@ export const waterford = {
   name: "Tramore",
   latitude: -10,
   longitude: 10
+}
+
+export const testPhotos = [
+  {
+    name: "Landscape",
+    description: "A beautiful landscape photo"
+  },
+  {
+    name: "Seascape",
+    description: "A beautiful seascape photo"
+  },
+  {
+    name: "Wildlife",
+    description: "A beautiful wildlife photo"
+  },
+];
+
+export const birdPhoto = {
+  name: "Birds",
+  description: "A beautiful bird photo"
 }
