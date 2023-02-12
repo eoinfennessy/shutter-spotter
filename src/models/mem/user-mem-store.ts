@@ -14,17 +14,17 @@ export const userMemStore: UserStore = {
     return userWithId;
   },
 
-  async getUserById(id: String): Promise<User | null> {
+  async getUserById(id: string): Promise<User | null> {
     const user = users.find((user) => user._id === id);
     return user ? user : null;
   },
 
-  async getUserByEmail(email: String): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<User | null> {
     const user = users.find((user) => user.email === email);
     return user ? user : null;
   },
 
-  async deleteUserById(id: String): Promise<void> {
+  async deleteUserById(id: string): Promise<void> {
     const index = users.findIndex((user) => user._id === id);
     if (index !== -1) users.splice(index, 1);
   },

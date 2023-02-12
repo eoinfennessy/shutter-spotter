@@ -1,13 +1,12 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { Location } from "../models/store-types.js";
-import { isNewLocation } from "../utils/type-gaurds.js";
 
 export const dashboardController = {
   index: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const loggedInUser = request.auth.credentials;
-      if (typeof loggedInUser._id === 'string') {
+      if (typeof loggedInUser._id === "string") {
         const locations = await db.locationStore.getUserLocations(loggedInUser._id);
         const viewData = {
           title: "ShutterSpotter Dashboard",
@@ -15,9 +14,8 @@ export const dashboardController = {
           locations: locations,
         };
         return h.view("dashboard-view", viewData);
-      } else {
-        return h.redirect("/login")
       }
+      return h.redirect("/login")
     },
   },
 

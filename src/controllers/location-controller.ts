@@ -10,7 +10,7 @@ export const locationController = {
       const viewData = {
         title: "Location",
         location: location,
-        photos: photos
+        photos: photos,
       };
       return h.view("location-view", viewData);
     },
@@ -22,15 +22,14 @@ export const locationController = {
       const newPhoto = {
         // @ts-ignore
         title: request.payload.title,
-        // @ts-ignore: 
+        // @ts-ignore:
         description: request.payload.description,
       };
       if (location && isNewPhoto(newPhoto)) {
         await db.photoStore.addPhoto(location._id, newPhoto);
         return h.redirect(`/location/${location._id}`);
-      } else {
-        return h.redirect("/dashboard");
       }
+      return h.redirect("/dashboard");
     },
   },
 
@@ -40,9 +39,8 @@ export const locationController = {
       await db.photoStore.deletePhoto(request.params.photoid);
       if (location) {
         return h.redirect(`/location/${location._id}`);
-      } else {
-        return h.redirect("/dashboard");
       }
+      return h.redirect("/dashboard");
     },
   },
 };

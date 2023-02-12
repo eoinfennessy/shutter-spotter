@@ -1,7 +1,6 @@
+import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
 import { UserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
-import { ResponseObject, ResponseToolkit } from "@hapi/hapi";
-import { Request } from "@hapi/hapi/lib/types/request.js";
 
 
 export const accountsController = {
@@ -26,6 +25,7 @@ export const accountsController = {
 
         // TODO: remove and fix error type
         console.log(`Error type: ${typeof error}`)
+        console.log(`Error attributes: ${error.attributes}`)
 
         return h
           .view("signup-view", {

@@ -26,8 +26,8 @@ export type UserStore = {
   getAllUsers: () => Promise<User[]>;
   addUser: (user: Omit<User, "_id">) => Promise<User>;
   getUserById: (id: string) => Promise<User | null>;
-  getUserByEmail: (email: String) => Promise<User | null>;
-  deleteUserById: (id: String) => Promise<void>;
+  getUserByEmail: (email: string) => Promise<User | null>;
+  deleteUserById: (id: string) => Promise<void>;
   deleteAll(): Promise<void>;
 };
 
