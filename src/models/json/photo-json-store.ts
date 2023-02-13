@@ -51,8 +51,9 @@ export const photoJsonStore: PhotoStore = {
   },
 
   async updatePhoto(photo: Photo, updatedPhoto: Omit<Photo, "_id" | "locationId">): Promise<void> {
-    photo.name = updatedPhoto.name;
-    photo.description = updatedPhoto.description;
+    Object.keys(updatedPhoto).forEach(key => {
+      photo[key as keyof Photo] = updatedPhoto[key as keyof Omit<Photo, "_id" | "locationId">];
+    });
     await db.write();
   },
 };
