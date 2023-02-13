@@ -10,7 +10,7 @@ suite("Location Model tests", () => {
   let locations: Location[] = [];
 
   setup(async () => {
-    db.init();
+    db.init("json");
     const user = await db.userStore.addUser(maggie);
     for (let i = 0; i < testLocations.length; i += 1) {
       const location = { ...testLocations[i], userId: user._id};

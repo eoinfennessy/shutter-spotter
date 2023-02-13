@@ -7,7 +7,7 @@ import Joi from "joi";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
 import { webRoutes } from "./web-routes.js";
-import { db } from "./models/db.js";
+import { db} from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +52,7 @@ async function init() {
   });
   server.auth.default("session");
 
-  db.init();
+  db.init("json");
   server.route(webRoutes);
   await server.start();
   console.log(`Server running on ${server.info.uri}`);

@@ -54,5 +54,5 @@ export type Db = {
   userStore: UserStore;
   locationStore: LocationStore;
   photoStore: PhotoStore;
-  init: () => void;
+  init: (dbType: "mem" | "json") => void;
 };

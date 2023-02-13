@@ -8,7 +8,7 @@ interface LowPhoto extends Low {
   data: { photos: Photo[] };
 }
 
-const db = new Low(new JSONFile("./src/models/json/locations.json")) as LowPhoto;
+const db = new Low(new JSONFile("./src/models/json/photos.json")) as LowPhoto;
 db.data = { photos: [] };
 
 export const photoJsonStore: PhotoStore = {
@@ -47,7 +47,7 @@ export const photoJsonStore: PhotoStore = {
 
   async deleteAllPhotos(): Promise<void> {
     db.data.photos = [];
-    db.write();
+    await db.write();
   },
 
   async updatePhoto(photo: Photo, updatedPhoto: Omit<Photo, "_id" | "locationId">): Promise<void> {

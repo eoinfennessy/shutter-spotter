@@ -11,7 +11,7 @@ suite("Photo Model tests", () => {
   let photos: Photo[] = [];
 
   setup(async () => {
-    db.init();
+    db.init("json");
     const user = await db.userStore.addUser(maggie);
     const location = await db.locationStore.addLocation({ ...waterford, userId: user._id });
     for (let i = 0; i < testPhotos.length; i++) {
@@ -55,12 +55,21 @@ suite("Photo Model tests", () => {
     }
   });
 
-  test("delete one location - success", async () => {
+  test("delete one photo - success", async () => {
     await db.photoStore.deletePhoto(photos[0]._id);
     const returnedPhotos = await db.photoStore.getAllPhotos();
     assert.equal(returnedPhotos.length, photos.length - 1);
     const deletedPhoto = await db.photoStore.getPhotoById(photos[0]._id);
     assert.isNull(deletedPhoto);
+  });
+
+  test("update photo - success", async () => {
+    const photo = (await db.photoStore.getAllPhotos())[0]
+    const updates = { name: "Greenway", description: "A Greenway photo" }
+    db.photoStore.updatePhoto(photo, updates)
+    const updatedPhoto = await db.photoStore.getPhotoById(photo._id);
+    assert.isNotNull(updatedPhoto)
+    assertSubset(updates, updatedPhoto);
   });
 
   test("get a photo - bad params", async () => {

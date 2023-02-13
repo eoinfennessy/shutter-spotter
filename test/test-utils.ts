@@ -1,4 +1,4 @@
-export function assertSubset(subset: {[key: string]: any}, superset: {[key: string]: any}) {
+export function assertSubset(subset: Record<string, any> | null, superset: Record<string, any> | null) {
   if (superset === null || subset === null) return false;
 
   if (superset instanceof Date || subset instanceof Date) return superset.valueOf() === subset.valueOf();

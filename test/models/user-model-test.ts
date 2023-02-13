@@ -10,7 +10,7 @@ suite("User Model tests", () => {
   let users: User[] = [];
 
   setup(async () => {
-    db.init();
+    db.init("json");
     for (let i = 0; i < testUsers.length; i += 1) {
       users.push(await db.userStore.addUser(testUsers[i]));
     }
