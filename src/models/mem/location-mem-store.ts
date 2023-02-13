@@ -16,8 +16,7 @@ export const locationMemStore: LocationStore = {
 
   async getLocationById(id: string): Promise<Location | null> {
     const location = locations.find((l) => l._id === id);
-    // location.photos = await photoMemStore.getPhotosByLocationId(location._id);
-    return location ? location : null;
+    return location || null;
   },
 
   async getUserLocations(userId: string): Promise<Location[]> {

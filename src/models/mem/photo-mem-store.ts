@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Photo, PhotoStore } from "../store-types";
+import { Photo, PhotoStore } from "../store-types.js";
 
 let photos: Photo[] = [];
 
@@ -19,11 +19,11 @@ export const photoMemStore: PhotoStore = {
   },
 
   async getPhotoById(id: string): Promise<Photo | null> {
-    const photo = photos.find((photo) => photo._id === id);
-    return photo ? photo : null
+    const photo = photos.find((p) => p._id === id);
+    return photo || null;
   },
 
-  async deletePhoto(id: string): Promise<void>  {
+  async deletePhoto(id: string): Promise<void> {
     const index = photos.findIndex((photo) => photo._id === id);
     if (index !== -1) photos.splice(index, 1);
   },
