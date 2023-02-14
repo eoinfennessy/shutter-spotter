@@ -1,35 +1,49 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { isNewPhoto } from "../utils/type-gaurds.js";
+import { PhotoSpec } from "../models/joi-schemas.js";
+import { Photo } from "../models/store-types.js";
+
+const getLocationViewData = async function (request: Request) {
+  const location = await db.locationStore.getLocationById(request.params.id);
+  const photos = await db.photoStore.getPhotosByLocationId(request.params.id);
+  return {
+    location: location,
+    photos: photos
+  };
+}
 
 export const locationController = {
   index: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
-      const location = await db.locationStore.getLocationById(request.params.id);
-      const photos = await db.photoStore.getPhotosByLocationId(request.params.id);
-      const viewData = {
-        title: "Location",
-        location: location,
-        photos: photos,
-      };
-      return h.view("location-view", viewData);
+      const viewData = await getLocationViewData(request);
+      return h.view("location-view", { ...viewData, title: "Location" });
     },
   },
 
   addPhoto: {
+    validate: {
+      payload: PhotoSpec,
+      options: { abortEarly: false, stripUnknown: true },
+      failAction: async function (request: Request, h: ResponseToolkit, error: Record<string, any>): Promise<ResponseObject> {
+        const viewData = await getLocationViewData(request);
+        return h
+          .view("location-view", {
+            ...viewData,
+            title: "Invalid Photo",
+            errors: error.details
+          })
+          .takeover()
+          .code(400);
+      },
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const location = await db.locationStore.getLocationById(request.params.id);
-      const newPhoto = {
-        // @ts-ignore
-        title: request.payload.title,
-        // @ts-ignore:
-        description: request.payload.description,
-      };
-      if (location && isNewPhoto(newPhoto)) {
-        await db.photoStore.addPhoto(location._id, newPhoto);
-        return h.redirect(`/location/${location._id}`);
+      if (location === null) {
+        return h.redirect("/dashboard");
       }
-      return h.redirect("/dashboard");
+      const newPhoto = request.payload as Omit<Photo, "_id" | "locationId">
+      await db.photoStore.addPhoto(location._id, newPhoto);
+      return h.redirect(`/location/${location._id}`);
     },
   },
 

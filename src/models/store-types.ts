@@ -1,15 +1,20 @@
-export type User = {
-  _id: string;
-  firstName: string;
-  lastName: string;
+export type UserCredentials = {
   email: string;
   password: string;
+}
+
+export type NewUser = UserCredentials & {
+  firstName: string;
+  lastName: string;
+}
+
+export type User = NewUser & {
+  _id: string;
 };
 
 export type Location = {
   _id: string;
   userId: string;
-  // photos?: Photo[];
   name: string;
   latitude: number;
   longitude: number;
@@ -18,7 +23,7 @@ export type Location = {
 export type Photo = {
   _id: string;
   locationId: string;
-  name: string;
+  title: string;
   description: string;
 };
 

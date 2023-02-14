@@ -52,20 +52,20 @@ export const waterford = {
 
 export const testPhotos = [
   {
-    name: "Landscape",
+    title: "Landscape",
     description: "A beautiful landscape photo"
   },
   {
-    name: "Seascape",
+    title: "Seascape",
     description: "A beautiful seascape photo"
   },
   {
-    name: "Wildlife",
+    title: "Wildlife",
     description: "A beautiful wildlife photo"
   },
 ];
 
 export const birdPhoto = {
-  name: "Birds",
+  title: "Birds",
   description: "A beautiful bird photo"
 }

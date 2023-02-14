@@ -65,7 +65,7 @@ suite("Photo Model tests", () => {
 
   test("update photo - success", async () => {
     const photo = (await db.photoStore.getAllPhotos())[0]
-    const updates = { name: "Greenway", description: "A Greenway photo" }
+    const updates = { title: "Greenway", description: "A Greenway photo" }
     db.photoStore.updatePhoto(photo, updates)
     const updatedPhoto = await db.photoStore.getPhotoById(photo._id);
     assert.isNotNull(updatedPhoto)
