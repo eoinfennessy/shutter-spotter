@@ -22,7 +22,8 @@ if (result.error) {
 async function init() {
   const server = Hapi.server({
     port: 3000,
-    host: "localhost",
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    host: process.env.HOST || "localhost",
   });
 
   await server.register(Vision);
