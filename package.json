@@ -5,12 +5,14 @@
   "type": "module",
   "main": "src/server.ts",
   "scripts": {
+    "build": "tsc",
+    "deployBuild": "npm install && tsc",
+    "deployCleanUp": "npm prune --production && find . -name \"*.ts\" -exec rm {} \\;",
     "dev:tsc": "tsc --watch",
     "dev:serve": "node --watch --watch-preserve-output ./src/server.js",
     "dev": "run-p dev:*",
     "lint": "./node_modules/.bin/eslint . --ext .ts",
-    "build": "tsc --outDir build",
-    "start": "node build/server.ts",
+    "start": "node src/server.js",
     "test": "NODE_OPTIONS='--loader ts-node/esm' mocha test/**/*.ts"
   },
   "repository": {
