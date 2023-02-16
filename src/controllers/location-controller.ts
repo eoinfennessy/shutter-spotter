@@ -1,6 +1,6 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { PhotoSpec } from "../models/joi-schemas.js";
+import { NewPhotoSpec } from "../models/joi-schemas.js";
 import { Photo } from "../models/store-types.js";
 
 const getLocationViewData = async function (request: Request) {
@@ -22,7 +22,7 @@ export const locationController = {
 
   addPhoto: {
     validate: {
-      payload: PhotoSpec,
+      payload: NewPhotoSpec,
       options: { abortEarly: false, stripUnknown: true },
       failAction: async function (request: Request, h: ResponseToolkit, error: Record<string, any>): Promise<ResponseObject> {
         const viewData = await getLocationViewData(request);

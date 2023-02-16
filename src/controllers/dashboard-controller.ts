@@ -1,6 +1,6 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { LocationSpec } from "../models/joi-schemas.js";
+import { NewLocationSpec } from "../models/joi-schemas.js";
 import { Location, User } from "../models/store-types.js";
 
 const getDashboardData = async function (request: Request) {
@@ -22,7 +22,7 @@ export const dashboardController = {
 
   addLocation: {
     validate: {
-      payload: LocationSpec,
+      payload: NewLocationSpec,
       options: { abortEarly: false, stripUnknown: true },
       failAction: async function (request: Request, h: ResponseToolkit, error: Record<string, any>): Promise<ResponseObject> {
         const viewData = await getDashboardData(request);

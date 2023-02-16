@@ -1,5 +1,5 @@
 import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
-import { UserLoginSpec, UserSpec } from "../models/joi-schemas.js";
+import { UserCredentialsSpec, NewUserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
 import { NewUser, UserCredentials } from "../models/store-types.js";
 
@@ -21,7 +21,7 @@ export const accountsController = {
   signup: {
     auth: false,
     validate: {
-      payload: UserSpec,
+      payload: NewUserSpec,
       options: { abortEarly: false, stripUnknown: true },
       failAction: function (request: Request, h: ResponseToolkit, error: Record<string, any>): ResponseObject {
         return h
@@ -50,7 +50,7 @@ export const accountsController = {
   login: {
     auth: false,
     validate: {
-      payload: UserLoginSpec,
+      payload: UserCredentialsSpec,
       options: { abortEarly: false, stripUnknown: true },
       failAction: function (request: Request, h: ResponseToolkit, error: Record<string, any>): ResponseObject {
         return h

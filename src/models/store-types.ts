@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export type UserCredentials = {
   email: string;
   password: string;
@@ -12,24 +14,33 @@ export type User = NewUser & {
   _id: string;
 };
 
-export type Location = {
-  _id: string;
+export type NewLocation = {
   userId: string;
   name: string;
   latitude: number;
   longitude: number;
 };
 
-export type Photo = {
+export type Location = NewLocation & {
   _id: string;
-  locationId: string;
+}
+
+export type NewPhoto = {
   title: string;
   description: string;
 };
 
+export type NewPhotoWithRefs = NewPhoto & {
+  locationId: string;
+};
+
+export type Photo = NewPhotoWithRefs & {
+  _id: string;
+};
+
 export type UserStore = {
   getAllUsers: () => Promise<User[]>;
-  addUser: (user: Omit<User, "_id">) => Promise<User>;
+  addUser: (user: NewUser) => Promise<User>;
   getUserById: (id: string) => Promise<User | null>;
   getUserByEmail: (email: string) => Promise<User | null>;
   deleteUserById: (id: string) => Promise<void>;
@@ -38,7 +49,7 @@ export type UserStore = {
 
 export type LocationStore = {
   getAllLocations: () => Promise<Location[]>;
-  addLocation: (location: Omit<Location, "_id">) => Promise<Location>;
+  addLocation: (location: NewLocation) => Promise<Location>;
   getLocationById: (id: string) => Promise<Location | null>;
   getUserLocations: (userId: string) => Promise<Location[]>;
   deleteLocationById: (id: string) => Promise<void>;
@@ -47,17 +58,19 @@ export type LocationStore = {
 
 export type PhotoStore = {
   getAllPhotos: () => Promise<Photo[]>;
-  addPhoto: (locationId: string, photo: Omit<Photo, "_id" | "locationId">) => Promise<Photo>;
+  addPhoto: (locationId: string, photo: NewPhoto) => Promise<Photo>;
   getPhotosByLocationId: (id: string) => Promise<Photo[]>;
   getPhotoById: (id: string) => Promise<Photo | null>;
   deletePhoto: (id: string) => Promise<void>;
   deleteAllPhotos: () => Promise<void>;
-  updatePhoto: (photo: Photo, updatedPhoto: Omit<Photo, "_id" | "locationId">) => Promise<void>;
+  updatePhoto: (photoId: string, updates: Partial<NewPhoto>) => Promise<Photo | null>;
 };
+
+export type DbTypes = "mem" | "json" | "mongo";
 
 export type Db = {
   userStore: UserStore;
   locationStore: LocationStore;
   photoStore: PhotoStore;
-  init: (dbType: "mem" | "json") => void;
+  init: (dbType: DbTypes) => void;
 };
