@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { User, UserStore } from "../store-types";
+import { NewUser, User, UserStore } from "../store-types";
 
 interface LowUser extends Low {
   data: { users: User[] };
@@ -17,7 +17,7 @@ export const userJsonStore: UserStore = {
     return db.data.users;
   },
 
-  async addUser(user: Omit<User, "_id">): Promise<User> {
+  async addUser(user: NewUser): Promise<User> {
     await db.read();
     const userWithId: User = { ...user, _id: v4() };
     db.data.users.push(userWithId);

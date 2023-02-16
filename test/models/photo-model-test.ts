@@ -11,7 +11,7 @@ suite("Photo Model tests", () => {
   let photos: Photo[] = [];
 
   setup(async () => {
-    db.init("json");
+    db.init("mongo");
     const user = await db.userStore.addUser(maggie);
     const location = await db.locationStore.addLocation({ ...waterford, userId: user._id });
     for (let i = 0; i < testPhotos.length; i++) {
@@ -66,7 +66,7 @@ suite("Photo Model tests", () => {
   test("update photo - success", async () => {
     const photo = (await db.photoStore.getAllPhotos())[0]
     const updates = { title: "Greenway", description: "A Greenway photo" }
-    db.photoStore.updatePhoto(photo, updates)
+    db.photoStore.updatePhoto(photo._id, updates)
     const updatedPhoto = await db.photoStore.getPhotoById(photo._id);
     assert.isNotNull(updatedPhoto)
     assertSubset(updates, updatedPhoto);

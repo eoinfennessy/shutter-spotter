@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { User, UserStore } from "../store-types.js";
+import { NewUser, User, UserStore } from "../store-types.js";
 
 let users: User[] = [];
 
@@ -8,7 +8,7 @@ export const userMemStore: UserStore = {
     return users;
   },
 
-  async addUser(user: Omit<User, "_id">): Promise<User> {
+  async addUser(user: NewUser): Promise<User> {
     const userWithId: User = { ...user, _id: v4() };
     users.push(userWithId);
     return userWithId;

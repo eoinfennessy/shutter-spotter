@@ -10,7 +10,7 @@ suite("User Model tests", () => {
   let users: User[] = [];
 
   setup(async () => {
-    db.init("json");
+    db.init("mongo");
     for (let i = 0; i < testUsers.length; i += 1) {
       users.push(await db.userStore.addUser(testUsers[i]));
     }

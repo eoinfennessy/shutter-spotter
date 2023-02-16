@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { Location, LocationStore } from "../store-types.js";
+import { Location, LocationStore, NewLocation } from "../store-types.js";
 
 interface LowLocation extends Low {
   data: { locations: Location[] };
@@ -17,7 +17,7 @@ export const locationJsonStore: LocationStore = {
     return db.data.locations;
   },
 
-  async addLocation(location: Omit<Location, "_id">): Promise<Location> {
+  async addLocation(location: NewLocation): Promise<Location> {
     await db.read();
     const locationWithId: Location = { ...location, _id: v4() };
     db.data.locations.push(locationWithId);
