@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { NewPhoto, Photo, PhotoStore } from "../store-types.js";
+import { NewPhoto, NewPhotoWithLocationId, Photo, PhotoStore } from "../store-types.js";
 
 let photos: Photo[] = [];
 
@@ -8,10 +8,10 @@ export const photoMemStore: PhotoStore = {
     return photos;
   },
 
-  async addPhoto(locationId: string, photo: Omit<Photo, "_id" | "locationId">): Promise<Photo> {
-    const photoWithIds: Photo = { ...photo, _id: v4(), locationId: locationId };
-    photos.push(photoWithIds);
-    return photoWithIds;
+  async addPhoto(photo: NewPhotoWithLocationId): Promise<Photo> {
+    const photoWithId: Photo = { ...photo, _id: v4() };
+    photos.push(photoWithId);
+    return photoWithId;
   },
 
   async getPhotosByLocationId(id: string): Promise<Photo[]> {

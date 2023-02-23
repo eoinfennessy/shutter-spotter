@@ -1,7 +1,7 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { NewLocationSpec } from "../models/joi-schemas.js";
-import { Location, User } from "../models/store-types.js";
+import { Location, NewLocation, NewLocationWithUserId, User } from "../models/store-types.js";
 
 const getDashboardData = async function (request: Request) {
   const loggedInUser = request.auth.credentials as User;
@@ -38,13 +38,13 @@ export const dashboardController = {
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const loggedInUser = request.auth.credentials;
-      const payload = request.payload as Omit<Location, "_id" | "userId">;
+      const payload = request.payload as NewLocation;
       const newLocation = {
         userId: loggedInUser._id,
         name: payload.name,
         latitude: Number(payload.latitude),
         longitude: Number(payload.longitude),
-      } as Omit<Location, "_id">;
+      } as NewLocationWithUserId;
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
     },

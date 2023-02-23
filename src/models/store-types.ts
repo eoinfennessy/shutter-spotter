@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 export type UserCredentials = {
   email: string;
   password: string;
@@ -15,13 +13,16 @@ export type User = NewUser & {
 };
 
 export type NewLocation = {
-  userId: string;
   name: string;
   latitude: number;
   longitude: number;
 };
 
-export type Location = NewLocation & {
+export type NewLocationWithUserId = NewLocation & {
+  userId: string;
+}
+
+export type Location = NewLocationWithUserId & {
   _id: string;
 }
 
@@ -30,11 +31,11 @@ export type NewPhoto = {
   description: string;
 };
 
-export type NewPhotoWithRefs = NewPhoto & {
+export type NewPhotoWithLocationId = NewPhoto & {
   locationId: string;
 };
 
-export type Photo = NewPhotoWithRefs & {
+export type Photo = NewPhotoWithLocationId & {
   _id: string;
 };
 
@@ -49,7 +50,7 @@ export type UserStore = {
 
 export type LocationStore = {
   getAllLocations: () => Promise<Location[]>;
-  addLocation: (location: NewLocation) => Promise<Location>;
+  addLocation: (location: NewLocationWithUserId) => Promise<Location>;
   getLocationById: (id: string) => Promise<Location | null>;
   getUserLocations: (userId: string) => Promise<Location[]>;
   deleteLocationById: (id: string) => Promise<void>;
@@ -58,7 +59,7 @@ export type LocationStore = {
 
 export type PhotoStore = {
   getAllPhotos: () => Promise<Photo[]>;
-  addPhoto: (locationId: string, photo: NewPhoto) => Promise<Photo>;
+  addPhoto: (photo: NewPhotoWithLocationId) => Promise<Photo>;
   getPhotosByLocationId: (id: string) => Promise<Photo[]>;
   getPhotoById: (id: string) => Promise<Photo | null>;
   deletePhoto: (id: string) => Promise<void>;

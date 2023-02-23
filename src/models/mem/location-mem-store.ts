@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Location, LocationStore, NewLocation } from "../store-types.js";
+import { Location, LocationStore, NewLocationWithUserId } from "../store-types.js";
 
 let locations: Location[] = [];
 
@@ -8,7 +8,7 @@ export const locationMemStore: LocationStore = {
     return locations;
   },
 
-  async addLocation(location: NewLocation): Promise<Location> {
+  async addLocation(location: NewLocationWithUserId): Promise<Location> {
     const locationWithId: Location = { ...location, _id: v4() };
     locations.push(locationWithId);
     return locationWithId;

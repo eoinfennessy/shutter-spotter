@@ -1,7 +1,7 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { NewPhotoSpec } from "../models/joi-schemas.js";
-import { Photo } from "../models/store-types.js";
+import { NewPhoto, Photo } from "../models/store-types.js";
 
 const getLocationViewData = async function (request: Request) {
   const location = await db.locationStore.getLocationById(request.params.id);
@@ -37,12 +37,12 @@ export const locationController = {
       },
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+      const payload = request.payload as NewPhoto
       const location = await db.locationStore.getLocationById(request.params.id);
       if (location === null) {
         return h.redirect("/dashboard");
       }
-      const newPhoto = request.payload as Omit<Photo, "_id" | "locationId">
-      await db.photoStore.addPhoto(location._id, newPhoto);
+      await db.photoStore.addPhoto({ ...payload, locationId: location._id });
       return h.redirect(`/location/${location._id}`);
     },
   },
