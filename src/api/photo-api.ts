@@ -1,8 +1,8 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { NewLocationWithUserIdSpec, NewPhotoWithLocationIdSpec } from "../models/joi-schemas.js";
-import { NewLocationWithUserId, Location, NewPhotoWithLocationId } from "../models/store-types.js";
+import { NewPhotoWithLocationIdSpec } from "../models/joi-schemas.js";
+import { NewPhotoWithLocationId } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const photoApi = {

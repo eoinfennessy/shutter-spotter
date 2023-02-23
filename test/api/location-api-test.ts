@@ -22,6 +22,25 @@ suite("Location API tests", () => {
     locations = [];
   });
 
+  test("get all locations", async () => {
+    let returnedLocations = await shutterSpotterService.getAllLocations();
+    assert.equal(returnedLocations.length, 3);
+  });
+
+  test("get user locations", async () => {
+    const dummyUser = await shutterSpotterService.createUser(maggie);
+    const newLocation = { ...waterford, userId: dummyUser._id }
+    await shutterSpotterService.createLocation({ ...newLocation, userId: dummyUser._id})
+
+    let returnedLocations: Location[] = await shutterSpotterService.getAllLocations();
+    assert.equal(returnedLocations.length, 4);
+    returnedLocations = await shutterSpotterService.getUserLocations(locations[0].userId);
+    assert.equal(returnedLocations.length, 3);
+    returnedLocations.forEach(location => {
+      assert.equal(location.userId, locations[0].userId)
+    });
+  });
+
   test("create a location", async () => {
     const user = await shutterSpotterService.createUser(maggie);
     const newLocation = { ...waterford, userId: user._id }

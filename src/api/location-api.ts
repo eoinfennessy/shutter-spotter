@@ -2,7 +2,7 @@ import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { NewLocationWithUserIdSpec } from "../models/joi-schemas.js";
-import { NewLocationWithUserId, Location } from "../models/store-types.js";
+import { NewLocationWithUserId } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const locationApi = {
@@ -44,7 +44,18 @@ export const locationApi = {
         }
         return h.response(location).code(200);
       } catch (err) {
-        return Boom.serverUnavailable("No Location with this id");
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+  },
+  findUserLocations: {
+    auth: false,
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      try {
+        const locations = await db.locationStore.getUserLocations(request.params.id);
+        return h.response(locations).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
       }
     },
   },
