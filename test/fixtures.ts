@@ -1,3 +1,5 @@
+export const serviceUrl = "http://localhost:3000";
+
 export const testUsers = [
   {
     firstName: "Homer",
@@ -29,8 +31,8 @@ export const maggie = {
 export const testLocations = [
   {
     name: "Woodstown",
-    latitude: 100,
-    longitude: 100
+    latitude: 80,
+    longitude: 80
   },
   {
     name: "Dunmore East",

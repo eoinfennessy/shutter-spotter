@@ -1,5 +1,5 @@
 import { PhotoMongoose } from "./photo.js";
-import { NewPhoto, Photo, PhotoStore } from "../store-types.js";
+import { NewPhoto, NewPhotoWithLocationId, Photo, PhotoStore } from "../store-types.js";
 import { Types } from "mongoose"
 
 function convertLeanPhotoToPhoto(photo: Record<string, any>) {
@@ -18,8 +18,8 @@ export const photoMongoStore: PhotoStore = {
     return photos;
   },
 
-  async addPhoto(locationId: string, photo: NewPhoto): Promise<Photo> {
-    const newPhoto = new PhotoMongoose({ ...photo, locationId: locationId });
+  async addPhoto(photo: NewPhotoWithLocationId): Promise<Photo> {
+    const newPhoto = new PhotoMongoose(photo);
     const docPhoto = await newPhoto.save();
     const objPhoto = docPhoto.toObject();
     return convertLeanPhotoToPhoto(objPhoto);

@@ -15,7 +15,7 @@ suite("Photo Model tests", () => {
     const user = await db.userStore.addUser(maggie);
     const location = await db.locationStore.addLocation({ ...waterford, userId: user._id });
     for (let i = 0; i < testPhotos.length; i++) {
-      photos.push(await db.photoStore.addPhoto(location._id, testPhotos[i]));
+      photos.push(await db.photoStore.addPhoto({ ...testPhotos[i], locationId: location._id }));
     }
   });
 
@@ -27,7 +27,7 @@ suite("Photo Model tests", () => {
 
   test("add a photo", async () => {
     const locations = await db.locationStore.getAllLocations();
-    const newPhoto = await db.photoStore.addPhoto(locations[0]._id, birdPhoto);
+    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id });
     assertSubset(birdPhoto, newPhoto);
   });
 
@@ -41,7 +41,7 @@ suite("Photo Model tests", () => {
 
   test("get a photo - success", async () => {
     const locations = await db.locationStore.getAllLocations();
-    const newPhoto = await db.photoStore.addPhoto(locations[0]._id, birdPhoto);
+    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id });
     const returnedPhoto = await db.photoStore.getPhotoById(newPhoto._id);
     assert.deepEqual(newPhoto, returnedPhoto);
   });

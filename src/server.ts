@@ -6,6 +6,7 @@ import path from "path";
 import Joi from "joi";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
+import { apiRoutes } from "./api-routes.js";
 import { webRoutes } from "./web-routes.js";
 import { db} from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
@@ -53,7 +54,8 @@ async function init() {
   });
   server.auth.default("session");
 
-  db.init("json");
+  db.init("mongo");
+  server.route(apiRoutes);
   server.route(webRoutes);
   await server.start();
   console.log(`Server running on ${server.info.uri}`);

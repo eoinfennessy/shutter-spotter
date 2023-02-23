@@ -53,6 +53,7 @@ suite("User Model tests", () => {
   test("get a user - bad params", async () => {
     assert.isNull(await db.userStore.getUserByEmail(""));
     assert.isNull(await db.userStore.getUserById(""));
+    assert.isNull(await db.userStore.getUserById("1234"));
     // @ts-ignore
     assert.isNull(await db.userStore.getUserById());
   });

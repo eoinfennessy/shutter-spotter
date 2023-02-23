@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { UserStore, User, NewUser } from "../store-types.js";
 import { UserMongoose } from "./user.js";
 
@@ -15,9 +16,9 @@ export const userMongoStore: UserStore = {
   },
 
   async getUserById(id: string): Promise<User | null> {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!id) {
-      return null
+    if (!Types.ObjectId.isValid(id)) {
+      console.error(`Bad ID: "${id}"`);
+      return null;
     }
     const leanUser = await UserMongoose.findOne({ _id: id }).lean();
     if (leanUser === null) {
@@ -38,7 +39,7 @@ export const userMongoStore: UserStore = {
     const user = await UserMongoose.findOne({ email: email }).lean();
     if (user === null) {
       return null
-    };
+    }
     return convertLeanUserToUser(user);
   },
 
@@ -46,7 +47,7 @@ export const userMongoStore: UserStore = {
     try {
       await UserMongoose.deleteOne({ _id: id });
     } catch (error) {
-      console.log("bad id");
+      console.log(`Bad ID: "${id}"`);
     }
   },
 

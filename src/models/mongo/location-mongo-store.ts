@@ -1,4 +1,4 @@
-import { Location, LocationStore, NewLocation } from "../store-types.js";
+import { Location, LocationStore, NewLocation, NewLocationWithUserId } from "../store-types.js";
 import { LocationMongoose } from "./location.js";
 import { Types } from "mongoose"
 
@@ -30,7 +30,7 @@ export const locationMongoStore: LocationStore = {
     return convertLeanLocationToLocation(location);
   },
 
-  async addLocation(location: NewLocation): Promise<Location> {
+  async addLocation(location: NewLocationWithUserId): Promise<Location> {
     const newLocation = new LocationMongoose(location);
     const docLocation = await newLocation.save();
     const leanLocation = docLocation.toObject();
