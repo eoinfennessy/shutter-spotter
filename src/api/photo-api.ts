@@ -48,6 +48,17 @@ export const photoApi = {
       }
     },
   },
+  findLocationPhotos: {
+    auth: false,
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      try {
+        const locations = await db.photoStore.getPhotosByLocationId(request.params.id);
+        return h.response(locations).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+  },
   deleteAll: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {

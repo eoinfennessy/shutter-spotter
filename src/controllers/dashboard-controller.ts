@@ -1,7 +1,7 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { NewLocationSpec } from "../models/joi-schemas.js";
-import { Location, NewLocation, NewLocationWithUserId, User } from "../models/store-types.js";
+import { NewLocation, NewLocationWithUserId, User } from "../models/store-types.js";
 
 const getDashboardData = async function (request: Request) {
   const loggedInUser = request.auth.credentials as User;

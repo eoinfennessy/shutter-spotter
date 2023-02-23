@@ -18,6 +18,7 @@ export const apiRoutes = [
 
   { method: "GET", path: "/api/photos", config: photoApi.find },
   { method: "GET", path: "/api/photos/{id}", config: photoApi.findOne },
+  { method: "GET", path: "/api/locations/{id}/photos", config: photoApi.findLocationPhotos },
   { method: "POST", path: "/api/photos", config: photoApi.create },
   { method: "DELETE", path: "/api/photos", config: photoApi.deleteAll },
   { method: "DELETE", path: "/api/photos/{id}", config: photoApi.deleteOne },

@@ -29,6 +29,21 @@ suite("Photo API tests", () => {
     photos = [];
   });
 
+  test("get all photos", async () => {
+    let returnedPhotos = await shutterSpotterService.getAllPhotos();
+    assert.equal(returnedPhotos.length, 9);
+  });
+
+  test("get photos by location ID", async () => {
+    let returnedPhotos: Photo[] = await shutterSpotterService.getAllPhotos();
+    assert.equal(returnedPhotos.length, 9);
+    returnedPhotos = await shutterSpotterService.getLocationPhotos(photos[0].locationId);
+    assert.equal(returnedPhotos.length, 3);
+    returnedPhotos.forEach(photo => {
+      assert.equal(photo.locationId, photos[0].locationId)
+    });
+  });
+
   test("create a photo", async () => {
     const newPhoto = { ...birdPhoto, locationId: locations[0]._id }
     const returnedphoto = await shutterSpotterService.createPhoto(newPhoto)

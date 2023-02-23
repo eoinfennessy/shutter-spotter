@@ -70,6 +70,11 @@ export const shutterSpotterService = {
     return res.data;
   },
 
+  async getLocationPhotos(photoId: string) {
+    const res = await axios.get(`${this.shutterSpotterUrl}/api/locations/${photoId}/photos`);
+    return res.data;
+  },
+
   async getAllPhotos() {
     const res = await axios.get(`${this.shutterSpotterUrl}/api/photos`);
     return res.data;
