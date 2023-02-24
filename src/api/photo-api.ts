@@ -1,7 +1,7 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { NewPhotoWithLocationIdSpec } from "../models/joi-schemas.js";
+import { IdSpec, NewPhotoWithLocationIdSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
 import { NewPhotoWithLocationId } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
@@ -17,12 +17,13 @@ export const photoApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
-    validate: {
-      payload: NewPhotoWithLocationIdSpec,
-      options: { stripUnknown: true },
-      failAction: validationError
-    },
+    tags: ["api"],
+    description: "Create a photo",
+    notes: "Returns the newly created photo",
+    validate: { payload: NewPhotoWithLocationIdSpec, options: { stripUnknown: true }, failAction: validationError },
+    response: { schema: PhotoSpec, failAction: validationError },
   },
+
   find: {
     auth: false,
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -33,7 +34,12 @@ export const photoApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get all photos",
+    notes: "Returns details of all photos",
+    response: { schema: PhotoArray, failAction: validationError}
   },
+
   findOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -47,7 +53,14 @@ export const photoApi = {
         return Boom.serverUnavailable("No Photo with this id");
       }
     },
+    tags: ["api"],
+    description: "Get a specific photo",
+    notes: "Returns details of photo matching specified ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: PhotoSpec, failAction: validationError },
+
   },
+
   findLocationPhotos: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -58,7 +71,13 @@ export const photoApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get all photos taken at location",
+    notes: "Returns details of all photos matching specified location ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: PhotoArray, failAction: validationError },
   },
+
   deleteAll: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -69,7 +88,11 @@ export const photoApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Deletes all photos",
+    notes: "Deletes all photos from ShutterSpotter's DB",
   },
+
   deleteOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -80,5 +103,9 @@ export const photoApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Deletes a specific photo",
+    notes: "Deletes location matching specified ID from the ShutterSpotter DB",
+    validate: { params: { id: IdSpec }, failAction: validationError },
   },
 };

@@ -3,13 +3,14 @@ import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
 import dotenv from "dotenv";
 import path from "path";
+import HapiSwagger from "hapi-swagger";
 import Inert from "@hapi/inert";
 import Joi from "joi";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
 import { apiRoutes } from "./api-routes.js";
 import { webRoutes } from "./web-routes.js";
-import { db} from "./models/db.js";
+import { db } from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,13 @@ if (result.error) {
   process.exit(1);
 }
 
+const swaggerOptions = {
+  info: {
+    title: "ShutterSpotter API",
+    version: "0.2",
+  },
+};
+
 async function init() {
   const server = Hapi.server({
     port: 3000,
@@ -31,6 +39,10 @@ async function init() {
   await server.register(Vision);
   await server.register(Cookie);
   await server.register(Inert);
+  // @ts-ignore
+  await server.register([Inert, Vision, { plugin: HapiSwagger, options: swaggerOptions }]);
+
+
   server.validator(Joi);
 
   server.views({

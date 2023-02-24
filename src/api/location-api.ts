@@ -1,7 +1,7 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { NewLocationWithUserIdSpec } from "../models/joi-schemas.js";
+import { IdSpec, LocationArray, LocationSpec, NewLocationWithUserIdSpec } from "../models/joi-schemas.js";
 import { NewLocationWithUserId } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
@@ -17,12 +17,13 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
-    validate: {
-      payload: NewLocationWithUserIdSpec,
-      options: { stripUnknown: true },
-      failAction: validationError
-    },
+    tags: ["api"],
+    description: "Create a location",
+    notes: "Returns the newly created location",
+    validate: { payload: NewLocationWithUserIdSpec, options: { stripUnknown: true }, failAction: validationError },
+    response: { schema: LocationSpec, failAction: validationError },
   },
+
   find: {
     auth: false,
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -33,7 +34,12 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get all locations",
+    notes: "Returns details of all locations",
+    response: { schema: LocationArray, failAction: validationError },
   },
+
   findOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -47,7 +53,13 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get a specific location",
+    notes: "Returns details of location matching specified ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: LocationSpec, failAction: validationError },
   },
+
   findUserLocations: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -58,7 +70,13 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get a user's locations",
+    notes: "Returns details of all locations matching specified user ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: LocationArray, failAction: validationError },
   },
+
   deleteAll: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -69,7 +87,11 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Deletes all locations",
+    notes: "Deletes all locations from ShutterSpotter's DB",
   },
+
   deleteOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -80,5 +102,9 @@ export const locationApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Deletes a specific location",
+    notes: "Deletes location matching specified ID from the ShutterSpotter DB",
+    validate: { params: { id: IdSpec }, failAction: validationError },
   },
 };

@@ -1,8 +1,8 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { NewUserSpec } from "../models/joi-schemas.js";
-import { NewUser, User } from "../models/store-types.js";
+import { IdSpec, NewUserSpec, UserArray, UserSpec } from "../models/joi-schemas.js";
+import { NewUser } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const userApi = {
@@ -21,12 +21,13 @@ export const userApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
-    validate: {
-      payload: NewUserSpec,
-      options: { stripUnknown: true },
-      failAction: validationError
-    },
+    tags: ["api"],
+    description: "Create a User",
+    notes: "Returns the newly created user",
+    validate: { payload: NewUserSpec, options: { stripUnknown: true }, failAction: validationError },
+    response: { schema: UserSpec, failAction: validationError },
   },
+
   find: {
     auth: false,
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -37,7 +38,12 @@ export const userApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Get all users",
+    notes: "Returns details of all users",
+    response: { schema: UserArray, failAction: validationError },
   },
+
   findOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -51,7 +57,13 @@ export const userApi = {
         return Boom.serverUnavailable("Database error");
       }
     },
+    tags: ["api"],
+    description: "Get a specific user",
+    notes: "Returns user details matching specified ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpec, failAction: validationError },
   },
+
   deleteAll: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -62,7 +74,11 @@ export const userApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Delete all users",
+    notes: "Deletes all users from the ShutterSpotter DB"
   },
+
   deleteOne: {
     auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -73,5 +89,9 @@ export const userApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Deletes specific user",
+    notes: "Deletes user matching specified ID from the ShutterSpotter DB",
+    validate: { params: { id: IdSpec }, failAction: validationError },
   },
 };
