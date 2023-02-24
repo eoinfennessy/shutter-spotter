@@ -5,13 +5,13 @@ export const IdSpec = Joi.string().required().label("IdSpec")
 // User
 
 export const UserCredentialsSpec = Joi.object().keys({
-  email: Joi.string().email().required(),
-  password: Joi.string().required() // .min(8)
+  email: Joi.string().email().required().example("joe@bloggs.com"),
+  password: Joi.string().required().example("topsecret") // .min(8)
 }).label("UserCredentialsSpec");
 
 export const NewUserSpec = UserCredentialsSpec.keys({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required()
+  firstName: Joi.string().required().example("Joe"),
+  lastName: Joi.string().required().example("Bloggs")
 }).label("NewUserSpec");
 
 export const UserSpec = NewUserSpec.keys({
@@ -23,9 +23,9 @@ export const UserArray = Joi.array().items(UserSpec).label("UserArray");
 // Location
 
 export const NewLocationSpec = Joi.object().keys({
-  name: Joi.string().required(),
-  latitude: Joi.number().min(-90).max(90),
-  longitude: Joi.number().min(-180).max(180)
+  name: Joi.string().required().example("Waterford"),
+  latitude: Joi.number().min(-90).max(90).example(52.25833),
+  longitude: Joi.number().min(-180).max(180).example(-7.11194)
 }).label("NewLocationSpec");
 
 export const NewLocationWithUserIdSpec = NewLocationSpec.keys({
@@ -41,8 +41,8 @@ export const LocationArray = Joi.array().items(LocationSpec).label("LocationArra
 // Photo
 
 export const NewPhotoSpec = Joi.object().keys({
-  title: Joi.string().required(),
-  description: Joi.string().required().max(300),
+  title: Joi.string().required().example("Dunmore East Sunset"),
+  description: Joi.string().required().max(300).example("A beautiful sunset at Dunmore East"),
 }).label("NewPhotoSpec");
 
 export const NewPhotoWithLocationIdSpec = NewPhotoSpec.keys({
