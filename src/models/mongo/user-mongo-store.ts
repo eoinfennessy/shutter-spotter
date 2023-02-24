@@ -4,6 +4,7 @@ import { UserMongoose } from "./user.js";
 
 function convertLeanUserToUser(user: Record<string, any>) {
   user._id = String(user._id)
+  delete user.__v
   return user as User
 }
 
@@ -31,7 +32,7 @@ export const userMongoStore: UserStore = {
   async addUser(user: NewUser): Promise<User> {
     const newUser = new UserMongoose(user);
     const docUser = await newUser.save();
-    const leanUser = docUser.toObject()
+    const leanUser = docUser.toObject();
     return convertLeanUserToUser(leanUser);
   },
 

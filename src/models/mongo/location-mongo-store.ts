@@ -5,6 +5,7 @@ import { Types } from "mongoose"
 function convertLeanLocationToLocation(location: Record<string, any>) {
   location._id = String(location._id)
   location.userId = String(location.userId)
+  delete location.__v
   return location as Location
 }
 

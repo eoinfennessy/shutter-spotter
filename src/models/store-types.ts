@@ -1,3 +1,7 @@
+export type Id = string
+
+export type MongooseVersion = { __v: number }
+
 export type UserCredentials = {
   email: string;
   password: string;
@@ -9,7 +13,7 @@ export type NewUser = UserCredentials & {
 }
 
 export type User = NewUser & {
-  _id: string;
+  _id: Id;
 };
 
 export type NewLocation = {
@@ -19,11 +23,11 @@ export type NewLocation = {
 };
 
 export type NewLocationWithUserId = NewLocation & {
-  userId: string;
+  userId: Id;
 }
 
 export type Location = NewLocationWithUserId & {
-  _id: string;
+  _id: Id;
 }
 
 export type NewPhoto = {
@@ -32,39 +36,39 @@ export type NewPhoto = {
 };
 
 export type NewPhotoWithLocationId = NewPhoto & {
-  locationId: string;
+  locationId: Id;
 };
 
 export type Photo = NewPhotoWithLocationId & {
-  _id: string;
+  _id: Id;
 };
 
 export type UserStore = {
   getAllUsers: () => Promise<User[]>;
   addUser: (user: NewUser) => Promise<User>;
-  getUserById: (id: string) => Promise<User | null>;
+  getUserById: (id: Id) => Promise<User | null>;
   getUserByEmail: (email: string) => Promise<User | null>;
-  deleteUserById: (id: string) => Promise<void>;
+  deleteUserById: (id: Id) => Promise<void>;
   deleteAll(): Promise<void>;
 };
 
 export type LocationStore = {
   getAllLocations: () => Promise<Location[]>;
   addLocation: (location: NewLocationWithUserId) => Promise<Location>;
-  getLocationById: (id: string) => Promise<Location | null>;
-  getUserLocations: (userId: string) => Promise<Location[]>;
-  deleteLocationById: (id: string) => Promise<void>;
+  getLocationById: (id: Id) => Promise<Location | null>;
+  getUserLocations: (userId: Id) => Promise<Location[]>;
+  deleteLocationById: (id: Id) => Promise<void>;
   deleteAllLocations: () => Promise<void>;
 };
 
 export type PhotoStore = {
   getAllPhotos: () => Promise<Photo[]>;
   addPhoto: (photo: NewPhotoWithLocationId) => Promise<Photo>;
-  getPhotosByLocationId: (id: string) => Promise<Photo[]>;
-  getPhotoById: (id: string) => Promise<Photo | null>;
-  deletePhoto: (id: string) => Promise<void>;
+  getPhotosByLocationId: (id: Id) => Promise<Photo[]>;
+  getPhotoById: (id: Id) => Promise<Photo | null>;
+  deletePhoto: (id: Id) => Promise<void>;
   deleteAllPhotos: () => Promise<void>;
-  updatePhoto: (photoId: string, updates: Partial<NewPhoto>) => Promise<Photo | null>;
+  updatePhoto: (photoId: Id, updates: Partial<NewPhoto>) => Promise<Photo | null>;
 };
 
 export type DbTypes = "mem" | "json" | "mongo";

@@ -1,5 +1,5 @@
 import Mongoose from "mongoose";
-import { NewPhoto, NewPhotoWithLocationId } from "../store-types";
+import { MongooseVersion, NewPhoto, NewPhotoWithLocationId } from "../store-types";
 
 const { Schema } = Mongoose;
 
@@ -13,4 +13,4 @@ const photoSchema = new Schema({
   },
 });
 
-export const PhotoMongoose = Mongoose.model<NewPhotoWithLocationId>("Photo", photoSchema);
+export const PhotoMongoose = Mongoose.model<NewPhotoWithLocationId & MongooseVersion>("Photo", photoSchema);

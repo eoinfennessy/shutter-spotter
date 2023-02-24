@@ -5,6 +5,7 @@ import { Types } from "mongoose"
 function convertLeanPhotoToPhoto(photo: Record<string, any>) {
   photo._id = String(photo._id)
   photo.locationId = String(photo.locationId)
+  delete photo.__v
   return photo as Photo
 }
 
