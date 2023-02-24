@@ -20,4 +20,6 @@ export const webRoutes = [
   { method: "GET", path: "/location/{id}", config: locationController.index },
   { method: "POST", path: "/location/{id}/addphoto", config: locationController.addPhoto },
   { method: "GET", path: "/location/{id}/deletephoto/{photoid}", config: locationController.deletePhoto },
+
+  { method: "GET", path: "/{param*}", handler: { directory: { path: "./public" } }, options: { auth: false as const } }
 ];

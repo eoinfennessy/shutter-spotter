@@ -3,6 +3,7 @@ import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
 import dotenv from "dotenv";
 import path from "path";
+import Inert from "@hapi/inert";
 import Joi from "joi";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
@@ -29,6 +30,7 @@ async function init() {
 
   await server.register(Vision);
   await server.register(Cookie);
+  await server.register(Inert);
   server.validator(Joi);
 
   server.views({
