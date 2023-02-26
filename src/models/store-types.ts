@@ -2,6 +2,11 @@ export type Id = string
 
 export type MongooseVersion = { __v: number }
 
+export type JwtPayload = {
+  id: Id,
+  email: string
+}
+
 export type UserCredentials = {
   email: string;
   password: string;

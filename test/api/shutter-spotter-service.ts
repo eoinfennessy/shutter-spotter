@@ -1,9 +1,19 @@
 import axios from "axios";
 import { serviceUrl } from "../fixtures.js";
-import { Location, NewUser, User, NewLocationWithUserId, NewPhotoWithLocationId } from "../../src/models/store-types.js"
+import { NewUser, NewLocationWithUserId, NewPhotoWithLocationId, UserCredentials } from "../../src/models/store-types.js"
 
 export const shutterSpotterService = {
   shutterSpotterUrl: serviceUrl,
+
+  async authenticate(user: UserCredentials) {
+    const response = await axios.post(`${this.shutterSpotterUrl}/api/users/authenticate`, user);
+    axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+    return response.data;
+  },
+
+  async clearAuth() {
+    axios.defaults.headers.common["Authorization"] = "";
+  },
 
   async createUser(user: NewUser) {
     const res = await axios.post(`${this.shutterSpotterUrl}/api/users`, user);

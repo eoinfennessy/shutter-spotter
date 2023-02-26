@@ -22,4 +22,6 @@ export const apiRoutes = [
   { method: "POST", path: "/api/photos", config: photoApi.create },
   { method: "DELETE", path: "/api/photos", config: photoApi.deleteAll },
   { method: "DELETE", path: "/api/photos/{id}", config: photoApi.deleteOne },
+
+  { method: "POST", path: "/api/users/authenticate", config: userApi.authenticate },
 ];

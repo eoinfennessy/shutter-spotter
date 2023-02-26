@@ -1,7 +1,7 @@
 import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
 import { UserCredentialsSpec, NewUserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
-import { NewUser, UserCredentials } from "../models/store-types.js";
+import { NewUser, User, UserCredentials } from "../models/store-types.js";
 
 export const accountsController = {
   index: {
@@ -80,7 +80,7 @@ export const accountsController = {
     },
   },
 
-  async validate(request: Request, session: { id: string }): Promise<{ isValid: boolean, credentials?: any }> {
+  async validate(request: Request, session: { id: string }): Promise<{ isValid: true, credentials: User } | { isValid: false }> {
     const user = await db.userStore.getUserById(session.id);
     if (!user) {
       return { isValid: false };
