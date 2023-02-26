@@ -1,25 +1,24 @@
 import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
+import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
-import { maggie, testUsers, testLocations, waterford } from "../fixtures.js";
-import { User, Location } from "../../src/models/store-types.js";
+import { maggie, testLocations, waterford } from "../fixtures.js";
+import { Location } from "../../src/models/store-types.js";
+
+const locations = new Array(testLocations.length)
 
 suite("Location API tests", () => {
-  shutterSpotterService.deleteAllLocations();
-  shutterSpotterService.deleteAllUsers();
-  let locations: Location[] = [];
-
   setup(async () => {
+    await shutterSpotterService.createUser(maggie);
+    await shutterSpotterService.authenticate(maggie);
+    await shutterSpotterService.deleteAllLocations();
+    await shutterSpotterService.deleteAllUsers();
+
     const user = await shutterSpotterService.createUser(maggie);
+    await shutterSpotterService.authenticate(maggie);
     for (let i = 0; i < testLocations.length; i++) {
-      locations.push(await shutterSpotterService.createLocation({ ...testLocations[i], userId: user._id}))
+      locations[i] = await shutterSpotterService.createLocation({ ...testLocations[i], userId: user._id})
     }
-  });
-  
-  teardown(async () => {
-    shutterSpotterService.deleteAllLocations();
-    shutterSpotterService.deleteAllUsers();
-    locations = [];
   });
 
   test("get all locations", async () => {
