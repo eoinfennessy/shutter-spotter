@@ -6,6 +6,7 @@ export const apiRoutes = [
   { method: "GET", path: "/api/users", config: userApi.find },
   { method: "GET", path: "/api/users/{id}", config: userApi.findOne },
   { method: "POST", path: "/api/users", config: userApi.create },
+  { method: "POST", path: "/api/users/authenticate", config: userApi.authenticate },
   { method: "DELETE", path: "/api/users", config: userApi.deleteAll },
   { method: "DELETE", path: "/api/users/{id}", config: userApi.deleteOne },
 
@@ -22,6 +23,4 @@ export const apiRoutes = [
   { method: "POST", path: "/api/photos", config: photoApi.create },
   { method: "DELETE", path: "/api/photos", config: photoApi.deleteAll },
   { method: "DELETE", path: "/api/photos/{id}", config: photoApi.deleteOne },
-
-  { method: "POST", path: "/api/users/authenticate", config: userApi.authenticate },
 ];

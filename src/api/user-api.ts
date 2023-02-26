@@ -2,7 +2,7 @@ import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { createToken } from "./jwt-utils.js";
 import { db } from "../models/db.js";
-import { IdSpec, NewUserSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
+import { IdSpec, JwtAuth, NewUserSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
 import { NewUser, UserCredentials } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
@@ -25,7 +25,11 @@ export const userApi = {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    tags: ["api"],
+    description: "Authenticates a User",
+    notes: "Creates and return a JWT token if user's credentials are valid; otherwise returns 401 error.",
     validate: { payload: UserCredentialsSpec, options: { stripUnknown: true }, failAction: validationError },
+    response: { schema: JwtAuth, failAction: validationError }
   },
   
   create: {
