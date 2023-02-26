@@ -7,7 +7,9 @@ import { validationError } from "./logger.js";
 
 export const locationApi = {
   create: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const locationPayload = request.payload as NewLocationWithUserId
@@ -25,7 +27,9 @@ export const locationApi = {
   },
 
   find: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const locations = await db.locationStore.getAllLocations();
@@ -41,7 +45,9 @@ export const locationApi = {
   },
 
   findOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
@@ -61,7 +67,9 @@ export const locationApi = {
   },
 
   findUserLocations: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const locations = await db.locationStore.getUserLocations(request.params.id);
@@ -78,7 +86,9 @@ export const locationApi = {
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.locationStore.deleteAllLocations();
@@ -93,7 +103,9 @@ export const locationApi = {
   },
 
   deleteOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.locationStore.deleteLocationById(request.params.id);

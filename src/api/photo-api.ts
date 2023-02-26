@@ -7,7 +7,9 @@ import { validationError } from "./logger.js";
 
 export const photoApi = {
   create: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const photoPayload = request.payload as NewPhotoWithLocationId
@@ -25,7 +27,9 @@ export const photoApi = {
   },
 
   find: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const photos = await db.photoStore.getAllPhotos();
@@ -41,7 +45,9 @@ export const photoApi = {
   },
 
   findOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const photo = await db.photoStore.getPhotoById(request.params.id);
@@ -62,7 +68,9 @@ export const photoApi = {
   },
 
   findLocationPhotos: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const locations = await db.photoStore.getPhotosByLocationId(request.params.id);
@@ -79,7 +87,9 @@ export const photoApi = {
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.photoStore.deleteAllPhotos();
@@ -94,7 +104,9 @@ export const photoApi = {
   },
 
   deleteOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.photoStore.deletePhoto(request.params.id);

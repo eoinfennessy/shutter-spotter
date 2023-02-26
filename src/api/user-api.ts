@@ -1,11 +1,33 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
+import { createToken } from "./jwt-utils.js";
 import { db } from "../models/db.js";
-import { IdSpec, NewUserSpec, UserArray, UserSpec } from "../models/joi-schemas.js";
-import { NewUser } from "../models/store-types.js";
+import { IdSpec, NewUserSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
+import { NewUser, UserCredentials } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const userApi = {
+  authenticate: {
+    auth: false,
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      const payload = request.payload as UserCredentials;
+      try {
+        const user = await db.userStore.getUserByEmail(payload.email);
+        if (!user) {
+          return Boom.unauthorized("User not found");
+        }
+        if (user.password !== payload.password) {
+          return Boom.unauthorized("Invalid password");
+        }
+        const token = createToken(user);
+        return h.response({ success: true, token: token }).code(201);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    validate: { payload: UserCredentialsSpec, options: { stripUnknown: true }, failAction: validationError },
+  },
+  
   create: {
     auth: false,
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
@@ -29,7 +51,9 @@ export const userApi = {
   },
 
   find: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const users = await db.userStore.getAllUsers();
@@ -45,7 +69,9 @@ export const userApi = {
   },
 
   findOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const user = await db.userStore.getUserById(request.params.id);
@@ -65,7 +91,9 @@ export const userApi = {
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.userStore.deleteAll();
@@ -80,7 +108,9 @@ export const userApi = {
   },
 
   deleteOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         await db.userStore.deleteUserById(request.params.id);
