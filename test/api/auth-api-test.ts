@@ -14,8 +14,9 @@ suite("Authentication API tests", async () => {
 
   test("authenticate", async () => {
     const returnedUser = await shutterSpotterService.createUser(maggie);
+    console.log(returnedUser)
     const response = await shutterSpotterService.authenticate({ email: maggie.email, password: maggie.password });
-    // console.log(response)
+    console.log(response)
     assert(response.success);
     assert.isDefined(response.token);
   });
@@ -23,10 +24,14 @@ suite("Authentication API tests", async () => {
   test("verify Token", async () => {
     const returnedUser = await shutterSpotterService.createUser(maggie);
     const response = await shutterSpotterService.authenticate(maggie);
-
     const userInfo = decodeToken(response.token);
-    assert.equal(userInfo.email, returnedUser.email);
-    assert.equal(userInfo.userId, returnedUser._id);
+    if (userInfo === null) {
+      assert.fail("userInfo is null")
+    } else {
+      assert.equal(userInfo.email, returnedUser.email);
+      assert.equal(userInfo.id, returnedUser._id);
+      assert.deepEqual(userInfo.scope, returnedUser.scope);
+    }
   });
 
   test("check Unauthorized", async () => {

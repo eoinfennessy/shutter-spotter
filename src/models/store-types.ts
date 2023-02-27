@@ -4,7 +4,8 @@ export type MongooseVersion = { __v: number }
 
 export type JwtPayload = {
   id: Id,
-  email: string
+  email: string,
+  scope: string[]
 }
 
 export type UserCredentials = {
