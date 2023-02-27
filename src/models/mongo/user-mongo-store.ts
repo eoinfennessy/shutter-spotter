@@ -30,7 +30,8 @@ export const userMongoStore: UserStore = {
   },
 
   async addUser(user: NewUser): Promise<User> {
-    const newUser = new UserMongoose(user);
+    const id = new Types.ObjectId();
+    const newUser = new UserMongoose({ ...user, _id: id, scope: ["user", `user-${id.toHexString()}`] });
     const docUser = await newUser.save();
     const leanUser = docUser.toObject();
     return convertLeanUserToUser(leanUser);

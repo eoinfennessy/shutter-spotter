@@ -19,7 +19,8 @@ export const userJsonStore: UserStore = {
 
   async addUser(user: NewUser): Promise<User> {
     await db.read();
-    const userWithId: User = { ...user, _id: v4() };
+    const id = v4();
+    const userWithId: User = { ...user, _id: id, scope: ["user", `user-${id}`] };
     db.data.users.push(userWithId);
     await db.write();
     return userWithId;

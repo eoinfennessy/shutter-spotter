@@ -5,20 +5,19 @@ import { maggie, testUsers } from "../fixtures.js";
 import { User } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
 
-suite("User Model tests", () => {
-  db.userStore.deleteAll();
-  let users: User[] = [];
+const users: User[] = new Array(testUsers.length);
 
+suite("User Model tests", () => {
   setup(async () => {
+    await db.userStore.deleteAll();
     db.init("mongo");
     for (let i = 0; i < testUsers.length; i += 1) {
-      users.push(await db.userStore.addUser(testUsers[i]));
+      users[i] = await db.userStore.addUser(testUsers[i])
     }
   });
 
   teardown(async () => {
     await db.userStore.deleteAll();
-    users = [];
   });
 
   test("create a user", async () => {

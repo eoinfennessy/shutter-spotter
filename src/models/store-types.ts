@@ -19,6 +19,7 @@ export type NewUser = UserCredentials & {
 
 export type User = NewUser & {
   _id: Id;
+  scope: string[];
 };
 
 export type NewLocation = {

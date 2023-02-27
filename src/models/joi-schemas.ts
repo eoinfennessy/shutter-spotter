@@ -20,7 +20,8 @@ export const NewUserSpec = UserCredentialsSpec.keys({
 }).label("NewUserSpec");
 
 export const UserSpec = NewUserSpec.keys({
-  _id: IdSpec
+  _id: IdSpec,
+  scope: Joi.array().items(Joi.string()).required().example(["user", "user-1234asdf", "admin"])
 }).label("UserSpec");
 
 export const UserArray = Joi.array().items(UserSpec).label("UserArray");
