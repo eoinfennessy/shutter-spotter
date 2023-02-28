@@ -51,4 +51,12 @@ export const userJsonStore: UserStore = {
     db.data.users = [];
     await db.write();
   },
+
+  async addScope(id: string, scope: string): Promise<void> {
+    const user = await this.getUserById(id);
+    if (user === null) return;
+    if (user.scope.indexOf(scope) !== -1) return;
+    user.scope.push(scope);
+    await db.write();
+  }
 };

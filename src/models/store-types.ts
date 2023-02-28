@@ -56,7 +56,8 @@ export type UserStore = {
   getUserById: (id: Id) => Promise<User | null>;
   getUserByEmail: (email: string) => Promise<User | null>;
   deleteUserById: (id: Id) => Promise<void>;
-  deleteAll(): Promise<void>;
+  deleteAll: () => Promise<void>;
+  addScope: (id: Id, scope: string) => Promise<void>;
 };
 
 export type LocationStore = {

@@ -49,11 +49,19 @@ export const userMongoStore: UserStore = {
     try {
       await UserMongoose.deleteOne({ _id: id });
     } catch (error) {
-      console.log(`Bad ID: "${id}"`);
+      console.error(`Bad ID: "${id}"`);
     }
   },
 
   async deleteAll() {
     await UserMongoose.deleteMany({});
+  },
+
+  async addScope(id: string, scope: string): Promise<void> {
+    if (!Types.ObjectId.isValid(id)) {
+      console.error(`Bad ID: "${id}"`);
+      return;
+    }
+    await UserMongoose.findByIdAndUpdate(id, { $addToSet: { scope: scope } })
   }
 };

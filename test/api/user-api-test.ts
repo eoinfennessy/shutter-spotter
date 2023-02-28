@@ -3,9 +3,8 @@ import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, testUsers } from "../fixtures.js";
-import { User } from "../../src/models/store-types.js";
 
-const users = new Array(testUsers.length)
+const users = new Array(testUsers.length);
 
 suite("User API tests", () => {
   setup(async () => {
@@ -37,7 +36,7 @@ suite("User API tests", () => {
     returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 1);
   });
-  
+
   test("delete one user - success", async () => {
     let returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 4);
@@ -52,7 +51,7 @@ suite("User API tests", () => {
       assert.equal(error.response.data.statusCode, 404);
     }
   });
-  
+
   test("delete one user - bad ID", async () => {
     let returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 4);

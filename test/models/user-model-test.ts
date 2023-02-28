@@ -62,4 +62,21 @@ suite("User Model tests", () => {
     const allUsers = await db.userStore.getAllUsers();
     assert.equal(users.length, allUsers.length);
   });
+
+  test("Add scope to user - success",async () => {
+    await db.userStore.addScope(users[0]._id, "admin");
+    const user = await db.userStore.getUserById(users[0]._id);
+    if (user !== null) {
+      assert.notEqual(user.scope.indexOf("admin"), -1);
+    };
+  });
+
+  test("Add scope to user - scope already exists",async () => {
+    const originalLength = users[0].scope.length;
+    await db.userStore.addScope(users[0]._id, "user");
+    const user = await db.userStore.getUserById(users[0]._id);
+    if (user !== null) {
+      assert.equal(user.scope.length, originalLength);
+    };
+  });
 });
