@@ -57,6 +57,7 @@ export const userApi = {
   find: {
     auth: {
       strategy: "jwt",
+      scope: ["admin", "super-admin"]
     },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -75,6 +76,7 @@ export const userApi = {
   findOne: {
     auth: {
       strategy: "jwt",
+      scope: ["user-{params.id}", "admin", "super-admin"]
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -97,6 +99,7 @@ export const userApi = {
   deleteAll: {
     auth: {
       strategy: "jwt",
+      scope: "super-admin"
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -114,6 +117,7 @@ export const userApi = {
   deleteOne: {
     auth: {
       strategy: "jwt",
+      scope: ["user-{params.id}", "admin", "super-admin"]
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
