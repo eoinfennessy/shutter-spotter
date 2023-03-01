@@ -1,25 +1,30 @@
 import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
+import { db } from "../../src/models/db.js";
 import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
-import { maggie, testUsers } from "../fixtures.js";
+import { maggie, testUsers, superAdmin } from "../fixtures.js";
+import { User } from "../../src/models/store-types.js";
 
 const users = new Array(testUsers.length);
+let testSuperAdmin: User;
 
 suite("User API tests", () => {
   setup(async () => {
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
-    await shutterSpotterService.deleteAllUsers();
-    await shutterSpotterService.clearAuth();
-
+    db.init("mongo")
+    await db.userStore.deleteAll();
     for (let i = 0; i < testUsers.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
-      users[i] = await shutterSpotterService.createUser(testUsers[i]);
+      users[i] = await db.userStore.addUser(testUsers[i]);
     }
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
+    testSuperAdmin = await shutterSpotterService.createUser(superAdmin);
+    await db.userStore.addScope(testSuperAdmin._id, "super-admin")
+    await shutterSpotterService.authenticate(testSuperAdmin);
   });
+
+  teardown(async () => {
+    await db.userStore.deleteAll();
+  })
 
   test("create a user", async () => {
     const newUser = await shutterSpotterService.createUser(maggie);
@@ -31,7 +36,8 @@ suite("User API tests", () => {
     let returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 4);
     await shutterSpotterService.deleteAllUsers();
-    await shutterSpotterService.createUser(maggie);
+    const sa = await shutterSpotterService.createUser(maggie);
+    await db.userStore.addScope(sa._id, "super-admin")
     await shutterSpotterService.authenticate(maggie);
     returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 1);

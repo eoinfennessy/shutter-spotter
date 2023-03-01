@@ -28,6 +28,20 @@ export const maggie = {
   password: "secret",
 };
 
+export const lisa = {
+  firstName: "Lisa",
+  lastName: "Simpson",
+  email: "lisa@simpson.com",
+  password: "secret",
+};
+
+export const superAdmin = {
+  firstName: "Super",
+  lastName: "Admin",
+  email: "super@admin.com",
+  password: "secret",
+};
+
 export const testLocations = [
   {
     name: "Woodstown",

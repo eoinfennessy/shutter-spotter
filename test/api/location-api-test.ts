@@ -1,25 +1,35 @@
 import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
-import { suite, setup, test } from "mocha";
+// import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
-import { maggie, testLocations, waterford } from "../fixtures.js";
-import { Location } from "../../src/models/store-types.js";
+import { maggie, superAdmin, testLocations, waterford } from "../fixtures.js";
+import { Location, User } from "../../src/models/store-types.js";
+import { db } from "../../src/models/db.js";
 
 const locations = new Array(testLocations.length)
+let testSuperAdmin: User;
 
 suite("Location API tests", () => {
   setup(async () => {
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
-    await shutterSpotterService.deleteAllLocations();
-    await shutterSpotterService.deleteAllUsers();
-
+    db.init("mongo")
+    await db.locationStore.deleteAllLocations();
+    await db.userStore.deleteAll();
+    
     const user = await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
+    await shutterSpotterService.authenticate(user);
     for (let i = 0; i < testLocations.length; i++) {
       locations[i] = await shutterSpotterService.createLocation({ ...testLocations[i], userId: user._id})
     }
+    await shutterSpotterService.clearAuth();
+    testSuperAdmin = await shutterSpotterService.createUser(superAdmin);
+    await db.userStore.addScope(testSuperAdmin._id, "super-admin")
+    await shutterSpotterService.authenticate(testSuperAdmin);
   });
+
+  teardown(async () => {
+    await db.locationStore.deleteAllLocations();
+    await db.userStore.deleteAll();
+  })
 
   test("get all locations", async () => {
     let returnedLocations = await shutterSpotterService.getAllLocations();
@@ -59,7 +69,7 @@ suite("Location API tests", () => {
   test("delete one location - success", async () => {
     let returnedLocations = await shutterSpotterService.getAllLocations();
     assert.equal(returnedLocations.length, 3);
-    await shutterSpotterService.deleteLocation(locations[0]._id);
+    await shutterSpotterService.deleteLocation(locations[0]._id, locations[0].userId);
     returnedLocations = await shutterSpotterService.getAllLocations();
     assert.equal(returnedLocations.length, 2);
     try {
@@ -74,7 +84,11 @@ suite("Location API tests", () => {
   test("delete one location - bad ID", async () => {
     let returnedLocations = await shutterSpotterService.getAllLocations();
     assert.equal(returnedLocations.length, 3);
-    await shutterSpotterService.deleteLocation("123456");
+    try {
+      await shutterSpotterService.deleteLocation("123456", "123456");
+    } catch (error: any) {
+      assert(error.response.data.message === "No Location with this id");
+    }
     returnedLocations = await shutterSpotterService.getAllLocations();
     assert.equal(returnedLocations.length, 3);
   });

@@ -9,8 +9,8 @@ const users: User[] = new Array(testUsers.length);
 
 suite("User Model tests", () => {
   setup(async () => {
-    await db.userStore.deleteAll();
     db.init("mongo");
+    await db.userStore.deleteAll();
     for (let i = 0; i < testUsers.length; i += 1) {
       users[i] = await db.userStore.addUser(testUsers[i])
     }

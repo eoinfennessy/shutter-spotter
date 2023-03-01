@@ -65,8 +65,8 @@ export const shutterSpotterService = {
     return res.data;
   },
 
-  async deleteLocation(id: string) {
-    const res = await axios.delete(`${this.shutterSpotterUrl}/api/locations/${id}`);
+  async deleteLocation(locationId: string, userId: string) {
+    const res = await axios.delete(`${this.shutterSpotterUrl}/api/users/${userId}/locations/${locationId}`);
     return res.data;
   },
 

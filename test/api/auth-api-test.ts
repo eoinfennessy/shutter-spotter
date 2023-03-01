@@ -3,20 +3,21 @@ import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { decodeToken } from "../../src/api/jwt-utils.js";
 import { maggie } from "../fixtures.js";
+import { db } from "../../src/models/db.js";
 
 suite("Authentication API tests", async () => {
   setup(async () => {
-    shutterSpotterService.clearAuth();
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
-    await shutterSpotterService.deleteAllUsers();
+    db.init("mongo")
+    await db.userStore.deleteAll();
+  });
+
+  teardown(async () => {
+    await db.userStore.deleteAll();
   });
 
   test("authenticate", async () => {
     const returnedUser = await shutterSpotterService.createUser(maggie);
-    console.log(returnedUser)
     const response = await shutterSpotterService.authenticate({ email: maggie.email, password: maggie.password });
-    console.log(response)
     assert(response.success);
     assert.isDefined(response.token);
   });
