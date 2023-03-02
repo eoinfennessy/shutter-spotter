@@ -121,8 +121,8 @@ export const locationApi = {
       }
     },
     tags: ["api"],
-    description: "Deletes a specific location",
-    notes: "Deletes location matching specified ID from the ShutterSpotter DB",
+    description: "Deletes a location",
+    notes: "Deletes location matching specified location ID from the ShutterSpotter DB",
     validate: { params: { userId: IdSpec, locationId: IdSpec }, failAction: validationError },
   },
 };
