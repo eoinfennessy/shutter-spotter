@@ -9,17 +9,22 @@ export const JwtAuth = Joi.object().keys({
 
 // User
 
-export const EmailSpec = Joi.string().email().required().example("joe@bloggs.com").label("EmailSpec");
-export const PasswordSpec = Joi.string().required().example("topsecret").label("PasswordSpec"); // .min(8)
+export const EmailSpec = Joi.object().keys({
+  email: Joi.string().email().required().example("joe@bloggs.com")
+}).label("EmailSpec");
+
+export const PasswordSpec = Joi.object().keys({
+  password: Joi.string().required().example("topsecret")
+}).label("PasswordSpec");
+
 export const NameSpec = Joi.object().keys({
   firstName: Joi.string().required().example("Joe"),
   lastName: Joi.string().required().example("Bloggs")
 }).label("NameSpec");
 
-export const UserCredentialsSpec = Joi.object().keys({
-  email: EmailSpec,
-  password: PasswordSpec
-}).label("UserCredentialsSpec");
+export const UserCredentialsSpec = EmailSpec
+  .concat(PasswordSpec)
+  .label("UserCredentialsSpec");
 
 export const NewUserSpec = UserCredentialsSpec
   .concat(NameSpec)

@@ -2,8 +2,8 @@ import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { createToken } from "./jwt-utils.js";
 import { db } from "../models/db.js";
-import { IdSpec, JwtAuth, NewUserSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
-import { NewUser, UserCredentials } from "../models/store-types.js";
+import { EmailSpec, IdSpec, JwtAuth, NameSpec, NewUserSpec, PasswordSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
+import { Email, Name, NewUser, Password, UserCredentials } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const userApi = {
@@ -29,14 +29,14 @@ export const userApi = {
     description: "Authenticates a User",
     notes: "Creates and return a JWT token if user's credentials are valid; otherwise returns 401 error.",
     validate: { payload: UserCredentialsSpec, options: { stripUnknown: true }, failAction: validationError },
-    response: { schema: JwtAuth, failAction: validationError }
+    response: { schema: JwtAuth, failAction: validationError },
   },
-  
+
   create: {
     auth: false,
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const userPayload = request.payload as NewUser
+        const userPayload = request.payload as NewUser;
         const user = await db.userStore.addUser(userPayload);
         return h.response(user).code(201);
         // if (user) {
@@ -57,9 +57,9 @@ export const userApi = {
   find: {
     auth: {
       strategy: "jwt",
-      scope: ["admin", "super-admin"]
+      scope: ["admin", "super-admin"],
     },
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const users = await db.userStore.getAllUsers();
         return h.response(users).code(200);
@@ -76,7 +76,7 @@ export const userApi = {
   findOne: {
     auth: {
       strategy: "jwt",
-      scope: ["user-{params.id}", "admin", "super-admin"]
+      scope: ["user-{params.id}", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -96,10 +96,81 @@ export const userApi = {
     response: { schema: UserSpec, failAction: validationError },
   },
 
+  updateName: {
+    auth: {
+      strategy: "jwt",
+      scope: ["user-{params.id}", "admin", "super-admin"],
+    },
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      try {
+        const user = await db.userStore.updateName(request.params.id, request.payload as Name);
+        if (user === null) {
+          return Boom.notFound("No user found matching the provided ID");
+        }
+        return h.response(user).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Updates a user's name",
+    notes: "Updates first and last names of user matching specified ID",
+    validate: { payload: NameSpec, options: { stripUnknown: true }, params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpec, failAction: validationError },
+  },
+
+  updateEmail: {
+    auth: {
+      strategy: "jwt",
+      scope: ["user-{params.id}", "admin", "super-admin"],
+    },
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      const payload = request.payload as { email: Email };
+      try {
+        const user = await db.userStore.updateEmail(request.params.id, payload.email);
+        if (user === null) {
+          return Boom.notFound("No user found matching the provided ID");
+        }
+        return h.response(user).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Updates a user's email",
+    notes: "Updates email address of user matching specified ID",
+    validate: { payload: EmailSpec, options: { stripUnknown: true }, params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpec, failAction: validationError },
+  },
+
+  updatePassword: {
+    auth: {
+      strategy: "jwt",
+      scope: ["user-{params.id}", "admin", "super-admin"],
+    },
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      const payload = request.payload as { password: Password };
+      try {
+        const user = await db.userStore.updatePassword(request.params.id, payload.password);
+        if (user === null) {
+          return Boom.notFound("No user found matching the provided ID");
+        }
+        return h.response(user).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Updates a user's password",
+    notes: "Updates password of user matching specified ID",
+    validate: { payload: PasswordSpec, options: { stripUnknown: true }, params: { id: IdSpec }, failAction: validationError },
+    response: { schema: UserSpec, failAction: validationError },
+  },
+
   deleteAll: {
     auth: {
       strategy: "jwt",
-      scope: "super-admin"
+      scope: "super-admin",
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -111,13 +182,13 @@ export const userApi = {
     },
     tags: ["api"],
     description: "Delete all users",
-    notes: "Deletes all users from the ShutterSpotter DB"
+    notes: "Deletes all users from the ShutterSpotter DB",
   },
 
   deleteOne: {
     auth: {
       strategy: "jwt",
-      scope: ["user-{params.id}", "admin", "super-admin"]
+      scope: ["user-{params.id}", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {

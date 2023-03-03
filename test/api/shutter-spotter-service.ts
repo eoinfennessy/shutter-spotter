@@ -1,6 +1,6 @@
 import axios from "axios";
 import { serviceUrl } from "../fixtures.js";
-import { NewUser, NewLocationWithUserId, NewPhotoWithLocationId, UserCredentials } from "../../src/models/store-types.js"
+import { NewUser, NewLocationWithUserId, NewPhotoWithLocationId, UserCredentials, Name, Email, Password } from "../../src/models/store-types.js"
 
 export const shutterSpotterService = {
   shutterSpotterUrl: serviceUrl,
@@ -32,6 +32,21 @@ export const shutterSpotterService = {
 
   async deleteAllUsers() {
     const res = await axios.delete(`${this.shutterSpotterUrl}/api/users`);
+    return res.data;
+  },
+
+  async updateUserName(id: string, name: Name) {
+    const res = await axios.patch(`${this.shutterSpotterUrl}/api/users/${id}/name`, name);
+    return res.data;
+  },
+
+  async updateEmail(id: string, email: { email: Email }) {
+    const res = await axios.patch(`${this.shutterSpotterUrl}/api/users/${id}/email`, email);
+    return res.data;
+  },
+
+  async updatePassword(id: string, password: { password: Password }) {
+    const res = await axios.patch(`${this.shutterSpotterUrl}/api/users/${id}/password`, password);
     return res.data;
   },
 

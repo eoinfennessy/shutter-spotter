@@ -32,6 +32,55 @@ suite("User API tests", () => {
     assert.isDefined(newUser._id);
   });
 
+  test("update user's name", async () => {
+    const newUser = await shutterSpotterService.createUser(maggie);
+    const updatedUser = await shutterSpotterService.updateUserName(newUser._id, { firstName: "Jane", lastName: "Doe" });
+    assert.equal(updatedUser.firstName, "Jane")
+    assert.equal(updatedUser.lastName, "Doe")
+  });
+
+  test("update user's name - bad ID", async () => {
+    try {
+      const updatedUser = await shutterSpotterService.updateUserName("1234", { firstName: "Jane", lastName: "Doe" });
+      assert.fail("Should not return a response");
+    } catch (error: any) {
+      assert(error.response.data.message === "No user found matching the provided ID");
+      assert.equal(error.response.data.statusCode, 404);
+    }
+  });
+
+  test("update user's email", async () => {
+    const newUser = await shutterSpotterService.createUser(maggie);
+    const updatedUser = await shutterSpotterService.updateEmail(newUser._id, { email: "new@email.com"});
+    assert.equal(updatedUser.email, "new@email.com")
+  });
+
+  test("update user's email - bad ID", async () => {
+    try {
+      const updatedUser = await shutterSpotterService.updateEmail("1234", { email: "new@email.com"});
+      assert.fail("Should not return a response");
+    } catch (error: any) {
+      assert(error.response.data.message === "No user found matching the provided ID");
+      assert.equal(error.response.data.statusCode, 404);
+    }
+  });
+
+  test("update user's password", async () => {
+    const newUser = await shutterSpotterService.createUser(maggie);
+    const updatedUser = await shutterSpotterService.updatePassword(newUser._id, { password: "newpassword" });
+    assert.equal(updatedUser.password, "newpassword")
+  });
+
+  test("update user's password - bad ID", async () => {
+    try {
+      const updatedUser = await shutterSpotterService.updatePassword("1234", { password: "newpassword" });
+      assert.fail("Should not return a response");
+    } catch (error: any) {
+      assert(error.response.data.message === "No user found matching the provided ID");
+      assert.equal(error.response.data.statusCode, 404);
+    }
+  });
+
   test("delete all users", async () => {
     let returnedUsers = await shutterSpotterService.getAllUsers();
     assert.equal(returnedUsers.length, 4);

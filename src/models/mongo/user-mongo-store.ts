@@ -64,7 +64,7 @@ export const userMongoStore: UserStore = {
       console.error(`Bad ID: "${id}"`);
       return null;
     }
-    const user = UserMongoose.findByIdAndUpdate(id, name, { new: true, lean: true });
+    const user = await UserMongoose.findByIdAndUpdate(id, name, { new: true, lean: true });
     if (user === null) {
       return null;
     }
@@ -76,7 +76,7 @@ export const userMongoStore: UserStore = {
       console.error(`Bad ID: "${id}"`);
       return null;
     }
-    const user = UserMongoose.findByIdAndUpdate(id, { email: email }, { new: true, lean: true });
+    const user = await UserMongoose.findByIdAndUpdate(id, { email: email }, { new: true, lean: true });
     if (user === null) {
       return null;
     }
@@ -88,7 +88,7 @@ export const userMongoStore: UserStore = {
       console.error(`Bad ID: "${id}"`);
       return null;
     }
-    const user = UserMongoose.findByIdAndUpdate(id, { password: password }, { new: true, lean: true });
+    const user = await UserMongoose.findByIdAndUpdate(id, { password: password }, { new: true, lean: true });
     if (user === null) {
       return null;
     }
