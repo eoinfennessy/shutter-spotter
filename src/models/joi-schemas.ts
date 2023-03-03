@@ -5,19 +5,25 @@ export const IdSpec = Joi.string().required().label("IdSpec")
 export const JwtAuth = Joi.object().keys({
     success: Joi.boolean().example("true").required(),
     token: Joi.string().example("eyJhbGciOiJND.g5YmJisIjoiaGYwNTNjAOhE.gCWGmY5-YigQw0DCBo").required(),
-  }).label("JwtAuth");
+}).label("JwtAuth");
 
 // User
 
-export const UserCredentialsSpec = Joi.object().keys({
-  email: Joi.string().email().required().example("joe@bloggs.com"),
-  password: Joi.string().required().example("topsecret") // .min(8)
-}).label("UserCredentialsSpec");
-
-export const NewUserSpec = UserCredentialsSpec.keys({
+export const EmailSpec = Joi.string().email().required().example("joe@bloggs.com").label("EmailSpec");
+export const PasswordSpec = Joi.string().required().example("topsecret").label("PasswordSpec"); // .min(8)
+export const NameSpec = Joi.object().keys({
   firstName: Joi.string().required().example("Joe"),
   lastName: Joi.string().required().example("Bloggs")
-}).label("NewUserSpec");
+}).label("NameSpec");
+
+export const UserCredentialsSpec = Joi.object().keys({
+  email: EmailSpec,
+  password: PasswordSpec
+}).label("UserCredentialsSpec");
+
+export const NewUserSpec = UserCredentialsSpec
+  .concat(NameSpec)
+  .label("NewUserSpec");
 
 export const UserSpec = NewUserSpec.keys({
   _id: IdSpec,
