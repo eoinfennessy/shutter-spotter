@@ -1,5 +1,5 @@
 import Mongoose from "mongoose";
-import { MongooseVersion, NewUser } from "../store-types";
+import { MongooseVersion, User } from "../store-types";
 
 const { Schema } = Mongoose;
 
@@ -12,4 +12,4 @@ const userSchema = new Schema({
   password: { type: String, required: true },
 });
 
-export const UserMongoose = Mongoose.model<NewUser & MongooseVersion>("User", userSchema);
+export const UserMongoose = Mongoose.model<User & MongooseVersion>("User", userSchema);

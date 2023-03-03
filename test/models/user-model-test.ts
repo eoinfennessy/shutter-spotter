@@ -62,6 +62,61 @@ suite("User Model tests", () => {
     const allUsers = await db.userStore.getAllUsers();
     assert.equal(users.length, allUsers.length);
   });
+  
+  test("update name", async () => {
+    await db.userStore.updateName(users[0]._id, { firstName: "Jane", lastName: "Doe" });
+    const updatedUser = await db.userStore.getUserById(users[0]._id);
+    if (updatedUser === null) assert.fail("User is null")
+    assert.equal(updatedUser.firstName, "Jane")
+    assert.equal(updatedUser.lastName, "Doe")
+  });
+  
+  test("update name - deleted user", async () => {
+    await db.userStore.deleteUserById(users[0]._id);
+    const user = await db.userStore.updateName(users[0]._id, { firstName: "Jane", lastName: "Doe" });
+    assert.isNull(user)
+  });
+
+  test("update name - bad ID", async () => {
+    const user = await db.userStore.updateName("1234", { firstName: "Jane", lastName: "Doe" });
+    assert.isNull(user)
+  });
+  
+  test("update email", async () => {
+    await db.userStore.updateEmail(users[0]._id, "jane@doe.com");
+    const updatedUser = await db.userStore.getUserById(users[0]._id);
+    if (updatedUser === null) assert.fail("User is null")
+    assert.equal(updatedUser.email, "jane@doe.com")
+  });
+  
+  test("update email - deleted user", async () => {
+    await db.userStore.deleteUserById(users[0]._id);
+    const user = await db.userStore.updateEmail(users[0]._id, "jane@doe.com");
+    assert.isNull(user)
+  });
+
+  test("update email - bad ID", async () => {
+    const user = await db.userStore.updateEmail("1234", "jane@doe.com");
+    assert.isNull(user)
+  });
+  
+  test("update password", async () => {
+    await db.userStore.updatePassword(users[0]._id, "newpassword");
+    const updatedUser = await db.userStore.getUserById(users[0]._id);
+    if (updatedUser === null) assert.fail("User is null")
+    assert.equal(updatedUser.password, "newpassword")
+  });
+  
+  test("update password - deleted user", async () => {
+    await db.userStore.deleteUserById(users[0]._id);
+    const user = await db.userStore.updatePassword(users[0]._id, "newpassword");
+    assert.isNull(user)
+  });
+
+  test("update password - bad ID", async () => {
+    const user = await db.userStore.updatePassword("1234", "newpassword");
+    assert.isNull(user)
+  });
 
   test("Add scope to user - success",async () => {
     await db.userStore.addScope(users[0]._id, "admin");
