@@ -29,6 +29,14 @@ const swaggerOptions = {
     title: "ShutterSpotter API",
     version: "0.2",
   },
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+    }
+  },
+  security: [{ jwt: [] }],
 };
 
 async function init() {
