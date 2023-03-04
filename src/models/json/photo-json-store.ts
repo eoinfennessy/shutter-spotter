@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { NewPhoto, NewPhotoWithLocationId, Photo, PhotoStore } from "../store-types.js";
+import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
 
 interface LowPhoto extends Low {
   data: { photos: Photo[] };
@@ -17,7 +17,7 @@ export const photoJsonStore: PhotoStore = {
     return db.data.photos;
   },
 
-  async addPhoto(photo: NewPhotoWithLocationId): Promise<Photo> {
+  async addPhoto(photo: NewPhoto): Promise<Photo> {
     await db.read();
     const photoWithId: Photo = { ...photo, _id: v4() };
     db.data.photos.push(photoWithId);
@@ -50,15 +50,15 @@ export const photoJsonStore: PhotoStore = {
     await db.write();
   },
 
-  async updatePhoto(photoId: string, updates: Partial<NewPhoto>): Promise<Photo | null> {
+  async updatePhoto(photoId: string, updates: Partial<BasePhoto>): Promise<Photo | null> {
     const photo = await this.getPhotoById(photoId)
     if (photo === null) {
       return null
     }
     Object.keys(updates).forEach(key => {
-      const update = updates[key as keyof Partial<NewPhoto>];
+      const update = updates[key as keyof Partial<BasePhoto>];
       if (update !== undefined) {
-        photo[key as keyof Photo] = update;
+        photo[key as keyof BasePhoto] = update;
       }
     });
     await db.write();

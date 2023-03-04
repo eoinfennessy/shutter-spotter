@@ -47,16 +47,42 @@ export type Location = NewLocationWithUserId & {
 
 // Photo
 
-export type NewPhoto = {
+export type Comment = {
+  userId: string;
+  comment: string;
+}
+
+export type Vote = {
+  userId: string;
+  vote: -1 | 1;
+}
+
+export type BasePhoto = {
   title: string;
   description: string;
 };
 
-export type NewPhotoWithLocationId = NewPhoto & {
+export type PhotoPayload = BasePhoto & {
+  imagefile: object;
+  tags: string;
+}
+
+export type PhotoApiPayload = PhotoPayload & {
+  userId: Id,
+  locationId: Id,
+}
+
+export type NewPhoto = BasePhoto & {
   locationId: Id;
+  userId: Id;
+  img: string;
+  tags: string[];
+  comments: Comment[];
+  voteScore: number;
+  votes: Vote[];
 };
 
-export type Photo = NewPhotoWithLocationId & {
+export type Photo = NewPhoto & {
   _id: Id;
 };
 
@@ -86,12 +112,12 @@ export type LocationStore = {
 
 export type PhotoStore = {
   getAllPhotos: () => Promise<Photo[]>;
-  addPhoto: (photo: NewPhotoWithLocationId) => Promise<Photo>;
+  addPhoto: (photo: NewPhoto) => Promise<Photo>;
   getPhotosByLocationId: (id: Id) => Promise<Photo[]>;
   getPhotoById: (id: Id) => Promise<Photo | null>;
   deletePhoto: (id: Id) => Promise<void>;
   deleteAllPhotos: () => Promise<void>;
-  updatePhoto: (photoId: Id, updates: Partial<NewPhoto>) => Promise<Photo | null>;
+  updatePhoto: (photoId: Id, updates: Partial<BasePhoto>) => Promise<Photo | null>;
 };
 
 export type DbTypes = "mem" | "json" | "mongo";

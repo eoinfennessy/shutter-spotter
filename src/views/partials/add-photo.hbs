@@ -1,5 +1,25 @@
-<form class="box" action="/location/{{location._id}}/addphoto" method="POST">
+<form class="box" action="/location/{{location._id}}/addphoto" method="POST" enctype="multipart/form-data">
   <label>Enter Photo Details:</label>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field">
+        <div id="file-select" class="file has-name is-fullwidth">
+          <label class="file-label">
+            <input class="file-input" name="imagefile" type="file" accept="image/png, image/jpeg">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Choose an image…
+              </span>
+              </span>
+            <span class="file-name"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="field is-horizontal">
     <div class="field-body">
       <div class="field">
@@ -10,5 +30,22 @@
       </div>
     </div>
   </div>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field">
+        <input class="input" type="text" placeholder="Enter a Space-Separated List of Tags" name="tags">
+      </div>
+    </div>
+  </div>
   <button class="button is-primary">Add Photo</button>
 </form>
+
+<script>
+  const fileInput = document.querySelector(".file-input");
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector(".file-name");
+      fileName.textContent = fileInput.files[0].name;
+    }
+  };
+</script>

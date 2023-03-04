@@ -1,21 +1,33 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { IdSpec, NewPhotoWithLocationIdSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
-import { NewPhotoWithLocationId } from "../models/store-types.js";
+import { IdSpec, NewPhotoSpec, PhotoApiPayloadSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
+import { NewPhoto, PhotoApiPayload } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const photoApi = {
-  // TODO: tighten scope to claimed photo owner after adding userId to photo schema
   create: {
     auth: {
       strategy: "jwt",
-      scope: ["user", "admin", "super-admin"],
+      scope: ["user-{payload.userId}", "admin", "super-admin"],
     },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const photoPayload = request.payload as NewPhotoWithLocationId
-        const photo = await db.photoStore.addPhoto(photoPayload);
+        const photoPayload = request.payload as PhotoApiPayload
+        // TODO
+        const photoUrl = "http://www.my-photo.com/photo.jpeg"
+        const newPhoto = {
+          title: photoPayload.title,
+          description: photoPayload.description,
+          locationId: photoPayload.locationId,
+          userId: photoPayload.userId,
+          img: photoUrl,
+          tags: photoPayload.tags.split(" "),
+          comments: [],
+          voteScore: 0,
+          votes: [],
+        } as NewPhoto
+        const photo = await db.photoStore.addPhoto(newPhoto);
         return h.response(photo).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
@@ -24,7 +36,7 @@ export const photoApi = {
     tags: ["api"],
     description: "Create a photo",
     notes: "Returns the newly created photo",
-    validate: { payload: NewPhotoWithLocationIdSpec, options: { stripUnknown: true }, failAction: validationError },
+    validate: { payload: PhotoApiPayloadSpec, options: { stripUnknown: true }, failAction: validationError },
     response: { schema: PhotoSpec, failAction: validationError },
   },
 

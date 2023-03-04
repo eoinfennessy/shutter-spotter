@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { NewPhoto, NewPhotoWithLocationId, Photo, PhotoStore } from "../store-types.js";
+import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
 
 let photos: Photo[] = [];
 
@@ -8,7 +8,7 @@ export const photoMemStore: PhotoStore = {
     return photos;
   },
 
-  async addPhoto(photo: NewPhotoWithLocationId): Promise<Photo> {
+  async addPhoto(photo: NewPhoto): Promise<Photo> {
     const photoWithId: Photo = { ...photo, _id: v4() };
     photos.push(photoWithId);
     return photoWithId;
@@ -32,15 +32,16 @@ export const photoMemStore: PhotoStore = {
     photos = [];
   },
 
-  async updatePhoto(photoId: string, updates: Partial<NewPhoto>): Promise<Photo | null> {
+  async updatePhoto(photoId: string, updates: Partial<BasePhoto>): Promise<Photo | null> {
     const photo = await this.getPhotoById(photoId)
     if (photo === null) {
       return null
     }
-    Object.keys(updates).forEach(key => {
-      const update = updates[key as keyof Partial<NewPhoto>];
+    const keys = Object.keys(updates)
+    keys.forEach(key => {
+      const update = updates[key as keyof Partial<BasePhoto>];
       if (update !== undefined) {
-        photo[key as keyof Photo] = update;
+        photo[key as keyof BasePhoto] = update;
       }
     });
     return photo;

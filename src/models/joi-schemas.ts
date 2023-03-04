@@ -57,17 +57,43 @@ export const LocationArray = Joi.array().items(LocationSpec).label("LocationArra
 
 // Photo
 
-export const NewPhotoSpec = Joi.object().keys({
+export const CommentSpec = Joi.object().keys({
+  userId: IdSpec,
+  comment: Joi.string().max(300).required().example("Great photo!")
+}).label("CommentSpec")
+
+export const VoteSpec = Joi.object().keys({
+  userId: IdSpec,
+  vote: Joi.number().allow(-1, 1)
+}).label("VoteSpec")
+
+export const BasePhotoSpec = Joi.object().keys({
   title: Joi.string().required().example("Dunmore East Sunset"),
   description: Joi.string().required().max(300).example("A beautiful sunset at Dunmore East"),
+}).label("BasePhotoSpec");
+
+export const PhotoPayloadSpec = BasePhotoSpec.keys({
+  imagefile: Joi.any().meta({ swaggerType: "file" }).required().description("A JPEG or PNG file"),
+  tags: Joi.string().required().example("Landscape Sunset Waterford").description("A space-separated list of tags"),
+}).label("PhotoPayloadSpec");
+
+export const PhotoApiPayloadSpec = PhotoPayloadSpec.keys({
+  userId: IdSpec,
+  locationId: IdSpec,
+}).label("PhotoApiPayloadSpec");
+
+export const NewPhotoSpec = BasePhotoSpec.keys({
+  locationId: IdSpec,
+  userId: IdSpec,
+  img: Joi.string().uri().required().example("https://www.my-photos.com/cat.jpeg"),
+  tags: Joi.array().items(Joi.string()).example(["Landscape", "Sunset", "Waterford"]),
+  comments: Joi.array().items(CommentSpec).required(),
+  voteScore: Joi.number().required().example(42).description("Current score of photo"),
+  votes: Joi.array().items(VoteSpec).required()
 }).label("NewPhotoSpec");
 
-export const NewPhotoWithLocationIdSpec = NewPhotoSpec.keys({
-  locationId: IdSpec
-}).label("NewPhotoWithLocationIdSpec");
-
-export const PhotoSpec = NewPhotoWithLocationIdSpec.keys({
-  _id: IdSpec
+export const PhotoSpec = NewPhotoSpec.keys({
+  _id: IdSpec,
 }).label("PhotoSpec");
 
 export const PhotoArray = Joi.array().items(PhotoSpec).label("PhotoArray");
