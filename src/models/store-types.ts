@@ -4,22 +4,32 @@ export type MongooseVersion = { __v: number }
 
 export type JwtPayload = {
   id: Id,
-  email: string
+  email: string,
+  scope: string[]
 }
 
-export type UserCredentials = {
-  email: string;
-  password: string;
-}
+// User
 
-export type NewUser = UserCredentials & {
+export type Email = string;
+export type Password = string;
+export type Name = {
   firstName: string;
   lastName: string;
-}
+};
+
+export type UserCredentials = {
+  email: Email;
+  password: Password;
+};
+
+export type NewUser = UserCredentials & Name;
 
 export type User = NewUser & {
   _id: Id;
+  scope: string[];
 };
+
+// Location
 
 export type NewLocation = {
   name: string;
@@ -35,6 +45,8 @@ export type Location = NewLocationWithUserId & {
   _id: Id;
 }
 
+// Photo
+
 export type NewPhoto = {
   title: string;
   description: string;
@@ -48,13 +60,19 @@ export type Photo = NewPhotoWithLocationId & {
   _id: Id;
 };
 
+// Stores
+
 export type UserStore = {
   getAllUsers: () => Promise<User[]>;
   addUser: (user: NewUser) => Promise<User>;
   getUserById: (id: Id) => Promise<User | null>;
   getUserByEmail: (email: string) => Promise<User | null>;
   deleteUserById: (id: Id) => Promise<void>;
-  deleteAll(): Promise<void>;
+  deleteAll: () => Promise<void>;
+  updateName: (id: Id, name: Name) => Promise<User | null>;
+  updateEmail: (id: Id, email: Email) => Promise<User | null>;
+  updatePassword: (id: Id, password: Password) => Promise<User | null>;
+  addScope: (id: Id, scope: string) => Promise<void>;
 };
 
 export type LocationStore = {

@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { NewUser, User, UserStore } from "../store-types";
+import { Email, Name, NewUser, Password, User, UserStore } from "../store-types";
 
 interface LowUser extends Low {
   data: { users: User[] };
@@ -19,7 +19,8 @@ export const userJsonStore: UserStore = {
 
   async addUser(user: NewUser): Promise<User> {
     await db.read();
-    const userWithId: User = { ...user, _id: v4() };
+    const id = v4();
+    const userWithId: User = { ...user, _id: id, scope: ["user", `user-${id}`] };
     db.data.users.push(userWithId);
     await db.write();
     return userWithId;
@@ -50,4 +51,46 @@ export const userJsonStore: UserStore = {
     db.data.users = [];
     await db.write();
   },
+
+  async updateName(id: string, name: Name): Promise<User | null> {
+    await db.read();
+    const user = await this.getUserById(id)
+    if (user === null) {
+      return null
+    }
+    user.firstName = name.firstName;
+    user.lastName = name.lastName;
+    await db.write();
+    return user;
+  },
+  
+  async updateEmail(id: string, email: Email): Promise<User | null> {
+    await db.read();
+    const user = await this.getUserById(id)
+    if (user === null) {
+      return null
+    }
+    user.email = email;
+    await db.write();
+    return user;
+  },
+  
+  async updatePassword(id: string, password: Password): Promise<User | null> {
+    await db.read();
+    const user = await this.getUserById(id)
+    if (user === null) {
+      return null
+    }
+    user.password = password;
+    await db.write();
+    return user;
+  },
+
+  async addScope(id: string, scope: string): Promise<void> {
+    const user = await this.getUserById(id);
+    if (user === null) return;
+    if (user.scope.indexOf(scope) !== -1) return;
+    user.scope.push(scope);
+    await db.write();
+  }
 };

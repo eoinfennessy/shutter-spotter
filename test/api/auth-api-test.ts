@@ -3,19 +3,21 @@ import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { decodeToken } from "../../src/api/jwt-utils.js";
 import { maggie } from "../fixtures.js";
+import { db } from "../../src/models/db.js";
 
 suite("Authentication API tests", async () => {
   setup(async () => {
-    shutterSpotterService.clearAuth();
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
-    await shutterSpotterService.deleteAllUsers();
+    db.init("mongo")
+    await db.userStore.deleteAll();
+  });
+
+  teardown(async () => {
+    await db.userStore.deleteAll();
   });
 
   test("authenticate", async () => {
     const returnedUser = await shutterSpotterService.createUser(maggie);
     const response = await shutterSpotterService.authenticate({ email: maggie.email, password: maggie.password });
-    // console.log(response)
     assert(response.success);
     assert.isDefined(response.token);
   });
@@ -23,10 +25,14 @@ suite("Authentication API tests", async () => {
   test("verify Token", async () => {
     const returnedUser = await shutterSpotterService.createUser(maggie);
     const response = await shutterSpotterService.authenticate(maggie);
-
     const userInfo = decodeToken(response.token);
-    assert.equal(userInfo.email, returnedUser.email);
-    assert.equal(userInfo.userId, returnedUser._id);
+    if (userInfo === null) {
+      assert.fail("userInfo is null")
+    } else {
+      assert.equal(userInfo.email, returnedUser.email);
+      assert.equal(userInfo.id, returnedUser._id);
+      assert.deepEqual(userInfo.scope, returnedUser.scope);
+    }
   });
 
   test("check Unauthorized", async () => {

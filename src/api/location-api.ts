@@ -9,10 +9,11 @@ export const locationApi = {
   create: {
     auth: {
       strategy: "jwt",
+      scope: ["user-{payload.userId}", "admin", "super-admin"],
     },
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const locationPayload = request.payload as NewLocationWithUserId
+        const locationPayload = request.payload as NewLocationWithUserId;
         const location = await db.locationStore.addLocation(locationPayload);
         return h.response(location).code(201);
       } catch (err) {
@@ -30,7 +31,7 @@ export const locationApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const locations = await db.locationStore.getAllLocations();
         return h.response(locations).code(200);
@@ -88,6 +89,7 @@ export const locationApi = {
   deleteAll: {
     auth: {
       strategy: "jwt",
+      scope: "super-admin",
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -105,18 +107,22 @@ export const locationApi = {
   deleteOne: {
     auth: {
       strategy: "jwt",
+      scope: ["user-{params.userId}", "admin", "super-admin"]
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        await db.locationStore.deleteLocationById(request.params.id);
+        const location = await db.locationStore.getLocationById(request.params.locationId);
+        if (location === null) return Boom.notFound("No Location with this id");
+        if (location.userId !== request.params.userId) return Boom.forbidden();
+        await db.locationStore.deleteLocationById(request.params.locationId);
         return h.response().code(204);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
     },
     tags: ["api"],
-    description: "Deletes a specific location",
-    notes: "Deletes location matching specified ID from the ShutterSpotter DB",
-    validate: { params: { id: IdSpec }, failAction: validationError },
+    description: "Deletes a location",
+    notes: "Deletes location matching specified location ID from the ShutterSpotter DB",
+    validate: { params: { userId: IdSpec, locationId: IdSpec }, failAction: validationError },
   },
 };

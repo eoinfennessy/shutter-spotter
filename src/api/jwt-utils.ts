@@ -11,6 +11,7 @@ export function createToken(user: User) {
   const payload = {
     id: user._id,
     email: user.email,
+    scope: user.scope
   };
   const options: jwt.SignOptions = {
     algorithm: "HS256",
@@ -20,15 +21,17 @@ export function createToken(user: User) {
 }
 
 export function decodeToken(token: string) {
-  const userInfo = { userId: "", email: "" };
   try {
     const decoded = jwt.verify(token, cookiePassword) as jwt.JwtPayload;
-    userInfo.userId = decoded.id;
-    userInfo.email = decoded.email;
+    return {
+      id: decoded.id,
+      email: decoded.email,
+      scope: decoded.scope
+    } as JwtPayload
   } catch (e: any) {
     console.log(e.message);
   }
-  return userInfo;
+  return null;
 }
 
 export async function validate(decoded: JwtPayload, request: Request): Promise<{ isValid: true, credentials: User } | { isValid: false }> {

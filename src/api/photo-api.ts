@@ -6,9 +6,11 @@ import { NewPhotoWithLocationId } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 
 export const photoApi = {
+  // TODO: tighten scope to claimed photo owner after adding userId to photo schema
   create: {
     auth: {
       strategy: "jwt",
+      scope: ["user", "admin", "super-admin"],
     },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -89,6 +91,7 @@ export const photoApi = {
   deleteAll: {
     auth: {
       strategy: "jwt",
+      scope: "super-admin",
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -103,9 +106,11 @@ export const photoApi = {
     notes: "Deletes all photos from ShutterSpotter's DB",
   },
 
+  // TODO: tighten scope to photo owner after adding userId to photo schema
   deleteOne: {
     auth: {
       strategy: "jwt",
+      scope: ["user", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
@@ -116,8 +121,8 @@ export const photoApi = {
       }
     },
     tags: ["api"],
-    description: "Deletes a specific photo",
-    notes: "Deletes location matching specified ID from the ShutterSpotter DB",
+    description: "Deletes a photo",
+    notes: "Deletes photo matching specified photo ID from the ShutterSpotter DB",
     validate: { params: { id: IdSpec }, failAction: validationError },
   },
 };

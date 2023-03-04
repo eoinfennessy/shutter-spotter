@@ -2,29 +2,40 @@ import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
-import { maggie, testUsers, testLocations, waterford, testPhotos, birdPhoto } from "../fixtures.js";
+import { maggie, testUsers, testLocations, waterford, testPhotos, birdPhoto, superAdmin } from "../fixtures.js";
 import { User, Location, Photo } from "../../src/models/store-types.js";
+import { db } from "../../src/models/db.js";
 
 const locations: Location[] = new Array(testLocations.length);
 const photos: Photo[] = new Array(testPhotos.length);
+let testSuperAdmin: User;
 
 suite("Photo API tests", () => {
   setup(async () => {
-    await shutterSpotterService.createUser(maggie);
-    await shutterSpotterService.authenticate(maggie);
-    await shutterSpotterService.deleteAllPhotos();
-    await shutterSpotterService.deleteAllLocations();
-    await shutterSpotterService.deleteAllUsers();
-
-    const user = await shutterSpotterService.createUser(maggie);
+    db.init("mongo");
+    await db.photoStore.deleteAllPhotos();
+    await db.locationStore.deleteAllLocations();
+    await db.userStore.deleteAll();
+    
+    const photoOwner = await shutterSpotterService.createUser(maggie);
     await shutterSpotterService.authenticate(maggie);
     for (let i = 0; i < testLocations.length; i++) {
-      locations[i] = await shutterSpotterService.createLocation({ ...testLocations[i], userId: user._id})
+      locations[i] = await shutterSpotterService.createLocation({ ...testLocations[i], userId: photoOwner._id})
       for (let j = 0; j < testPhotos.length; j++) {
         photos[j] = await shutterSpotterService.createPhoto({ ...testPhotos[j], locationId: locations[i]._id})
       }
     }
+    await shutterSpotterService.clearAuth();
+    testSuperAdmin = await shutterSpotterService.createUser(superAdmin);
+    await db.userStore.addScope(testSuperAdmin._id, "super-admin")
+    await shutterSpotterService.authenticate(testSuperAdmin);
   });
+
+  teardown(async () => {
+    await db.photoStore.deleteAllPhotos();
+    await db.locationStore.deleteAllLocations();
+    await db.userStore.deleteAll();
+  })
 
   test("get all photos", async () => {
     let returnedPhotos = await shutterSpotterService.getAllPhotos();
