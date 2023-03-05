@@ -1,5 +1,6 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
+import { imageStore } from "../models/file-storage/image-store.js";
 import { PhotoPayloadSpec } from "../models/joi-schemas.js";
 import { NewPhoto, PhotoPayload } from "../models/store-types.js";
 
@@ -48,15 +49,13 @@ export const locationController = {
       if (location === null) {
         return h.redirect("/dashboard");
       }
-      // TODO: upload photo and get URL
-      console.log(payload.imagefile)
-      const photoUrl = "http://www.photos.com/my-photo.jpeg"
+      const imgUri = await imageStore.uploadImage(payload.imagefile);
       const newPhoto = {
         title: payload.title,
         description: payload.description,
         locationId: location._id,
         userId: request.auth.credentials._id,
-        img: photoUrl,
+        img: imgUri,
         tags: payload.tags.split(" "),
         comments: [],
         voteScore: 0,

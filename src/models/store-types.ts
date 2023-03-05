@@ -63,7 +63,7 @@ export type BasePhoto = {
 };
 
 export type PhotoPayload = BasePhoto & {
-  imagefile: object;
+  imagefile: NodeJS.ArrayBufferView;
   tags: string;
 }
 
