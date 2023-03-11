@@ -1,13 +1,13 @@
 import { exit } from "process";
 import { cloudinaryImageStore } from "./cloudinary.js";
+import { localImageStore } from "./local.js";
 
 const storeType = process.env.IMAGE_STORE_TYPE;
 
 let store;
 switch (storeType) {
   case "local":
-    console.error(`Unimplemented store type: ${storeType}`)
-    exit(1);
+    store = localImageStore
     break;
   case "cloudinary":
     store = cloudinaryImageStore;
