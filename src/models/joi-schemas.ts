@@ -74,7 +74,7 @@ export const BasePhotoSpec = Joi.object().keys({
 
 export const PhotoPayloadSpec = BasePhotoSpec.keys({
   imagefile: Joi.any().meta({ swaggerType: "file" }).required().description("A JPEG or PNG file"),
-  tags: Joi.string().required().example("Landscape Sunset Waterford").description("A space-separated list of tags"),
+  tags: Joi.string().required().allow("").example("Landscape Sunset Waterford").description("A space-separated list of tags"),
 }).label("PhotoPayloadSpec");
 
 export const PhotoApiPayloadSpec = PhotoPayloadSpec.keys({
@@ -85,7 +85,7 @@ export const PhotoApiPayloadSpec = PhotoPayloadSpec.keys({
 export const NewPhotoSpec = BasePhotoSpec.keys({
   locationId: IdSpec,
   userId: IdSpec,
-  img: Joi.string().uri().required().example("https://www.my-photos.com/cat.jpeg"),
+  img: Joi.string().required().example("https://www.my-photos.com/cat.jpeg"), // .uri()
   tags: Joi.array().items(Joi.string()).example(["Landscape", "Sunset", "Waterford"]),
   comments: Joi.array().items(CommentSpec).required(),
   voteScore: Joi.number().required().example(42).description("Current score of photo"),

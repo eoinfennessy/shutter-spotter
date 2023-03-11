@@ -56,7 +56,7 @@ export const locationController = {
         locationId: location._id,
         userId: request.auth.credentials._id,
         img: imgUri,
-        tags: payload.tags.split(" "),
+        tags: payload.tags !== "" ? payload.tags.split(" ") : [],
         comments: [],
         voteScore: 0,
         votes: [],

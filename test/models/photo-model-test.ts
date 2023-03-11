@@ -4,18 +4,23 @@ import { suite, setup, test, teardown } from "mocha";
 import { maggie, waterford, testPhotos, birdPhoto } from "../fixtures.js";
 import { Photo } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
+import { readFileSync } from "fs";
+import { imageStore } from "../../src/models/file-storage/image-store.js";
+
+let photos: Photo[] = new Array(testPhotos.length);
+const imageFile = readFileSync("./test/test-image.png");
 
 suite("Photo Model tests", () => {
-  db.locationStore.deleteAllLocations();
-  db.photoStore.deleteAllPhotos();
-  let photos: Photo[] = [];
-
   setup(async () => {
     db.init("mongo");
+    await db.locationStore.deleteAllLocations();
+    await db.photoStore.deleteAllPhotos();
+
     const user = await db.userStore.addUser(maggie);
     const location = await db.locationStore.addLocation({ ...waterford, userId: user._id });
     for (let i = 0; i < testPhotos.length; i++) {
-      photos.push(await db.photoStore.addPhoto({ ...testPhotos[i], locationId: location._id }));
+      const img = await imageStore.uploadImage(imageFile);
+      photos.push(await db.photoStore.addPhoto({ ...testPhotos[i], locationId: location._id, userId: user._id, img: img }));
     }
   });
 
@@ -27,7 +32,8 @@ suite("Photo Model tests", () => {
 
   test("add a photo", async () => {
     const locations = await db.locationStore.getAllLocations();
-    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id });
+    const img = await imageStore.uploadImage(imageFile);
+    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId, img: img });
     assertSubset(birdPhoto, newPhoto);
   });
 
@@ -41,7 +47,8 @@ suite("Photo Model tests", () => {
 
   test("get a photo - success", async () => {
     const locations = await db.locationStore.getAllLocations();
-    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id });
+    const img = await imageStore.uploadImage(imageFile);
+    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId, img: img });
     const returnedPhoto = await db.photoStore.getPhotoById(newPhoto._id);
     assert.deepEqual(newPhoto, returnedPhoto);
   });
@@ -49,7 +56,7 @@ suite("Photo Model tests", () => {
   test("get photos by location ID - success", async () => {
     const locations = await db.locationStore.getAllLocations();
     const returnedPhotos = await db.photoStore.getPhotosByLocationId(locations[0]._id);
-    assert.equal(photos.length, returnedPhotos.length)
+    assert.equal(photos.length, returnedPhotos.length);
     for (const photo of returnedPhotos) {
       assert.propertyVal(photo, "locationId", locations[0]._id);
     }
@@ -64,11 +71,11 @@ suite("Photo Model tests", () => {
   });
 
   test("update photo - success", async () => {
-    const photo = (await db.photoStore.getAllPhotos())[0]
-    const updates = { title: "Greenway", description: "A Greenway photo" }
-    db.photoStore.updatePhoto(photo._id, updates)
+    const photo = (await db.photoStore.getAllPhotos())[0];
+    const updates = { title: "Greenway", description: "A Greenway photo" };
+    db.photoStore.updatePhoto(photo._id, updates);
     const updatedPhoto = await db.photoStore.getPhotoById(photo._id);
-    assert.isNotNull(updatedPhoto)
+    assert.isNotNull(updatedPhoto);
     assertSubset(updates, updatedPhoto);
   });
 

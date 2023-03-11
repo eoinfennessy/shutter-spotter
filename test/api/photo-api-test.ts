@@ -2,7 +2,8 @@ import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
-import { maggie, testUsers, testLocations, waterford, testPhotos, birdPhoto, superAdmin } from "../fixtures.js";
+import { maggie, testLocations, superAdmin } from "../fixtures.js";
+import { testPhotos, birdPhoto } from "../api-fixtures.js"
 import { User, Location, Photo } from "../../src/models/store-types.js";
 import { db } from "../../src/models/db.js";
 
@@ -20,9 +21,10 @@ suite("Photo API tests", () => {
     const photoOwner = await shutterSpotterService.createUser(maggie);
     await shutterSpotterService.authenticate(maggie);
     for (let i = 0; i < testLocations.length; i++) {
-      locations[i] = await shutterSpotterService.createLocation({ ...testLocations[i], userId: photoOwner._id})
+      const currentLocation = await shutterSpotterService.createLocation({ ...testLocations[i], userId: photoOwner._id});
+      locations[i] = currentLocation;
       for (let j = 0; j < testPhotos.length; j++) {
-        photos[j] = await shutterSpotterService.createPhoto({ ...testPhotos[j], locationId: locations[i]._id})
+        photos[j] = await shutterSpotterService.createPhoto({ ...testPhotos[j], locationId: locations[i]._id, userId: locations[i].userId })
       }
     }
     await shutterSpotterService.clearAuth();
@@ -53,7 +55,7 @@ suite("Photo API tests", () => {
   });
 
   test("create a photo", async () => {
-    const newPhoto = { ...birdPhoto, locationId: locations[0]._id }
+    const newPhoto = { ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId }
     const returnedphoto = await shutterSpotterService.createPhoto(newPhoto)
     assertSubset(newPhoto, returnedphoto);
     assert.isDefined(returnedphoto._id);

@@ -1,6 +1,7 @@
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
+import { imageStore } from "../models/file-storage/image-store.js";
 import { IdSpec, NewPhotoSpec, PhotoApiPayloadSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
 import { NewPhoto, PhotoApiPayload } from "../models/store-types.js";
 import { validationError } from "./logger.js";
@@ -11,18 +12,23 @@ export const photoApi = {
       strategy: "jwt",
       scope: ["user-{payload.userId}", "admin", "super-admin"],
     },
+    payload: {
+      multipart: true,
+      output: "data",
+      maxBytes: 209715200,
+      parse: true,
+    },
     handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const photoPayload = request.payload as PhotoApiPayload
-        // TODO
-        const photoUrl = "http://www.my-photo.com/photo.jpeg"
+        const imgUri = await imageStore.uploadImage(photoPayload.imagefile);
         const newPhoto = {
           title: photoPayload.title,
           description: photoPayload.description,
           locationId: photoPayload.locationId,
           userId: photoPayload.userId,
-          img: photoUrl,
-          tags: photoPayload.tags.split(" "),
+          img: imgUri,
+          tags: photoPayload.tags !== "" ? photoPayload.tags.split(" ") : [],
           comments: [],
           voteScore: 0,
           votes: [],
@@ -122,11 +128,15 @@ export const photoApi = {
   deleteOne: {
     auth: {
       strategy: "jwt",
-      scope: ["user", "admin", "super-admin"],
+      scope: ["user-{payload.userId}", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        await db.photoStore.deletePhoto(request.params.id);
+        const photo = await db.photoStore.getPhotoById(request.params.id)
+        if (photo !== null) {
+          await db.photoStore.deletePhoto(request.params.id);
+          await imageStore.deleteImage(photo.img)
+        }
         return h.response().code(204);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");

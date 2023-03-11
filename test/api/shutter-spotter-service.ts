@@ -1,6 +1,6 @@
 import axios from "axios";
 import { serviceUrl } from "../fixtures.js";
-import { NewUser, NewLocationWithUserId, NewPhotoWithLocationId, UserCredentials, Name, Email, Password } from "../../src/models/store-types.js"
+import { NewUser, NewLocationWithUserId, UserCredentials, Name, Email, Password, PhotoApiPayload } from "../../src/models/store-types.js";
 
 export const shutterSpotterService = {
   shutterSpotterUrl: serviceUrl,
@@ -85,8 +85,16 @@ export const shutterSpotterService = {
     return res.data;
   },
 
-  async createPhoto(photo: NewPhotoWithLocationId) {
-    const res = await axios.post(`${this.shutterSpotterUrl}/api/photos`, photo);
+  async createPhoto(photo: PhotoApiPayload) {
+    // @ts-ignore
+    const form = new FormData();
+    form.append("title", photo.title)
+    form.append("userId", photo.userId)
+    form.append("locationId", photo.locationId)
+    form.append("description", photo.description)
+    form.append("tags", photo.tags)
+    form.append("imagefile", new Blob([photo.imagefile]))
+    const res = await axios.post(`${this.shutterSpotterUrl}/api/photos`, form)
     return res.data;
   },
 
@@ -114,4 +122,4 @@ export const shutterSpotterService = {
     const res = await axios.delete(`${this.shutterSpotterUrl}/api/photos/${id}`);
     return res.data;
   },
-}
+};

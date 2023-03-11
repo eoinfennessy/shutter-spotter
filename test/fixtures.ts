@@ -69,19 +69,35 @@ export const waterford = {
 export const testPhotos = [
   {
     title: "Landscape",
-    description: "A beautiful landscape photo"
+    description: "A beautiful landscape photo",
+    votes: [],
+    comments: [],
+    tags: [], 
+    voteScore: 0,
   },
   {
     title: "Seascape",
-    description: "A beautiful seascape photo"
+    description: "A beautiful seascape photo",
+    votes: [],
+    comments: [],
+    tags: [], 
+    voteScore: 0,
   },
   {
     title: "Wildlife",
-    description: "A beautiful wildlife photo"
+    description: "A beautiful wildlife photo",
+    votes: [],
+    comments: [],
+    tags: [], 
+    voteScore: 0,
   },
 ];
 
 export const birdPhoto = {
   title: "Birds",
-  description: "A beautiful bird photo"
+  description: "A beautiful bird photo",
+  votes: [],
+  comments: [],
+  tags: [], 
+  voteScore: 0,
 }
