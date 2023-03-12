@@ -1,4 +1,5 @@
 import { aboutController } from "./controllers/about-controller.js";
+import { accountSettingsController } from "./controllers/account-settings-controller.js";
 import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { locationController } from "./controllers/location-controller.js";
@@ -10,6 +11,12 @@ export const webRoutes = [
   { method: "GET", path: "/logout", config: accountsController.logout },
   { method: "POST", path: "/register", config: accountsController.signup },
   { method: "POST", path: "/authenticate", config: accountsController.login },
+  
+  { method: "GET", path: "/accountsettings", config: accountSettingsController.index },
+  { method: "POST", path: "/updatename", config: accountSettingsController.updateName },
+  { method: "POST", path: "/updateemail", config: accountSettingsController.updateEmail },
+  { method: "POST", path: "/updatepassword", config: accountSettingsController.updatePassword },
+  { method: "GET", path: "/deleteaccount", config: accountSettingsController.deleteAccount },
 
   { method: "GET", path: "/about", config: aboutController.index },
 
