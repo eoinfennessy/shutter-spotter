@@ -1,0 +1,68 @@
+{{> menu active="account-settings"}}
+
+
+<section class="section">
+  <h1 class="title">Account Settings</h1>
+  <div class="box box-link-hover-shadow">
+    <form action="/updatename" method="POST">
+      <label class="label">Update Name</label>
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <div class="field">
+            <input class="input" type="text" placeholder="Enter first name" name="firstName">
+          </div>
+          <div class="field">
+            <input class="input" type="text" placeholder="Enter last name" name="lastName">
+          </div>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <button class="button is-link">Update</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="box box-link-hover-shadow">
+    <form action="/updateemail" method="POST">
+      <label class="label">Update Email</label>
+      <div class="field is-horizontal">
+        <div class="control has-icons-left">
+          <input class="input" type="text" placeholder="Enter email" name="email">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <button class="button is-link">Update</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="box box-link-hover-shadow">
+    <form action="/updatepassword" method="POST">
+      <label class="label">Update Password</label>
+      <div class="field is-horizontal">
+        <div class="control has-icons-left">
+          <input class="input" type="text" placeholder="Enter password" name="password">
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <button class="button is-link">Update</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="box box-link-hover-shadow">
+    <label class="label">Delete Account</label>
+    <a href="/deleteaccount" class="button is-danger">
+      <span>Delete</span>
+      <span class="icon is-small">
+        <i class="fas fa-times"></i>
+      </span>
+    </a>
+  </div>
+</section>
