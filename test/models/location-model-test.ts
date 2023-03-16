@@ -10,7 +10,7 @@ let locations: Location[] = new Array(testLocations.length);
 suite("Location Model tests", () => {
   setup(async () => {
     db.init("mongo");
-    db.locationStore.deleteAllLocations();
+    await db.locationStore.deleteAllLocations();
 
     const user = await db.userStore.addUser(maggie);
     for (let i = 0; i < testLocations.length; i += 1) {
@@ -92,5 +92,14 @@ suite("Location Model tests", () => {
     assert.equal(await db.locationStore.count(), locations.length);
     await db.locationStore.deleteAllLocations();
     assert.equal(await db.locationStore.count(), 0);
+  });
+  
+  test("get count of locations by category", async () => {
+    let counts = await db.locationStore.countByCategory();
+    assert.equal(counts["Nature"], 1);
+    assert.equal(counts["Landscape"], 2);
+    await db.locationStore.deleteAllLocations();
+    counts = await db.locationStore.countByCategory();
+    assert.deepEqual(counts, {})
   });
 });

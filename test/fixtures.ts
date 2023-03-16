@@ -62,7 +62,7 @@ export const testLocations: NewLocation[] = [
   {
     name: "Tramore",
     description: "A big beach with dunes overlooking the town of Tramore",
-    category: "Landscape",
+    category: "Nature",
     latitude: -10,
     longitude: 0
   }

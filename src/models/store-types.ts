@@ -1,12 +1,12 @@
-export type Id = string
+export type Id = string;
 
-export type MongooseVersion = { __v: number }
+export type MongooseVersion = { __v: number };
 
 export type JwtPayload = {
-  id: Id,
-  email: string,
-  scope: string[]
-}
+  id: Id;
+  email: string;
+  scope: string[];
+};
 
 // User
 
@@ -32,33 +32,35 @@ export type User = NewUser & {
 
 // Location
 
+export type LocationCategory = "Landscape" | "Nature" | "Wildlife" | "Architecture" | "Macro" | "Aerial" | "Street";
+
 export type NewLocation = {
   name: string;
   description: string;
-  category: "Landscape" | "Nature" | "Wildlife" | "Architecture" | "Macro" | "Aerial" | "Street";
+  category: LocationCategory;
   latitude: number;
   longitude: number;
 };
 
 export type NewLocationWithUserId = NewLocation & {
   userId: Id;
-}
+};
 
 export type Location = NewLocationWithUserId & {
   _id: Id;
-}
+};
 
 // Photo
 
 export type Comment = {
   userId: string;
   comment: string;
-}
+};
 
 export type Vote = {
   userId: string;
   vote: -1 | 1;
-}
+};
 
 export type BasePhoto = {
   title: string;
@@ -68,12 +70,12 @@ export type BasePhoto = {
 export type PhotoPayload = BasePhoto & {
   imagefile: NodeJS.ArrayBufferView | string;
   tags: string;
-}
+};
 
 export type PhotoApiPayload = PhotoPayload & {
-  userId: Id,
-  locationId: Id,
-}
+  userId: Id;
+  locationId: Id;
+};
 
 export type NewPhoto = BasePhoto & {
   locationId: Id;
@@ -113,6 +115,7 @@ export type LocationStore = {
   deleteLocationById: (id: Id) => Promise<void>;
   deleteAllLocations: () => Promise<void>;
   count: () => Promise<number>;
+  countByCategory: () => Promise<Partial<Record<LocationCategory, number>>>;
 };
 
 export type PhotoStore = {

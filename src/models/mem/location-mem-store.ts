@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Location, LocationStore, NewLocationWithUserId } from "../store-types.js";
+import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
 
 let locations: Location[] = [];
 
@@ -34,5 +34,18 @@ export const locationMemStore: LocationStore = {
 
   async count(): Promise<number> {
     return locations.length;
+  },
+
+  async countByCategory(): Promise<Partial<Record<LocationCategory, number>>> {
+    const counts: Partial<Record<LocationCategory, number>> = {}
+    for (let i = 0; i < locations.length; i += 1) {
+      const currentValue = counts[locations[i].category]
+      if (currentValue === undefined) {
+        counts[locations[i].category] = 1;
+      } else {
+        counts[locations[i].category] = currentValue + 1;
+      }
+    }
+    return counts;
   },
 };

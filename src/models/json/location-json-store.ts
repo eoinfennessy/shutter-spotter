@@ -2,7 +2,7 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { Location, LocationStore, NewLocationWithUserId } from "../store-types.js";
+import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
 
 interface LowLocation extends Low {
   data: { locations: Location[] };
@@ -53,5 +53,19 @@ export const locationJsonStore: LocationStore = {
   async count(): Promise<number> {
     await db.read();
     return db.data.locations.length;
+  },
+
+  async countByCategory(): Promise<Partial<Record<LocationCategory, number>>> {
+    await db.read();
+    const counts: Partial<Record<LocationCategory, number>> = {}
+    for (let i = 0; i < db.data.locations.length; i += 1) {
+      const currentValue = counts[db.data.locations[i].category]
+      if (currentValue === undefined) {
+        counts[db.data.locations[i].category] = 1;
+      } else {
+        counts[db.data.locations[i].category] = currentValue + 1;
+      }
+    }
+    return counts;
   },
 };

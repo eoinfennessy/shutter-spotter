@@ -1,4 +1,4 @@
-import { Location, LocationStore, NewLocation, NewLocationWithUserId } from "../store-types.js";
+import { Location, LocationCategory, LocationStore, NewLocation, NewLocationWithUserId } from "../store-types.js";
 import { LocationMongoose } from "./location.js";
 import { Types } from "mongoose"
 
@@ -66,5 +66,14 @@ export const locationMongoStore: LocationStore = {
   async count(): Promise<number> {
     const count = await LocationMongoose.countDocuments();
     return count;
+  },
+
+  async countByCategory(): Promise<Partial<Record<LocationCategory, number>>> {
+    const counts = await LocationMongoose.aggregate().sortByCount("category");
+    const formattedCounts: Partial<Record<LocationCategory, number>> = {}
+    for (let i = 0; i < counts.length; i += 1) {
+      formattedCounts[counts[i]._id as LocationCategory] = counts[i].count;
+    }
+    return formattedCounts;
   },
 };
