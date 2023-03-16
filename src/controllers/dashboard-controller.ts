@@ -42,6 +42,7 @@ export const dashboardController = {
       const newLocation = {
         userId: loggedInUser._id,
         name: payload.name,
+        category: payload.category,
         latitude: Number(payload.latitude),
         longitude: Number(payload.longitude),
       } as NewLocationWithUserId;

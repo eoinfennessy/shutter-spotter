@@ -1,3 +1,5 @@
+import { NewLocation } from "../src/models/store-types";
+
 export const serviceUrl = "http://localhost:3000";
 
 export const testUsers = [
@@ -42,26 +44,30 @@ export const superAdmin = {
   password: "secret",
 };
 
-export const testLocations = [
+export const testLocations: NewLocation[] = [
   {
     name: "Woodstown",
+    category: "Landscape",
     latitude: 80,
     longitude: 80
   },
   {
     name: "Dunmore East",
+    category: "Landscape",
     latitude: 0,
     longitude: -10
   },
   {
     name: "Tramore",
+    category: "Landscape",
     latitude: -10,
     longitude: 0
   }
 ];
 
-export const waterford = {
-  name: "Tramore",
+export const waterford: NewLocation = {
+  name: "Waterford",
+  category: "Street",
   latitude: -10,
   longitude: 10
 }

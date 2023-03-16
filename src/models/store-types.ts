@@ -33,6 +33,7 @@ export type User = NewUser & {
 
 export type NewLocation = {
   name: string;
+  category: "Landscape" | "Nature" | "Wildlife" | "Architecture" | "Macro" | "Aerial" | "Street";
   latitude: number;
   longitude: number;
 };

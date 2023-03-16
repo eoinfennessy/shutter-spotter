@@ -41,6 +41,7 @@ export const UserArray = Joi.array().items(UserSpec).label("UserArray");
 
 export const NewLocationSpec = Joi.object().keys({
   name: Joi.string().required().example("Waterford"),
+  category: Joi.string().required().valid("Landscape", "Nature", "Wildlife", "Architecture", "Macro", "Aerial", "Street"),
   latitude: Joi.number().min(-90).max(90).example(52.25833),
   longitude: Joi.number().min(-180).max(180).example(-7.11194)
 }).label("NewLocationSpec");
