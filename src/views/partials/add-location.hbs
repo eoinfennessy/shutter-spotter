@@ -1,31 +1,36 @@
-<form action="/dashboard/addlocation" method="POST">
-  <div class="field">
-    <label class="label">Location Name</label>
-    <input class="input" type="text" placeholder="Enter location name" name="name">
-  </div>
-  <div class="field">
-    <label class="label">Description</label>
-    <textarea class="textarea" placeholder="Enter a description of the location" name="description"></textarea>
-  </div>
-  <div class="field">
-    <div class="select">
-      <select name="category">
-        <option>Select Category</option>
-        <option>Aerial</option>
-        <option>Architecture</option>
-        <option>Landscape</option>
-        <option>Macro</option>
-        <option>Nature</option>
-        <option>Street</option>
-        <option>Wildlife</option>
-      </select>
+<div class="box">
+  <form action="/dashboard/addlocation" method="POST">
+    <div class="field">
+      <label class="label">Location Name</label>
+      <input class="input" type="text" placeholder="Enter location name" name="name">
     </div>
-  </div>
-  <div class="field">
-    <input class="input" type="number" placeholder="Enter latitude" name="latitude">
-  </div>
-  <div class="field">
-    <input class="input" type="number" placeholder="Enter longitude" name="longitude">
-  </div>
-  <button class="button is-link">Add Location</button>
-</form>
+    <div class="field">
+      <label class="label">Description</label>
+      <textarea class="textarea" placeholder="Enter a description of the location" name="description"></textarea>
+    </div>
+    <div class="field">
+      <label class="label">Category</label>
+      <div class="select">
+        <select name="category">
+          <option>Select Category</option>
+          <option>Aerial</option>
+          <option>Architecture</option>
+          <option>Landscape</option>
+          <option>Macro</option>
+          <option>Nature</option>
+          <option>Street</option>
+          <option>Wildlife</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Latitude</label>
+      <input class="input" type="number" placeholder="Enter latitude" name="latitude">
+    </div>
+    <div class="field">
+      <label class="label">Longitude</label>
+      <input class="input" type="number" placeholder="Enter longitude" name="longitude">
+    </div>
+    <button class="button is-link">Add Location</button>
+  </form>
+</div>
