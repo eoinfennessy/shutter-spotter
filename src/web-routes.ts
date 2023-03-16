@@ -1,6 +1,7 @@
 import { aboutController } from "./controllers/about-controller.js";
 import { accountSettingsController } from "./controllers/account-settings-controller.js";
 import { accountsController } from "./controllers/accounts-controller.js";
+import { adminController } from "./controllers/admin-controller.js"
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { locationController } from "./controllers/location-controller.js";
 
@@ -18,6 +19,11 @@ export const webRoutes = [
   { method: "POST", path: "/updatepassword", config: accountSettingsController.updatePassword },
   { method: "GET", path: "/deleteaccount", config: accountSettingsController.deleteAccount },
 
+  { method: "GET", path: "/admin", config: adminController.index },
+  { method: "GET", path: "/admin/accounts", config: adminController.accounts },
+  { method: "GET", path: "/admin/accounts/{id}/deleteaccount", config: adminController.deleteAccount },
+  { method: "POST", path: "/admin/accounts/{id}/addscope", config: adminController.addScope },
+  
   { method: "GET", path: "/about", config: aboutController.index },
 
   { method: "GET", path: "/dashboard", config: dashboardController.index },

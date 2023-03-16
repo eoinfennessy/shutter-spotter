@@ -16,6 +16,7 @@ export type Name = {
   firstName: string;
   lastName: string;
 };
+export type Scope = string;
 
 export type UserCredentials = {
   email: Email;

@@ -1,0 +1,31 @@
+{{#each accounts}}
+  <div class="box box-link-hover-shadow">
+    <h2 class="title">
+      {{firstName}} {{lastName}}
+    </h2>
+    <ul class="block">
+      <li><strong> Email: </strong> {{email}}</li>
+      <li><strong> ID: </strong>  {{_id}}</li>
+      <li><strong> Scope: </strong>  {{scope}}</li>
+    </ul>
+    <div class="columns">
+      <div class="column">
+        <form action="/admin/accounts/{{_id}}/addscope" method="POST">
+          <div class="field has-addons">
+            <div class="control">
+              <input class="input" type="text" placeholder="Add scope to account" name="scope">
+            </div>
+            <div class="control">
+              <button class="button is-link">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="column is-narrow">
+        <a href="/admin/accounts/{{_id}}/deleteaccount" class="button is-danger">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+{{/each}}

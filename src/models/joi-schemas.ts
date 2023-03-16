@@ -22,6 +22,10 @@ export const NameSpec = Joi.object().keys({
   lastName: Joi.string().required().example("Bloggs")
 }).label("NameSpec");
 
+export const ScopeSpec = Joi.object().keys({
+  scope: Joi.string().required().example("admin")
+})
+
 export const UserCredentialsSpec = EmailSpec
   .concat(PasswordSpec)
   .label("UserCredentialsSpec");
