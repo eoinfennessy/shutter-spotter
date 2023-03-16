@@ -46,4 +46,8 @@ export const photoMemStore: PhotoStore = {
     });
     return photo;
   },
+
+  async count(): Promise<number> {
+    return photos.length;
+  },
 };

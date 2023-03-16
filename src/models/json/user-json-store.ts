@@ -92,5 +92,10 @@ export const userJsonStore: UserStore = {
     if (user.scope.indexOf(scope) !== -1) return;
     user.scope.push(scope);
     await db.write();
-  }
+  },
+
+  async count(): Promise<number> {
+    await db.read();
+    return db.data.users.length;
+  },
 };

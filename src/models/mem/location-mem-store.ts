@@ -31,4 +31,8 @@ export const locationMemStore: LocationStore = {
   async deleteAllLocations(): Promise<void> {
     locations = [];
   },
+
+  async count(): Promise<number> {
+    return locations.length;
+  },
 };

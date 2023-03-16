@@ -57,6 +57,12 @@ suite("User Model tests", () => {
     assert.isNull(await db.userStore.getUserById());
   });
 
+  test("get count of users", async () => {
+    assert.equal(await db.userStore.count(), users.length);
+    await db.userStore.deleteAll();
+    assert.equal(await db.userStore.count(), 0);
+  });
+
   test("delete One User - fail", async () => {
     await db.userStore.deleteUserById("bad-id");
     const allUsers = await db.userStore.getAllUsers();

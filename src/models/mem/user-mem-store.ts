@@ -67,5 +67,9 @@ export const userMemStore: UserStore = {
     if (user === null) return;
     if (user.scope.indexOf(scope) !== -1) return;
     user.scope.push(scope);
-  }
+  },
+
+  async count(): Promise<number> {
+    return users.length;
+  },
 };

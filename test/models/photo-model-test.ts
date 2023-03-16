@@ -20,14 +20,13 @@ suite("Photo Model tests", () => {
     const location = await db.locationStore.addLocation({ ...waterford, userId: user._id });
     for (let i = 0; i < testPhotos.length; i++) {
       const img = await imageStore.uploadImage(imageFile);
-      photos.push(await db.photoStore.addPhoto({ ...testPhotos[i], locationId: location._id, userId: user._id, img: img }));
+      photos[i] = await db.photoStore.addPhoto({ ...testPhotos[i], locationId: location._id, userId: user._id, img: img });
     }
   });
 
   teardown(async () => {
     await db.locationStore.deleteAllLocations();
     await db.photoStore.deleteAllPhotos();
-    photos = [];
   });
 
   test("add a photo", async () => {
@@ -97,5 +96,11 @@ suite("Photo Model tests", () => {
     await db.photoStore.deletePhoto("not an ID");
     const allPhotos = await db.photoStore.getAllPhotos();
     assert.equal(photos.length, allPhotos.length);
+  });
+
+  test("get count of photos", async () => {
+    assert.equal(await db.photoStore.count(), photos.length);
+    await db.photoStore.deleteAllPhotos();
+    assert.equal(await db.photoStore.count(), 0);
   });
 });

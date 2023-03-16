@@ -61,5 +61,10 @@ export const locationMongoStore: LocationStore = {
 
   async deleteAllLocations(): Promise<void> {
     await LocationMongoose.deleteMany({});
-  }
+  },
+
+  async count(): Promise<number> {
+    const count = await LocationMongoose.countDocuments();
+    return count;
+  },
 };

@@ -64,4 +64,9 @@ export const photoJsonStore: PhotoStore = {
     await db.write();
     return photo;
   },
+
+  async count(): Promise<number> {
+    await db.read();
+    return db.data.photos.length;
+  },
 };

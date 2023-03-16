@@ -102,6 +102,7 @@ export type UserStore = {
   updateEmail: (id: Id, email: Email) => Promise<User | null>;
   updatePassword: (id: Id, password: Password) => Promise<User | null>;
   addScope: (id: Id, scope: string) => Promise<void>;
+  count: () => Promise<number>;
 };
 
 export type LocationStore = {
@@ -111,6 +112,7 @@ export type LocationStore = {
   getUserLocations: (userId: Id) => Promise<Location[]>;
   deleteLocationById: (id: Id) => Promise<void>;
   deleteAllLocations: () => Promise<void>;
+  count: () => Promise<number>;
 };
 
 export type PhotoStore = {
@@ -121,6 +123,7 @@ export type PhotoStore = {
   deletePhoto: (id: Id) => Promise<void>;
   deleteAllPhotos: () => Promise<void>;
   updatePhoto: (photoId: Id, updates: Partial<BasePhoto>) => Promise<Photo | null>;
+  count: () => Promise<number>;
 };
 
 export type DbTypes = "mem" | "json" | "mongo";

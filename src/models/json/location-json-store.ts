@@ -49,4 +49,9 @@ export const locationJsonStore: LocationStore = {
     db.data.locations = [];
     await db.write();
   },
+
+  async count(): Promise<number> {
+    await db.read();
+    return db.data.locations.length;
+  },
 };

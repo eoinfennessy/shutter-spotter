@@ -102,4 +102,9 @@ export const userMongoStore: UserStore = {
     }
     await UserMongoose.findByIdAndUpdate(id, { $addToSet: { scope: scope } });
   },
+  
+  async count(): Promise<number> {
+    const count = await UserMongoose.countDocuments();
+    return count;
+  },
 };

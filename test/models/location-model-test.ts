@@ -5,22 +5,22 @@ import { maggie, testLocations, waterford } from "../fixtures.js";
 import { Location } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
 
-suite("Location Model tests", () => {
-  db.locationStore.deleteAllLocations();
-  let locations: Location[] = [];
+let locations: Location[] = new Array(testLocations.length);
 
+suite("Location Model tests", () => {
   setup(async () => {
     db.init("mongo");
+    db.locationStore.deleteAllLocations();
+
     const user = await db.userStore.addUser(maggie);
     for (let i = 0; i < testLocations.length; i += 1) {
       const location = { ...testLocations[i], userId: user._id};
-      locations.push(await db.locationStore.addLocation(location));
+      locations[i] = await db.locationStore.addLocation(location);
     }
   });
 
   teardown(async () => {
     await db.locationStore.deleteAllLocations();
-    locations = [];
   });
 
   test("create a location", async () => {
@@ -86,5 +86,11 @@ suite("Location Model tests", () => {
     await db.locationStore.deleteLocationById("not an ID");
     const allLocations = await db.locationStore.getAllLocations();
     assert.equal(locations.length, allLocations.length);
+  });
+
+  test("get count of locations", async () => {
+    assert.equal(await db.locationStore.count(), locations.length);
+    await db.locationStore.deleteAllLocations();
+    assert.equal(await db.locationStore.count(), 0);
   });
 });

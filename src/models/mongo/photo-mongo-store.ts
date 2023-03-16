@@ -74,4 +74,9 @@ export const photoMongoStore: PhotoStore = {
       return convertLeanPhotoToPhoto(doc)
     });
   },
+
+  async count(): Promise<number> {
+    const count = await PhotoMongoose.countDocuments();
+    return count;
+  },
 };
