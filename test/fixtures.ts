@@ -47,18 +47,21 @@ export const superAdmin = {
 export const testLocations: NewLocation[] = [
   {
     name: "Woodstown",
+    description: "A beautiful beach",
     category: "Landscape",
     latitude: 80,
     longitude: 80
   },
   {
     name: "Dunmore East",
+    description: "A scenic fishing village",
     category: "Landscape",
     latitude: 0,
     longitude: -10
   },
   {
     name: "Tramore",
+    description: "A big beach with dunes overlooking the town of Tramore",
     category: "Landscape",
     latitude: -10,
     longitude: 0
@@ -67,6 +70,7 @@ export const testLocations: NewLocation[] = [
 
 export const waterford: NewLocation = {
   name: "Waterford",
+  description: "A beautiful city with a rich Viking and Norman history",
   category: "Street",
   latitude: -10,
   longitude: 10
