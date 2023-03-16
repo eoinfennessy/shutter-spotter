@@ -4,6 +4,7 @@
       <th>Title</th>
       <th>Description</th>
       <th>Thumbnail</th>
+      <th>Tags</th>
       <th></th>
     </tr>
   </thead>
@@ -18,6 +19,11 @@
       </td>
       <td>
         <img src={{img}}>
+      </td>
+      <td>
+        {{#each tags}}
+          <span class="tag is-info">{{this}}</span>
+        {{/each}}
       </td>
       <td>
         <a href="/location/{{../location._id}}/deletephoto/{{_id}}" class="ui icon button">
