@@ -39,10 +39,6 @@ export const userApi = {
         const userPayload = request.payload as NewUser;
         const user = await db.userStore.addUser(userPayload);
         return h.response(user).code(201);
-        // if (user) {
-        //   return h.response(user).code(201);
-        // }
-        // return Boom.badImplementation("error creating user");
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }

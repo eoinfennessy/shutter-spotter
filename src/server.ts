@@ -85,6 +85,7 @@ async function init() {
   server.auth.default("session");
 
   db.init("mongo");
+  db.seed();
   server.route(apiRoutes);
   server.route(webRoutes);
   await server.start();

@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+
 import { userMemStore } from "./mem/user-mem-store.js";
 import { locationMemStore } from "./mem/location-mem-store.js";
 import { photoMemStore } from "./mem/photo-mem-store.js";
@@ -9,9 +11,16 @@ import { photoJsonStore } from "./json/photo-json-store.js";
 import { userMongoStore } from "./mongo/user-mongo-store.js";
 import { locationMongoStore } from "./mongo/location-mongo-store.js";
 import { photoMongoStore } from "./mongo/photo-mongo-store.js";
-
-import { Db, DbTypes } from "./store-types"
 import { connectMongo } from "./mongo/connect-mongo.js";
+
+import { createSuperAdminIfNotExists } from "./seed-db.js";
+import { Db, DbTypes } from "./store-types"
+
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
 
 export const db: Db = {
   userStore: userMemStore,
@@ -40,4 +49,10 @@ export const db: Db = {
         throw new Error(`Invalid database type: ${dbType}`);
     }
   },
+
+  seed(): void {
+    if (process.env.SUPER_ADMIN_PASSWORD !== undefined) {
+      createSuperAdminIfNotExists(this, process.env.SUPER_ADMIN_PASSWORD)
+    }
+  }
 };

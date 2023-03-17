@@ -136,4 +136,5 @@ export type Db = {
   locationStore: LocationStore;
   photoStore: PhotoStore;
   init: (dbType: DbTypes) => void;
+  seed: () => void;
 };
