@@ -1,0 +1,67 @@
+<script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.2.4/dist/frappe-charts.min.iife.js"></script>
+
+<div class="box">
+  <h1 class="title">ShutterSpotter Analytics</h1>
+  <div class="tile is-ancestor">
+    <div class="tile is-3 is-vertical is-parent">
+      <div class="tile is-child box notification is-primary has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{userCount}}</p>
+        <p class="is-size-5">Total Count of Users</p>
+      </div>
+      <div class="tile is-child box notification is-info has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{locationCount}}</p>
+        <p class="is-size-5">Total Count of Locations</p>
+      </div>
+      <div class="tile is-child box notification is-warning has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{photoCount}}</p>
+        <p class="is-size-5">Total Count of Photos</p>
+      </div>
+      <div class="tile is-child box notification is-success has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{avgLocationsPerUser}}</p>
+        <p class="is-size-5">Average Locations per User</p>
+      </div>
+      <div class="tile is-child box notification is-danger has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{avgPhotosPerUser}}</p>
+        <p class="is-size-5">Average Photos per User</p>
+      </div>
+      <div class="tile is-child box notification is-link has-text-weight-bold has-text-centered">
+        <p class="is-size-1">{{avgPhotosPerLocation}}</p>
+        <p class="is-size-5">Average Photos per Location</p>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="tile is-child box">
+        <p class="title has-text-centered">Location Count by Category</p>
+        <div id="chart" style="font-size: 200%;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  data = {
+    labels: [
+      {{#each locationCountByCategory}}
+        "{{@key}}",
+      {{/each}}
+    ],
+    datasets: [
+      { values: [
+          {{#each locationCountByCategory}}
+            {{this}},
+          {{/each}}
+        ]
+      }
+    ]
+  }
+  const chart = new frappe.Chart( "#chart", {
+    data: data,
+    type: 'bar',
+    height: 540,
+    colors: ['#00d1b2'],
+    valuesOverPoints: true,
+    axisOptions: {
+      xAxisMode: 'tick'
+    },
+  });
+</script>

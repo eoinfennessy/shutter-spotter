@@ -1,15 +1,37 @@
 import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
-import Joi from "joi";
 import { db } from "../models/db.js";
 import { ScopeSpec } from "../models/joi-schemas.js";
 
+const getAnalytics = async function () {
+  const promises = [];
+  promises.push(db.userStore.count());
+  promises.push(db.locationStore.count());
+  promises.push(db.photoStore.count());
+  const locationCountByCategory = await db.locationStore.countByCategory();
+  const [userCount, locationCount, photoCount] = await Promise.all(promises);
+  const avgLocationsPerUser = userCount !== 0 ? locationCount / userCount : 0;
+  const avgPhotosPerUser = userCount !== 0 ? photoCount / userCount : 0;
+  const avgPhotosPerLocation = locationCount !== 0 ? photoCount / locationCount : 0;
+  return {
+    userCount: userCount,
+    locationCount: locationCount,
+    photoCount: photoCount,
+    locationCountByCategory: locationCountByCategory,
+    // Format to at most 2 decimal places while removing trailing zeroes
+    avgLocationsPerUser: +(avgLocationsPerUser).toFixed(2),
+    avgPhotosPerUser: +(avgPhotosPerUser).toFixed(2),
+    avgPhotosPerLocation: +(avgPhotosPerLocation).toFixed(2),
+  };
+};
+
 export const adminController = {
   index: {
-    handler: function (request: Request, h: ResponseToolkit): ResponseObject {
-      return h.view("admin-dashboard-view", { title: "Admin Dashboard" });
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
+      const analytics = await getAnalytics();
+      return h.view("admin-dashboard-view", { ...analytics, title: "Admin Dashboard" });
     },
   },
-  
+
   accounts: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const users = await db.userStore.getAllUsers();
@@ -23,7 +45,7 @@ export const adminController = {
       return h.redirect("/admin/accounts");
     },
   },
-  
+
   addScope: {
     validate: {
       payload: ScopeSpec,
@@ -40,9 +62,9 @@ export const adminController = {
       },
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
-      const payload = request.payload as Record<"scope", string>
+      const payload = request.payload as Record<"scope", string>;
       await db.userStore.addScope(request.params.id, payload.scope);
       return h.redirect("/admin/accounts");
     },
   },
-}
+};
