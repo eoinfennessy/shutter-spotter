@@ -7,9 +7,9 @@ import HapiSwagger from "hapi-swagger";
 import Inert from "@hapi/inert";
 import Joi from "joi";
 import jwt from "hapi-auth-jwt2";
-import { validate } from "./api/jwt-utils.js";
 import { fileURLToPath } from "url";
 import Handlebars from "handlebars";
+import { validate } from "./api/jwt-utils.js";
 import { apiRoutes } from "./api-routes.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
@@ -35,7 +35,7 @@ const swaggerOptions = {
       type: "apiKey",
       name: "Authorization",
       in: "header",
-    }
+    },
   },
   security: [{ jwt: [] }],
 };
@@ -53,7 +53,6 @@ async function init() {
   await server.register(jwt);
   // @ts-ignore
   await server.register([Inert, Vision, { plugin: HapiSwagger, options: swaggerOptions }]);
-
 
   server.validator(Joi);
 
@@ -81,12 +80,12 @@ async function init() {
   server.auth.strategy("jwt", "jwt", {
     key: process.env.COOKIE_PASSWORD,
     validate: validate,
-    verifyOptions: { algorithms: ["HS256"] }
+    verifyOptions: { algorithms: ["HS256"] },
   });
   server.auth.default("session");
 
   if (isDbType(process.env.DB_TYPE)) {
-    db.init(process.env.DB_TYPE)
+    db.init(process.env.DB_TYPE);
   } else {
     throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
   }

@@ -26,6 +26,10 @@ const getAnalytics = async function () {
 
 export const adminController = {
   index: {
+    auth: {
+      strategy: "session",
+      scope: ["admin", "super-admin"],
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const analytics = await getAnalytics();
       return h.view("admin-dashboard-view", { ...analytics, title: "Admin Dashboard" });
@@ -33,6 +37,10 @@ export const adminController = {
   },
 
   accounts: {
+    auth: {
+      strategy: "session",
+      scope: ["admin", "super-admin"],
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const users = await db.userStore.getAllUsers();
       return h.view("accounts-view", { title: "Admin - User Accounts", accounts: users });
@@ -40,6 +48,10 @@ export const adminController = {
   },
 
   deleteAccount: {
+    auth: {
+      strategy: "session",
+      scope: ["admin", "super-admin"],
+    },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       await db.userStore.deleteUserById(request.params.id);
       return h.redirect("/admin/accounts");
@@ -47,6 +59,10 @@ export const adminController = {
   },
 
   addScope: {
+    auth: {
+      strategy: "session",
+      scope: ["super-admin"],
+    },
     validate: {
       payload: ScopeSpec,
       options: { abortEarly: false, stripUnknown: true },
