@@ -1,17 +1,31 @@
 import { assert } from "chai";
 import { shutterSpotterService } from "./shutter-spotter-service.js";
-// import { suite, setup, test } from "mocha";
+import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, superAdmin, testLocations, waterford } from "../fixtures.js";
-import { Location, User } from "../../src/models/store-types.js";
+import { DbTypes, Location, User } from "../../src/models/store-types.js";
 import { db } from "../../src/models/db.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
 
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 const locations = new Array(testLocations.length)
 let testSuperAdmin: User;
 
 suite("Location API tests", () => {
   setup(async () => {
-    db.init("mongo")
+    db.init(dbType)
     await db.locationStore.deleteAllLocations();
     await db.userStore.deleteAll();
     

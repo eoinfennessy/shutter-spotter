@@ -2,14 +2,28 @@ import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { suite, setup, test, teardown } from "mocha";
 import { maggie, testLocations, waterford } from "../fixtures.js";
-import { Location } from "../../src/models/store-types.js";
+import { DbTypes, Location } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
 
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 let locations: Location[] = new Array(testLocations.length);
 
 suite("Location Model tests", () => {
   setup(async () => {
-    db.init("mongo");
+    db.init(dbType)
     await db.locationStore.deleteAllLocations();
 
     const user = await db.userStore.addUser(maggie);

@@ -2,9 +2,23 @@ import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { suite, setup, test, teardown } from "mocha";
 import { maggie, testUsers } from "../fixtures.js";
-import { User } from "../../src/models/store-types.js";
+import { DbTypes, User } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
 
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 const users: User[] = new Array(testUsers.length);
 
 suite("User Model tests", () => {

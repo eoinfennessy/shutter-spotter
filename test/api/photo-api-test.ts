@@ -4,16 +4,30 @@ import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, testLocations, superAdmin } from "../fixtures.js";
 import { testPhotos, birdPhoto } from "../api-fixtures.js"
-import { User, Location, Photo } from "../../src/models/store-types.js";
+import { User, Location, Photo, DbTypes } from "../../src/models/store-types.js";
 import { db } from "../../src/models/db.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
 
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 const locations: Location[] = new Array(testLocations.length);
 const photos: Photo[] = new Array(testPhotos.length);
 let testSuperAdmin: User;
 
 suite("Photo API tests", () => {
   setup(async () => {
-    db.init("mongo");
+    db.init(dbType);
     await db.photoStore.deleteAllPhotos();
     await db.locationStore.deleteAllLocations();
     await db.userStore.deleteAll();

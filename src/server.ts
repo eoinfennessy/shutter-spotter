@@ -14,6 +14,7 @@ import { apiRoutes } from "./api-routes.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
+import { isDbType } from "./utils/type-gaurds.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,21 +71,25 @@ async function init() {
 
   server.auth.strategy("session", "cookie", {
     cookie: {
-      name: process.env.cookie_name,
-      password: process.env.cookie_password,
+      name: process.env.COOKIE_NAME,
+      password: process.env.COOKIE_PASSWORD,
       isSecure: false,
     },
     redirectTo: "/",
     validate: accountsController.validate,
   });
   server.auth.strategy("jwt", "jwt", {
-    key: process.env.cookie_password,
+    key: process.env.COOKIE_PASSWORD,
     validate: validate,
     verifyOptions: { algorithms: ["HS256"] }
   });
   server.auth.default("session");
 
-  db.init("mongo");
+  if (isDbType(process.env.DB_TYPE)) {
+    db.init(process.env.DB_TYPE)
+  } else {
+    throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+  }
   db.seed();
   server.route(apiRoutes);
   server.route(webRoutes);

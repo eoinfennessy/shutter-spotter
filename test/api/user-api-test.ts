@@ -4,14 +4,28 @@ import { db } from "../../src/models/db.js";
 import { suite, setup, test } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, testUsers, superAdmin } from "../fixtures.js";
-import { User } from "../../src/models/store-types.js";
+import { DbTypes, User } from "../../src/models/store-types.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
 
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 const users = new Array(testUsers.length);
 let testSuperAdmin: User;
 
 suite("User API tests", () => {
   setup(async () => {
-    db.init("mongo")
+    db.init(dbType)
     await db.userStore.deleteAll();
     for (let i = 0; i < testUsers.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop

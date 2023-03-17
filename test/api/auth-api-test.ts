@@ -4,10 +4,26 @@ import { suite, setup, test, teardown } from "mocha";
 import { decodeToken } from "../../src/api/jwt-utils.js";
 import { maggie } from "../fixtures.js";
 import { db } from "../../src/models/db.js";
+import { isDbType } from "../../src/utils/type-gaurds.js"
+import dotenv from "dotenv";
+import { DbTypes } from "../../src/models/store-types.js";
+
+const result = dotenv.config();
+if (result.error) {
+  console.error(result.error.message);
+  process.exit(1);
+}
+
+let dbType: DbTypes;
+if (isDbType(process.env.DB_TYPE)) {
+  dbType = process.env.DB_TYPE;
+} else {
+  throw new Error("'DB_TYPE' env variable has not been set or is not valid.");
+}
 
 suite("Authentication API tests", async () => {
   setup(async () => {
-    db.init("mongo")
+    db.init(dbType)
     await db.userStore.deleteAll();
   });
 
