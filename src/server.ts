@@ -28,7 +28,7 @@ if (result.error) {
 const swaggerOptions = {
   info: {
     title: "ShutterSpotter API",
-    version: "0.2",
+    version: "0.3",
   },
   securityDefinitions: {
     jwt: {
