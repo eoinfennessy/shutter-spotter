@@ -46,14 +46,14 @@ export const locationFirebaseStore: LocationStore = {
   },
 
   async deleteLocationById(id: string): Promise<void> {
-    locationsRef.doc(id).delete();
+    await locationsRef.doc(id).delete();
   },
 
   async deleteAllLocations(): Promise<void> {
     // Firestore requires one doc to remain in a collection
     // and doesn't seem to allow recreation of a collection after all docs have been removed :(
     const locationSnapshots = await locationsRef.where("name", "!=", "placeholder").get();
-    const locationDocs = locationSnapshots.docs
+    const locationDocs = locationSnapshots.docs;
     for (let i = 0; i < locationDocs.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       await locationDocs[i].ref.delete();

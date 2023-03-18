@@ -15,10 +15,10 @@ import { connectMongo } from "./mongo/connect-mongo.js";
 
 import { userFirebaseStore } from "./firebase/user-firebase-store.js";
 import { locationFirebaseStore } from "./firebase/location-firebase-store.js";
-// import { photoMongoStore } from "./mongo/photo-mongo-store.js";
+import { photoFirebaseStore } from "./firebase/photo-firebase-store.js";
 
 import { createSuperAdminIfNotExists } from "./seed-db.js";
-import { Db, DbTypes } from "./store-types"
+import { Db, DbTypes } from "./store-types";
 
 const result = dotenv.config();
 if (result.error) {
@@ -52,8 +52,7 @@ export const db: Db = {
       case "firebase":
         this.userStore = userFirebaseStore;
         this.locationStore = locationFirebaseStore;
-        this.photoStore = photoJsonStore;
-        connectMongo();
+        this.photoStore = photoFirebaseStore;
         break;
       default:
         throw new Error(`Invalid database type: ${dbType}`);
@@ -62,7 +61,7 @@ export const db: Db = {
 
   seed(): void {
     if (process.env.SUPER_ADMIN_PASSWORD !== undefined) {
-      createSuperAdminIfNotExists(this, process.env.SUPER_ADMIN_PASSWORD)
+      createSuperAdminIfNotExists(this, process.env.SUPER_ADMIN_PASSWORD);
     }
-  }
+  },
 };

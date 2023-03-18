@@ -46,14 +46,14 @@ export const userFirebaseStore: UserStore = {
   },
 
   async deleteUserById(id: string): Promise<void> {
-    usersRef.doc(id).delete();
+    await usersRef.doc(id).delete();
   },
 
   async deleteAll(): Promise<void> {
     // Firestore requires one doc to remain in a collection
     // and doesn't seem to allow recreation of a collection after all docs have been removed :(
     const userSnapshots = await usersRef.where("email", "!=", "john@doe.com").get();
-    const userDocs = userSnapshots.docs
+    const userDocs = userSnapshots.docs;
     for (let i = 0; i < userDocs.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       await userDocs[i].ref.delete();
@@ -61,25 +61,25 @@ export const userFirebaseStore: UserStore = {
   },
 
   async updateName(id: string, name: Name): Promise<User | null> {
-    if (await this.getUserById(id) === null) return null;
-    await usersRef.doc(id).update({ firstName: name.firstName, lastName: name.lastName });
+    if ((await this.getUserById(id)) === null) return null;
+    await usersRef.doc(id).update(name);
     return this.getUserById(id);
   },
 
   async updateEmail(id: string, email: Email): Promise<User | null> {
-    if (await this.getUserById(id) === null) return null;
+    if ((await this.getUserById(id)) === null) return null;
     await usersRef.doc(id).update({ email: email });
     return this.getUserById(id);
   },
 
   async updatePassword(id: string, password: Password): Promise<User | null> {
-    if (await this.getUserById(id) === null) return null;
+    if ((await this.getUserById(id)) === null) return null;
     await usersRef.doc(id).update({ password: password });
     return this.getUserById(id);
   },
 
   async addScope(id: string, scope: string): Promise<void> {
-    if (await this.getUserById(id) === null) return;
+    if ((await this.getUserById(id)) === null) return;
     await usersRef.doc(id).update({
       scope: FieldValue.arrayUnion(scope),
     });

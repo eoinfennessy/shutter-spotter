@@ -6,7 +6,7 @@ import { DbTypes, Photo } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
 import { readFileSync } from "fs";
 import { imageStore } from "../../src/models/file-storage/image-store.js";
-import { isDbType } from "../../src/utils/type-gaurds.js"
+import { isDbType } from "../../src/utils/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();
@@ -61,7 +61,12 @@ suite("Photo Model tests", () => {
   test("get a photo - success", async () => {
     const locations = await db.locationStore.getAllLocations();
     const img = await imageStore.uploadImage(imageFile);
-    const newPhoto = await db.photoStore.addPhoto({ ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId, img: img });
+    const newPhoto = await db.photoStore.addPhoto({
+      ...birdPhoto,
+      locationId: locations[0]._id,
+      userId: locations[0].userId,
+      img: img,
+    });
     const returnedPhoto = await db.photoStore.getPhotoById(newPhoto._id);
     assert.deepEqual(newPhoto, returnedPhoto);
   });

@@ -1,6 +1,6 @@
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ const serviceAccount = {
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
   client_id: process.env.FIREBASE_CLIENT_ID,
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
-} as ServiceAccount
+} as ServiceAccount;
 
 initializeApp({ credential: cert(serviceAccount) });
 
