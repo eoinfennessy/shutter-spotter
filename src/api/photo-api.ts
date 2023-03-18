@@ -18,9 +18,9 @@ export const photoApi = {
       maxBytes: 209715200,
       parse: true,
     },
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const photoPayload = request.payload as PhotoApiPayload
+        const photoPayload = request.payload as PhotoApiPayload;
         const imgUri = await imageStore.uploadImage(photoPayload.imagefile);
         const newPhoto = {
           title: photoPayload.title,
@@ -32,7 +32,7 @@ export const photoApi = {
           comments: [],
           voteScore: 0,
           votes: [],
-        } as NewPhoto
+        } as NewPhoto;
         const photo = await db.photoStore.addPhoto(newPhoto);
         return h.response(photo).code(201);
       } catch (err) {
@@ -50,7 +50,7 @@ export const photoApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function(request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const photos = await db.photoStore.getAllPhotos();
         return h.response(photos).code(200);
@@ -61,7 +61,7 @@ export const photoApi = {
     tags: ["api"],
     description: "Get all photos",
     notes: "Returns details of all photos",
-    response: { schema: PhotoArray, failAction: validationError}
+    response: { schema: PhotoArray, failAction: validationError },
   },
 
   findOne: {
@@ -84,7 +84,6 @@ export const photoApi = {
     notes: "Returns details of photo matching specified ID",
     validate: { params: { id: IdSpec }, failAction: validationError },
     response: { schema: PhotoSpec, failAction: validationError },
-
   },
 
   findLocationPhotos: {
@@ -124,7 +123,6 @@ export const photoApi = {
     notes: "Deletes all photos from ShutterSpotter's DB",
   },
 
-  // TODO: tighten scope to photo owner after adding userId to photo schema
   deleteOne: {
     auth: {
       strategy: "jwt",
@@ -132,11 +130,13 @@ export const photoApi = {
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const photo = await db.photoStore.getPhotoById(request.params.id)
-        if (photo !== null) {
-          await db.photoStore.deletePhoto(request.params.id);
-          await imageStore.deleteImage(photo.img)
+        const photo = await db.photoStore.getPhotoById(request.params.id);
+        if (photo === null) return Boom.notFound("No photo with this ID");
+        if (photo.userId !== request.params.userId) {
+          return Boom.badRequest("User ID request param does not match user ID of resource owner");
         }
+        await db.photoStore.deletePhoto(request.params.id);
+        await imageStore.deleteImage(photo.img);
         return h.response().code(204);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
@@ -145,6 +145,6 @@ export const photoApi = {
     tags: ["api"],
     description: "Deletes a photo",
     notes: "Deletes photo matching specified photo ID from the ShutterSpotter DB",
-    validate: { params: { id: IdSpec }, failAction: validationError },
+    validate: { params: { id: IdSpec, userId: IdSpec }, failAction: validationError },
   },
 };

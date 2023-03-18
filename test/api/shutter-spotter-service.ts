@@ -88,13 +88,13 @@ export const shutterSpotterService = {
   async createPhoto(photo: PhotoApiPayload) {
     // @ts-ignore
     const form = new FormData();
-    form.append("title", photo.title)
-    form.append("userId", photo.userId)
-    form.append("locationId", photo.locationId)
-    form.append("description", photo.description)
-    form.append("tags", photo.tags)
-    form.append("imagefile", new Blob([photo.imagefile]))
-    const res = await axios.post(`${this.shutterSpotterUrl}/api/photos`, form)
+    form.append("title", photo.title);
+    form.append("userId", photo.userId);
+    form.append("locationId", photo.locationId);
+    form.append("description", photo.description);
+    form.append("tags", photo.tags);
+    form.append("imagefile", new Blob([photo.imagefile]));
+    const res = await axios.post(`${this.shutterSpotterUrl}/api/photos`, form);
     return res.data;
   },
 
@@ -118,8 +118,8 @@ export const shutterSpotterService = {
     return res.data;
   },
 
-  async deletePhoto(id: string) {
-    const res = await axios.delete(`${this.shutterSpotterUrl}/api/photos/${id}`);
+  async deletePhoto(id: string, userId: string) {
+    const res = await axios.delete(`${this.shutterSpotterUrl}/api/users/${userId}/photos/${id}`);
     return res.data;
   },
 };

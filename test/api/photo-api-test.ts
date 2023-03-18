@@ -3,10 +3,10 @@ import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, testLocations, superAdmin } from "../fixtures.js";
-import { testPhotos, birdPhoto } from "../api-fixtures.js"
+import { testPhotos, birdPhoto } from "../api-fixtures.js";
 import { User, Location, Photo, DbTypes } from "../../src/models/store-types.js";
 import { db } from "../../src/models/db.js";
-import { isDbType } from "../../src/utils/type-gaurds.js"
+import { isDbType } from "../../src/utils/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();
@@ -31,19 +31,19 @@ suite("Photo API tests", () => {
     await db.photoStore.deleteAllPhotos();
     await db.locationStore.deleteAllLocations();
     await db.userStore.deleteAll();
-    
+
     const photoOwner = await shutterSpotterService.createUser(maggie);
     await shutterSpotterService.authenticate(maggie);
     for (let i = 0; i < testLocations.length; i++) {
-      const currentLocation = await shutterSpotterService.createLocation({ ...testLocations[i], userId: photoOwner._id});
+      const currentLocation = await shutterSpotterService.createLocation({ ...testLocations[i], userId: photoOwner._id });
       locations[i] = currentLocation;
       for (let j = 0; j < testPhotos.length; j++) {
-        photos[j] = await shutterSpotterService.createPhoto({ ...testPhotos[j], locationId: locations[i]._id, userId: locations[i].userId })
+        photos[j] = await shutterSpotterService.createPhoto({ ...testPhotos[j], locationId: locations[i]._id, userId: locations[i].userId });
       }
     }
     await shutterSpotterService.clearAuth();
     testSuperAdmin = await shutterSpotterService.createUser(superAdmin);
-    await db.userStore.addScope(testSuperAdmin._id, "super-admin")
+    await db.userStore.addScope(testSuperAdmin._id, "super-admin");
     await shutterSpotterService.authenticate(testSuperAdmin);
   });
 
@@ -51,7 +51,7 @@ suite("Photo API tests", () => {
     await db.photoStore.deleteAllPhotos();
     await db.locationStore.deleteAllLocations();
     await db.userStore.deleteAll();
-  })
+  });
 
   test("get all photos", async () => {
     let returnedPhotos = await shutterSpotterService.getAllPhotos();
@@ -63,14 +63,14 @@ suite("Photo API tests", () => {
     assert.equal(returnedPhotos.length, 9);
     returnedPhotos = await shutterSpotterService.getLocationPhotos(photos[0].locationId);
     assert.equal(returnedPhotos.length, 3);
-    returnedPhotos.forEach(photo => {
-      assert.equal(photo.locationId, photos[0].locationId)
+    returnedPhotos.forEach((photo) => {
+      assert.equal(photo.locationId, photos[0].locationId);
     });
   });
 
   test("create a photo", async () => {
-    const newPhoto = { ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId }
-    const returnedphoto = await shutterSpotterService.createPhoto(newPhoto)
+    const newPhoto = { ...birdPhoto, locationId: locations[0]._id, userId: locations[0].userId };
+    const returnedphoto = await shutterSpotterService.createPhoto(newPhoto);
     assertSubset(newPhoto, returnedphoto);
     assert.isDefined(returnedphoto._id);
   });
@@ -82,11 +82,11 @@ suite("Photo API tests", () => {
     returnedPhotos = await shutterSpotterService.getAllPhotos();
     assert.equal(returnedPhotos.length, 0);
   });
-  
+
   test("delete one photo - success", async () => {
     let returnedPhotos = await shutterSpotterService.getAllPhotos();
     assert.equal(returnedPhotos.length, 9);
-    await shutterSpotterService.deletePhoto(photos[0]._id);
+    await shutterSpotterService.deletePhoto(photos[0]._id, photos[0].userId);
     returnedPhotos = await shutterSpotterService.getAllPhotos();
     assert.equal(returnedPhotos.length, 8);
     try {
@@ -97,11 +97,17 @@ suite("Photo API tests", () => {
       assert.equal(error.response.data.statusCode, 404);
     }
   });
-  
+
   test("delete one photo - bad ID", async () => {
     let returnedPhotos = await shutterSpotterService.getAllPhotos();
     assert.equal(returnedPhotos.length, 9);
-    await shutterSpotterService.deletePhoto("1234");
+    try {
+      await shutterSpotterService.deletePhoto("1234", "1234");
+      assert.fail("Should not return a response");
+    } catch (error: any) {
+      assert(error.response.data.message === "No photo with this ID");
+      assert.equal(error.response.data.statusCode, 404);
+    }
     returnedPhotos = await shutterSpotterService.getAllPhotos();
     assert.equal(returnedPhotos.length, 9);
   });

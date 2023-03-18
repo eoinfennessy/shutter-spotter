@@ -107,13 +107,15 @@ export const locationApi = {
   deleteOne: {
     auth: {
       strategy: "jwt",
-      scope: ["user-{params.userId}", "admin", "super-admin"]
+      scope: ["user-{params.userId}", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
         const location = await db.locationStore.getLocationById(request.params.locationId);
         if (location === null) return Boom.notFound("No Location with this id");
-        if (location.userId !== request.params.userId) return Boom.forbidden();
+        if (location.userId !== request.params.userId) {
+          return Boom.badRequest("User ID request param does not match user ID of resource owner");
+        }
         await db.locationStore.deleteLocationById(request.params.locationId);
         return h.response().code(204);
       } catch (err) {
