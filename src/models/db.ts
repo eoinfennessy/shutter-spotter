@@ -13,6 +13,10 @@ import { locationMongoStore } from "./mongo/location-mongo-store.js";
 import { photoMongoStore } from "./mongo/photo-mongo-store.js";
 import { connectMongo } from "./mongo/connect-mongo.js";
 
+import { userFirebaseStore } from "./firebase/user-firebase-store.js";
+// import { locationMongoStore } from "./mongo/location-mongo-store.js";
+// import { photoMongoStore } from "./mongo/photo-mongo-store.js";
+
 import { createSuperAdminIfNotExists } from "./seed-db.js";
 import { Db, DbTypes } from "./store-types"
 
@@ -43,6 +47,12 @@ export const db: Db = {
         this.userStore = userMongoStore;
         this.locationStore = locationMongoStore;
         this.photoStore = photoMongoStore;
+        connectMongo();
+        break;
+      case "firebase":
+        this.userStore = userFirebaseStore;
+        this.locationStore = locationJsonStore;
+        this.photoStore = photoJsonStore;
         connectMongo();
         break;
       default:

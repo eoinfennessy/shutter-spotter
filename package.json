@@ -59,6 +59,7 @@
     "@hapi/vision": "^7.0.0",
     "cloudinary": "^1.35.0",
     "dotenv": "^16.0.3",
+    "firebase-admin": "^11.5.0",
     "handlebars": "^4.7.7",
     "hapi-auth-jwt2": "^10.4.0",
     "hapi-swagger": "^16.0.1",

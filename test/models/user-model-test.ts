@@ -23,7 +23,7 @@ const users: User[] = new Array(testUsers.length);
 
 suite("User Model tests", () => {
   setup(async () => {
-    db.init("mongo");
+    db.init(dbType);
     await db.userStore.deleteAll();
     for (let i = 0; i < testUsers.length; i += 1) {
       users[i] = await db.userStore.addUser(testUsers[i])
@@ -32,6 +32,11 @@ suite("User Model tests", () => {
 
   teardown(async () => {
     await db.userStore.deleteAll();
+  });
+
+  test("get all users", async () => {
+    const allUsers = await db.userStore.getAllUsers();
+    assert.equal(allUsers.length, users.length)
   });
 
   test("create a user", async () => {

@@ -129,7 +129,7 @@ export type PhotoStore = {
   count: () => Promise<number>;
 };
 
-export type DbTypes = "mem" | "json" | "mongo";
+export type DbTypes = "mem" | "json" | "mongo" | "firebase";
 
 export type Db = {
   userStore: UserStore;
