@@ -37,10 +37,9 @@ export const dashboardController = {
       },
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
-      const loggedInUser = request.auth.credentials;
       const payload = request.payload as NewLocation;
       const newLocation = {
-        userId: loggedInUser._id,
+        userId: request.auth.credentials._id,
         name: payload.name,
         description: payload.description,
         category: payload.category,
@@ -55,7 +54,7 @@ export const dashboardController = {
   deleteLocation: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const location = await db.locationStore.getLocationById(request.params.id);
-      if (location) {
+      if (location && location.userId === request.auth.credentials._id) {
         await db.locationStore.deleteLocationById(location._id);
       }
       return h.redirect("/dashboard");

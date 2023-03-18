@@ -69,7 +69,7 @@ export const locationController = {
   deletePhoto: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const photo = await db.photoStore.getPhotoById(request.params.photoid);
-      if (photo !== null) {
+      if (photo && photo.userId === request.auth.credentials._id) {
         await imageStore.deleteImage(photo.img)
         await db.photoStore.deletePhoto(photo._id);
       }
