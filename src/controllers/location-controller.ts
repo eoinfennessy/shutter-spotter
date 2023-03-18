@@ -68,12 +68,12 @@ export const locationController = {
 
   deletePhoto: {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
-      const location = await db.locationStore.getLocationById(request.params.id);
-      await db.photoStore.deletePhoto(request.params.photoid);
-      if (location) {
-        return h.redirect(`/location/${location._id}`);
+      const photo = await db.photoStore.getPhotoById(request.params.photoid);
+      if (photo !== null) {
+        await imageStore.deleteImage(photo.img)
+        await db.photoStore.deletePhoto(photo._id);
       }
-      return h.redirect("/dashboard");
+      return h.redirect(`/location/${request.params.id}`);
     },
   },
 };
