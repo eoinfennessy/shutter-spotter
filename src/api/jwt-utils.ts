@@ -5,13 +5,13 @@ import { JwtPayload, User, UserCredentials } from "../models/store-types.js";
 import { Request } from "@hapi/hapi";
 
 dotenv.config();
-const cookiePassword = process.env.cookie_password as string;
+const cookiePassword = process.env.COOKIE_PASSWORD as string;
 
 export function createToken(user: User) {
   const payload = {
     id: user._id,
     email: user.email,
-    scope: user.scope
+    scope: user.scope,
   };
   const options: jwt.SignOptions = {
     algorithm: "HS256",
@@ -26,15 +26,15 @@ export function decodeToken(token: string) {
     return {
       id: decoded.id,
       email: decoded.email,
-      scope: decoded.scope
-    } as JwtPayload
+      scope: decoded.scope,
+    } as JwtPayload;
   } catch (e: any) {
     console.log(e.message);
   }
   return null;
 }
 
-export async function validate(decoded: JwtPayload, request: Request): Promise<{ isValid: true, credentials: User } | { isValid: false }> {
+export async function validate(decoded: JwtPayload, request: Request): Promise<{ isValid: true; credentials: User } | { isValid: false }> {
   const user = await db.userStore.getUserById(decoded.id);
   if (!user) {
     return { isValid: false };
