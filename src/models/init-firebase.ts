@@ -1,5 +1,6 @@
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage"
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,6 +18,10 @@ const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
 } as ServiceAccount;
 
-initializeApp({ credential: cert(serviceAccount) });
+initializeApp({
+  credential: cert(serviceAccount),
+  storageBucket: "shutter-spotter.appspot.com",
+});
 
 export const firestore = getFirestore();
+export const bucket = getStorage().bucket();

@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { firestore } from "./connect-firestore.js";
+import { firestore } from "../init-firebase.js";
 import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
 
 const photosRef = firestore.collection("photos");

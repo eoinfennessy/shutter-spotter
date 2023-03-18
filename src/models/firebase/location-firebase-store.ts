@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
-import { firestore } from "./connect-firestore.js";
+import { firestore } from "../init-firebase.js";
 
 const locationsRef = firestore.collection("locations");
 

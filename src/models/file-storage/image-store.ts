@@ -1,6 +1,7 @@
 import { exit } from "process";
-import { cloudinaryImageStore } from "./cloudinary.js";
 import { localImageStore } from "./local.js";
+import { cloudinaryImageStore } from "./cloudinary.js";
+import { firebaseImageStore } from "./firebase.js";
 
 const storeType = process.env.IMAGE_STORE_TYPE;
 
@@ -13,8 +14,7 @@ switch (storeType) {
     store = cloudinaryImageStore;
     break;
   case "firebase":
-    console.error(`Unimplemented store type: ${storeType}`)
-    exit(1);
+    store = firebaseImageStore;
     break;
   default:
     console.error(`Invalid image store type: ${storeType}`)
