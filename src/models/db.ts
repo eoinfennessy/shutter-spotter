@@ -14,7 +14,7 @@ import { photoMongoStore } from "./mongo/photo-mongo-store.js";
 import { connectMongo } from "./mongo/connect-mongo.js";
 
 import { userFirebaseStore } from "./firebase/user-firebase-store.js";
-// import { locationMongoStore } from "./mongo/location-mongo-store.js";
+import { locationFirebaseStore } from "./firebase/location-firebase-store.js";
 // import { photoMongoStore } from "./mongo/photo-mongo-store.js";
 
 import { createSuperAdminIfNotExists } from "./seed-db.js";
@@ -51,7 +51,7 @@ export const db: Db = {
         break;
       case "firebase":
         this.userStore = userFirebaseStore;
-        this.locationStore = locationJsonStore;
+        this.locationStore = locationFirebaseStore;
         this.photoStore = photoJsonStore;
         connectMongo();
         break;

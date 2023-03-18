@@ -53,9 +53,11 @@ export const userFirebaseStore: UserStore = {
     // Firestore requires one doc to remain in a collection
     // and doesn't seem to allow recreation of a collection after all docs have been removed :(
     const userSnapshots = await usersRef.where("email", "!=", "john@doe.com").get();
-    userSnapshots.forEach((user) => {
-      user.ref.delete();
-    });
+    const userDocs = userSnapshots.docs
+    for (let i = 0; i < userDocs.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await userDocs[i].ref.delete();
+    }
   },
 
   async updateName(id: string, name: Name): Promise<User | null> {
