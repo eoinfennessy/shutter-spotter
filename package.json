@@ -1,6 +1,6 @@
 {
   "name": "shutter-spotter",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A location-based social app for photographers",
   "type": "module",
   "engines": {
