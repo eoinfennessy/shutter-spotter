@@ -1,6 +1,6 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
-import { imageStore } from "../models/file-storage/image-store.js";
+import { imageStore } from "../models/image-store.js";
 import { PhotoPayloadSpec } from "../models/joi-schemas.js";
 import { NewPhoto, PhotoPayload } from "../types/schemas.js";
 

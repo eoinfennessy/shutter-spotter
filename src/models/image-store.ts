@@ -1,7 +1,7 @@
 import { exit } from "process";
-import { localImageStore } from "./local.js";
-import { cloudinaryImageStore } from "./cloudinary.js";
-import { firebaseImageStore } from "./firebase.js";
+import { localImageStore } from "./image-stores/local.js";
+import { cloudinaryImageStore } from "./image-stores/cloudinary.js";
+import { firebaseImageStore } from "./image-stores/firebase.js";
 
 const storeType = process.env.IMAGE_STORE_TYPE;
 
