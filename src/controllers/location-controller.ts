@@ -9,9 +9,9 @@ const getLocationViewData = async function (request: Request) {
   const photos = await db.photoStore.getPhotosByLocationId(request.params.id);
   return {
     location: location,
-    photos: photos
+    photos: photos,
   };
-}
+};
 
 export const locationController = {
   index: {
@@ -37,14 +37,14 @@ export const locationController = {
           .view("location-view", {
             ...viewData,
             title: "Invalid Photo",
-            errors: error.details
+            errors: error.details,
           })
           .takeover()
           .code(400);
       },
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
-      const payload = request.payload as PhotoPayload
+      const payload = request.payload as PhotoPayload;
       const location = await db.locationStore.getLocationById(request.params.id);
       if (location === null) {
         return h.redirect("/dashboard");
@@ -60,7 +60,7 @@ export const locationController = {
         comments: [],
         voteScore: 0,
         votes: [],
-      } as NewPhoto
+      } as NewPhoto;
       await db.photoStore.addPhoto(newPhoto);
       return h.redirect(`/location/${location._id}`);
     },
@@ -70,7 +70,7 @@ export const locationController = {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const photo = await db.photoStore.getPhotoById(request.params.photoid);
       if (photo && photo.userId === request.auth.credentials._id) {
-        await imageStore.deleteImage(photo.img)
+        await imageStore.deleteImage(photo.img);
         await db.photoStore.deletePhoto(photo._id);
       }
       return h.redirect(`/location/${request.params.id}`);

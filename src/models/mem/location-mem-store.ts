@@ -37,9 +37,9 @@ export const locationMemStore: LocationStore = {
   },
 
   async countByCategory(): Promise<Partial<Record<LocationCategory, number>>> {
-    const counts: Partial<Record<LocationCategory, number>> = {}
+    const counts: Partial<Record<LocationCategory, number>> = {};
     for (let i = 0; i < locations.length; i += 1) {
-      const currentValue = counts[locations[i].category]
+      const currentValue = counts[locations[i].category];
       if (currentValue === undefined) {
         counts[locations[i].category] = 1;
       } else {

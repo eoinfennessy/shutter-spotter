@@ -4,7 +4,7 @@ import { suite, setup, test, teardown } from "mocha";
 import { maggie, testLocations, waterford } from "../fixtures.js";
 import { DbTypes, Location } from "../../src/models/store-types.js";
 import { assertSubset } from "../test-utils.js";
-import { isDbType } from "../../src/utils/type-gaurds.js"
+import { isDbType } from "../../src/utils/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();
@@ -23,12 +23,12 @@ let locations: Location[] = new Array(testLocations.length);
 
 suite("Location Model tests", () => {
   setup(async () => {
-    db.init(dbType)
+    db.init(dbType);
     await db.locationStore.deleteAllLocations();
 
     const user = await db.userStore.addUser(maggie);
     for (let i = 0; i < testLocations.length; i += 1) {
-      const location = { ...testLocations[i], userId: user._id};
+      const location = { ...testLocations[i], userId: user._id };
       locations[i] = await db.locationStore.addLocation(location);
     }
   });
@@ -39,7 +39,7 @@ suite("Location Model tests", () => {
 
   test("create a location", async () => {
     const user = await db.userStore.addUser(maggie);
-    const location = { ...waterford, userId: user._id }
+    const location = { ...waterford, userId: user._id };
     const newLocation = await db.locationStore.addLocation(location);
     assertSubset(location, newLocation);
   });
@@ -54,7 +54,7 @@ suite("Location Model tests", () => {
 
   test("get a location - success", async () => {
     const user = await db.userStore.addUser(maggie);
-    const location = { ...waterford, userId: user._id }
+    const location = { ...waterford, userId: user._id };
     const newLocation = await db.locationStore.addLocation(location);
     const returnedLocation = await db.locationStore.getLocationById(newLocation._id);
     assert.deepEqual(newLocation, returnedLocation);
@@ -64,11 +64,11 @@ suite("Location Model tests", () => {
     const user = await db.userStore.addUser(maggie);
     const locations: Location[] = [];
     for (let i = 0; i < testLocations.length; i += 1) {
-      const location = { ...testLocations[i], userId: user._id};
+      const location = { ...testLocations[i], userId: user._id };
       locations.push(await db.locationStore.addLocation(location));
     }
     const returnedLocations = await db.locationStore.getUserLocations(user._id);
-    assert.equal(locations.length, returnedLocations.length)
+    assert.equal(locations.length, returnedLocations.length);
     for (const returnedLocation of returnedLocations) {
       assert.propertyVal(returnedLocation, "userId", user._id);
     }
@@ -107,13 +107,13 @@ suite("Location Model tests", () => {
     await db.locationStore.deleteAllLocations();
     assert.equal(await db.locationStore.count(), 0);
   });
-  
+
   test("get count of locations by category", async () => {
     let counts = await db.locationStore.countByCategory();
     assert.equal(counts["Nature"], 1);
     assert.equal(counts["Landscape"], 2);
     await db.locationStore.deleteAllLocations();
     counts = await db.locationStore.countByCategory();
-    assert.deepEqual(counts, {})
+    assert.deepEqual(counts, {});
   });
 });

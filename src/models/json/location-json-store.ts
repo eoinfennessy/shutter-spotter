@@ -21,7 +21,7 @@ export const locationJsonStore: LocationStore = {
     await db.read();
     const locationWithId: Location = { ...location, _id: v4() };
     db.data.locations.push(locationWithId);
-    await db.write()
+    await db.write();
     return locationWithId;
   },
 
@@ -57,9 +57,9 @@ export const locationJsonStore: LocationStore = {
 
   async countByCategory(): Promise<Partial<Record<LocationCategory, number>>> {
     await db.read();
-    const counts: Partial<Record<LocationCategory, number>> = {}
+    const counts: Partial<Record<LocationCategory, number>> = {};
     for (let i = 0; i < db.data.locations.length; i += 1) {
-      const currentValue = counts[db.data.locations[i].category]
+      const currentValue = counts[db.data.locations[i].category];
       if (currentValue === undefined) {
         counts[db.data.locations[i].category] = 1;
       } else {

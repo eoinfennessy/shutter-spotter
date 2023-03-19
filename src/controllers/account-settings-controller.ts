@@ -51,7 +51,7 @@ export const accountSettingsController = {
     },
     handler: function (request: Request, h: ResponseToolkit): ResponseObject {
       const loggedInUser = request.auth.credentials as User;
-      const { email }  = request.payload as Record<"email", Email>;
+      const { email } = request.payload as Record<"email", Email>;
       db.userStore.updateEmail(loggedInUser._id, email);
       return h.redirect("/accountsettings");
     },
@@ -73,7 +73,7 @@ export const accountSettingsController = {
     },
     handler: function (request: Request, h: ResponseToolkit): ResponseObject {
       const loggedInUser = request.auth.credentials as User;
-      const { password }  = request.payload as Record<"password", Password>;
+      const { password } = request.payload as Record<"password", Password>;
       db.userStore.updatePassword(loggedInUser._id, password);
       return h.redirect("/accountsettings");
     },

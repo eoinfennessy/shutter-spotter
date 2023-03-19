@@ -33,12 +33,12 @@ export const photoMemStore: PhotoStore = {
   },
 
   async updatePhoto(photoId: string, updates: Partial<BasePhoto>): Promise<Photo | null> {
-    const photo = await this.getPhotoById(photoId)
+    const photo = await this.getPhotoById(photoId);
     if (photo === null) {
-      return null
+      return null;
     }
-    const keys = Object.keys(updates)
-    keys.forEach(key => {
+    const keys = Object.keys(updates);
+    keys.forEach((key) => {
       const update = updates[key as keyof Partial<BasePhoto>];
       if (update !== undefined) {
         photo[key as keyof BasePhoto] = update;

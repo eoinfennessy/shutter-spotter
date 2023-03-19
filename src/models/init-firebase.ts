@@ -1,6 +1,6 @@
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage"
+import { getStorage } from "firebase-admin/storage";
 import dotenv from "dotenv";
 
 dotenv.config();

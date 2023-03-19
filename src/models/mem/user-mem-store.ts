@@ -35,28 +35,28 @@ export const userMemStore: UserStore = {
   },
 
   async updateName(id: string, name: Name): Promise<User | null> {
-    const user = await this.getUserById(id)
+    const user = await this.getUserById(id);
     if (user === null) {
-      return null
+      return null;
     }
     user.firstName = name.firstName;
     user.lastName = name.lastName;
     return user;
   },
-  
+
   async updateEmail(id: string, email: Email): Promise<User | null> {
-    const user = await this.getUserById(id)
+    const user = await this.getUserById(id);
     if (user === null) {
-      return null
+      return null;
     }
     user.email = email;
     return user;
   },
-  
+
   async updatePassword(id: string, password: Password): Promise<User | null> {
-    const user = await this.getUserById(id)
+    const user = await this.getUserById(id);
     if (user === null) {
-      return null
+      return null;
     }
     user.password = password;
     return user;

@@ -47,7 +47,7 @@ export const userMongoStore: UserStore = {
     return convertLeanUserToUser(user);
   },
 
-  async deleteUserById(id): Promise<void>  {
+  async deleteUserById(id): Promise<void> {
     if (!Types.ObjectId.isValid(id)) {
       console.error(`Bad ID: "${id}"`);
       return;
@@ -102,7 +102,7 @@ export const userMongoStore: UserStore = {
     }
     await UserMongoose.findByIdAndUpdate(id, { $addToSet: { scope: scope } });
   },
-  
+
   async count(): Promise<number> {
     const count = await UserMongoose.countDocuments();
     return count;

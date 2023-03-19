@@ -50,22 +50,22 @@ export const testLocations: NewLocation[] = [
     description: "A beautiful beach",
     category: "Landscape",
     latitude: 80,
-    longitude: 80
+    longitude: 80,
   },
   {
     name: "Dunmore East",
     description: "A scenic fishing village",
     category: "Landscape",
     latitude: 0,
-    longitude: -10
+    longitude: -10,
   },
   {
     name: "Tramore",
     description: "A big beach with dunes overlooking the town of Tramore",
     category: "Nature",
     latitude: -10,
-    longitude: 0
-  }
+    longitude: 0,
+  },
 ];
 
 export const waterford: NewLocation = {
@@ -73,8 +73,8 @@ export const waterford: NewLocation = {
   description: "A beautiful city with a rich Viking and Norman history",
   category: "Street",
   latitude: -10,
-  longitude: 10
-}
+  longitude: 10,
+};
 
 export const testPhotos = [
   {
@@ -82,7 +82,7 @@ export const testPhotos = [
     description: "A beautiful landscape photo",
     votes: [],
     comments: [],
-    tags: [], 
+    tags: [],
     voteScore: 0,
   },
   {
@@ -90,7 +90,7 @@ export const testPhotos = [
     description: "A beautiful seascape photo",
     votes: [],
     comments: [],
-    tags: [], 
+    tags: [],
     voteScore: 0,
   },
   {
@@ -98,7 +98,7 @@ export const testPhotos = [
     description: "A beautiful wildlife photo",
     votes: [],
     comments: [],
-    tags: [], 
+    tags: [],
     voteScore: 0,
   },
 ];
@@ -108,6 +108,6 @@ export const birdPhoto = {
   description: "A beautiful bird photo",
   votes: [],
   comments: [],
-  tags: [], 
+  tags: [],
   voteScore: 0,
-}
+};

@@ -1,22 +1,22 @@
+import { Types } from "mongoose";
 import { PhotoMongoose } from "./photo.js";
 import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
-import { Types } from "mongoose"
 
 function convertLeanPhotoToPhoto(photo: Record<string, any>) {
-  photo._id = String(photo._id)
-  photo.locationId = String(photo.locationId)
-  photo.userId = String(photo.userId)
+  photo._id = String(photo._id);
+  photo.locationId = String(photo.locationId);
+  photo.userId = String(photo.userId);
   // TODO: Convert comments and votes IDs
-  delete photo.__v
-  return photo as Photo
+  delete photo.__v;
+  return photo as Photo;
 }
 
 export const photoMongoStore: PhotoStore = {
   async getAllPhotos(): Promise<Photo[]> {
     const leanPhotos = await PhotoMongoose.find().lean();
     const photos: Photo[] = [];
-    leanPhotos.forEach(leanPhoto => {
-      photos.push(convertLeanPhotoToPhoto(leanPhoto))
+    leanPhotos.forEach((leanPhoto) => {
+      photos.push(convertLeanPhotoToPhoto(leanPhoto));
     });
     return photos;
   },
@@ -35,8 +35,8 @@ export const photoMongoStore: PhotoStore = {
     }
     const leanPhotos = await PhotoMongoose.find({ locationId: id }).lean();
     const photos: Photo[] = [];
-    leanPhotos.forEach(leanPhoto => {
-      photos.push(convertLeanPhotoToPhoto(leanPhoto))
+    leanPhotos.forEach((leanPhoto) => {
+      photos.push(convertLeanPhotoToPhoto(leanPhoto));
     });
     return photos;
   },
@@ -65,13 +65,13 @@ export const photoMongoStore: PhotoStore = {
   async updatePhoto(photoId: string, updates: Partial<BasePhoto>): Promise<Photo | null> {
     return PhotoMongoose.findByIdAndUpdate(photoId, updates, { new: true, lean: true }, function (err, doc) {
       if (err) {
-        console.log(err)
-        return null
+        console.log(err);
+        return null;
       }
       if (doc === null) {
-        return null
+        return null;
       }
-      return convertLeanPhotoToPhoto(doc)
+      return convertLeanPhotoToPhoto(doc);
     });
   },
 

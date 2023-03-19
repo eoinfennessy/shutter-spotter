@@ -13,18 +13,18 @@ const credentials = {
 cloudinary.v2.config(credentials);
 
 export const cloudinaryImageStore = {
-  getAllImages: async function() {
+  getAllImages: async function () {
     const result = await cloudinary.v2.api.resources();
     return result.resources;
   },
 
-  uploadImage: async function(imagefile: string | NodeJS.ArrayBufferView) {
+  uploadImage: async function (imagefile: string | NodeJS.ArrayBufferView) {
     writeFileSync("./public/temp.img", imagefile);
     const response = await cloudinary.v2.uploader.upload("./public/temp.img");
     return response.url;
   },
 
-  deleteImage: async function(img: string) {
+  deleteImage: async function (img: string) {
     await cloudinary.v2.uploader.destroy(img, {});
-  }
+  },
 };

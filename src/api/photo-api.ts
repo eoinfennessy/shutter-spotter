@@ -2,7 +2,7 @@ import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { imageStore } from "../models/file-storage/image-store.js";
-import { IdSpec, NewPhotoSpec, PhotoApiPayloadSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
+import { IdSpec, PhotoApiPayloadSpec, PhotoArray, PhotoSpec } from "../models/joi-schemas.js";
 import { NewPhoto, PhotoApiPayload } from "../models/store-types.js";
 import { validationError } from "./logger.js";
 

@@ -7,9 +7,9 @@ export function connectMongo() {
   if (process.env.MONGO_DB !== undefined) {
     Mongoose.connect(process.env.MONGO_DB);
   } else {
-    console.log("Failed to connect to Mongo: Please set 'MONGO_DB' environment variable")
+    console.log("Failed to connect to Mongo: Please set 'MONGO_DB' environment variable");
   }
-  
+
   const db = Mongoose.connection;
 
   db.on("error", (err) => {

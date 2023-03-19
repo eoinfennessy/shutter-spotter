@@ -8,7 +8,7 @@ const storeType = process.env.IMAGE_STORE_TYPE;
 let store;
 switch (storeType) {
   case "local":
-    store = localImageStore
+    store = localImageStore;
     break;
   case "cloudinary":
     store = cloudinaryImageStore;
@@ -17,7 +17,7 @@ switch (storeType) {
     store = firebaseImageStore;
     break;
   default:
-    console.error(`Invalid image store type: ${storeType}`)
+    console.error(`Invalid image store type: ${storeType}`);
     exit(1);
 }
 

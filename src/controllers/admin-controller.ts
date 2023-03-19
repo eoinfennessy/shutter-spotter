@@ -18,9 +18,9 @@ const getAnalytics = async function () {
     photoCount: photoCount,
     locationCountByCategory: locationCountByCategory,
     // Format to at most 2 decimal places while removing trailing zeroes
-    avgLocationsPerUser: +(avgLocationsPerUser).toFixed(2),
-    avgPhotosPerUser: +(avgPhotosPerUser).toFixed(2),
-    avgPhotosPerLocation: +(avgPhotosPerLocation).toFixed(2),
+    avgLocationsPerUser: +avgLocationsPerUser.toFixed(2),
+    avgPhotosPerUser: +avgPhotosPerUser.toFixed(2),
+    avgPhotosPerLocation: +avgPhotosPerLocation.toFixed(2),
   };
 };
 

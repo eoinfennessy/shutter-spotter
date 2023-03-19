@@ -27,6 +27,8 @@
     "prefer-arrow-callback": "off",
     "import/extensions": "off",
     "import/prefer-default-export": "off",
+    "import/named": "off",
+    "import/no-unresolved": "off",
     "object-shorthand": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",

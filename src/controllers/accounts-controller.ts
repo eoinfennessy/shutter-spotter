@@ -72,7 +72,7 @@ export const accountsController = {
       return h.redirect("/dashboard");
     },
   },
-  
+
   logout: {
     handler: function (request: Request, h: ResponseToolkit): ResponseObject {
       request.cookieAuth.clear();
@@ -80,7 +80,7 @@ export const accountsController = {
     },
   },
 
-  async validate(request: Request, session: { id: string }): Promise<{ isValid: true, credentials: User } | { isValid: false }> {
+  async validate(request: Request, session: { id: string }): Promise<{ isValid: true; credentials: User } | { isValid: false }> {
     const user = await db.userStore.getUserById(session.id);
     if (!user) {
       return { isValid: false };

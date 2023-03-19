@@ -9,31 +9,35 @@ const photoSchema = new Schema({
   locationId: {
     type: Schema.Types.ObjectId,
     ref: "Location",
-    required: true
+    required: true,
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
   img: { type: String, required: true },
   tags: { type: Array, required: true },
-  comments: [{
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+  comments: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      comment: { type: String, required: true },
     },
-    comment: { type: String, required: true },
-  }],
-  votes: [{
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+  ],
+  votes: [
+    {
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      vote: { type: Number, required: true },
     },
-    vote: { type: Number, required: true },
-  }],
+  ],
   voteScore: { type: Number, required: true },
 });
 

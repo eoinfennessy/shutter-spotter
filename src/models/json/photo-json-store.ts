@@ -33,10 +33,10 @@ export const photoJsonStore: PhotoStore = {
   async getPhotoById(id: string): Promise<Photo | null> {
     await db.read();
     const photo = db.data.photos.find((p) => p._id === id);
-    return photo || null
+    return photo || null;
   },
 
-  async deletePhoto(id: string): Promise<void>  {
+  async deletePhoto(id: string): Promise<void> {
     await db.read();
     const index = db.data.photos.findIndex((photo) => photo._id === id);
     if (index !== -1) {
@@ -51,11 +51,11 @@ export const photoJsonStore: PhotoStore = {
   },
 
   async updatePhoto(photoId: string, updates: Partial<BasePhoto>): Promise<Photo | null> {
-    const photo = await this.getPhotoById(photoId)
+    const photo = await this.getPhotoById(photoId);
     if (photo === null) {
-      return null
+      return null;
     }
-    Object.keys(updates).forEach(key => {
+    Object.keys(updates).forEach((key) => {
       const update = updates[key as keyof Partial<BasePhoto>];
       if (update !== undefined) {
         photo[key as keyof BasePhoto] = update;
