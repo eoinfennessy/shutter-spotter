@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
-import { Email, Name, NewUser, Password, User, UserStore } from "../store-types.js";
+import { Email, Name, NewUser, Password, User } from "../../types/schemas.js";
+import { UserStore } from "../../types/store-specs.js";
 
 let users: User[] = [];
 

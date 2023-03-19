@@ -3,7 +3,7 @@ import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { createToken } from "./jwt-utils.js";
 import { db } from "../models/db.js";
 import { EmailSpec, IdSpec, JwtAuth, NameSpec, NewUserSpec, PasswordSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
-import { Email, Name, NewUser, Password, UserCredentials } from "../models/store-types.js";
+import { Email, Name, NewUser, Password, UserCredentials } from "../types/schemas.js";
 import { validationError } from "./logger.js";
 
 export const userApi = {

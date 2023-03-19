@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { PhotoMongoose } from "./photo.js";
-import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
+import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
+import { PhotoStore } from "../../types/store-specs.js";
 
 function convertLeanPhotoToPhoto(photo: Record<string, any>) {
   photo._id = String(photo._id);

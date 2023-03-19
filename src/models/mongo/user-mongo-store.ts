@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
-import { UserStore, User, NewUser, Name, Email, Password } from "../store-types.js";
 import { UserMongoose } from "./user.js";
+import { User, NewUser, Name, Email, Password } from "../../types/schemas.js";
+import { UserStore } from "../../types/store-specs.js";
+
 
 function convertLeanUserToUser(user: Record<string, any>) {
   user._id = String(user._id);

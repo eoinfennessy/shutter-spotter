@@ -1,6 +1,7 @@
 import { Types } from "mongoose"
-import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
 import { LocationMongoose } from "./location.js";
+import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
+import { LocationStore } from "../../types/store-specs.js";
 
 function convertLeanLocationToLocation(location: Record<string, any>) {
   location._id = String(location._id)

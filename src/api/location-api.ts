@@ -2,7 +2,7 @@ import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { IdSpec, LocationArray, LocationSpec, NewLocationWithUserIdSpec } from "../models/joi-schemas.js";
-import { NewLocationWithUserId } from "../models/store-types.js";
+import { NewLocationWithUserId } from "../types/schemas.js";
 import { validationError } from "./logger.js";
 
 export const locationApi = {

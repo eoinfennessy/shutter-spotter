@@ -14,7 +14,7 @@ import { apiRoutes } from "./api-routes.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
 import { accountsController } from "./controllers/accounts-controller.js";
-import { isDbType } from "./utils/type-gaurds.js";
+import { isDbType } from "./types/type-gaurds.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

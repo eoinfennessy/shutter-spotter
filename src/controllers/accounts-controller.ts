@@ -1,7 +1,7 @@
 import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
 import { UserCredentialsSpec, NewUserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
-import { NewUser, User, UserCredentials } from "../models/store-types.js";
+import { NewUser, User, UserCredentials } from "../types/schemas.js";
 
 export const accountsController = {
   index: {

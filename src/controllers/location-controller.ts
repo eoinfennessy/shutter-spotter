@@ -2,7 +2,7 @@ import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { imageStore } from "../models/file-storage/image-store.js";
 import { PhotoPayloadSpec } from "../models/joi-schemas.js";
-import { NewPhoto, PhotoPayload } from "../models/store-types.js";
+import { NewPhoto, PhotoPayload } from "../types/schemas.js";
 
 const getLocationViewData = async function (request: Request) {
   const location = await db.locationStore.getLocationById(request.params.id);

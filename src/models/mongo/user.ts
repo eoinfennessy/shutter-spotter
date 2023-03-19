@@ -1,5 +1,5 @@
 import Mongoose from "mongoose";
-import { MongooseVersion, User } from "../store-types";
+import { MongooseVersion, User } from "../../types/schemas";
 
 const { Schema } = Mongoose;
 

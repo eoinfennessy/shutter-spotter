@@ -2,7 +2,9 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { Email, Name, NewUser, Password, User, UserStore } from "../store-types";
+import { Email, Name, NewUser, Password, User } from "../../types/schemas";
+import { UserStore } from "../../types/store-specs.js";
+
 
 interface LowUser extends Low {
   data: { users: User[] };

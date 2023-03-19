@@ -1,5 +1,5 @@
 import Mongoose from "mongoose";
-import { MongooseVersion, NewPhoto } from "../store-types";
+import { MongooseVersion, NewPhoto } from "../../types/schemas";
 
 const { Schema } = Mongoose;
 

@@ -1,4 +1,5 @@
-import { Db, Password } from "./store-types";
+import { Password } from "../types/schemas";
+import { Db } from "../types/store-specs.js";
 
 export const createSuperAdminIfNotExists = async function (db: Db, password: Password) {
   const superadmin = await db.userStore.getUserByEmail("superadmin@shutterspotter.com");

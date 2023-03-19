@@ -2,7 +2,8 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
+import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
+import { LocationStore } from "../../types/store-specs.js";
 
 interface LowLocation extends Low {
   data: { locations: Location[] };

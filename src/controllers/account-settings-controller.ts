@@ -1,7 +1,7 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { db } from "../models/db.js";
 import { EmailSpec, NameSpec, PasswordSpec } from "../models/joi-schemas.js";
-import { Email, Name, Password, User } from "../models/store-types.js";
+import { Email, Name, Password, User } from "../types/schemas.js";
 
 export const accountSettingsController = {
   index: {

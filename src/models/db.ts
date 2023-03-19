@@ -18,7 +18,7 @@ import { locationFirebaseStore } from "./firebase/location-firebase-store.js";
 import { photoFirebaseStore } from "./firebase/photo-firebase-store.js";
 
 import { createSuperAdminIfNotExists } from "./seed-db.js";
-import { Db, DbTypes } from "./store-types";
+import { Db, DbTypes } from "../types/store-specs.js";
 
 const result = dotenv.config();
 if (result.error) {

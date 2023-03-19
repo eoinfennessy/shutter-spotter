@@ -2,7 +2,8 @@ import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
-import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
+import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
+import { PhotoStore } from "../../types/store-specs.js";
 
 interface LowPhoto extends Low {
   data: { photos: Photo[] };

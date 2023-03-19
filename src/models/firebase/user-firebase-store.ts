@@ -1,7 +1,8 @@
 import { v4 } from "uuid";
 import { FieldValue } from "firebase-admin/firestore";
-import { Email, Name, NewUser, Password, User, UserStore } from "../store-types";
 import { firestore } from "../init-firebase.js";
+import { Email, Name, NewUser, Password, User } from "../../types/schemas.js";
+import { UserStore } from "../../types/store-specs.js";
 
 const usersRef = firestore.collection("accounts");
 

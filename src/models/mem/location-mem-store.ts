@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
-import { Location, LocationCategory, LocationStore, NewLocationWithUserId } from "../store-types.js";
+import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
+import { LocationStore } from "../../types/store-specs.js";
 
 let locations: Location[] = [];
 

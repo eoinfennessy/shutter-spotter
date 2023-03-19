@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 import { firestore } from "../init-firebase.js";
-import { BasePhoto, NewPhoto, Photo, PhotoStore } from "../store-types.js";
+import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
+import { PhotoStore } from "../../types/store-specs.js"
 
 const photosRef = firestore.collection("photos");
 
