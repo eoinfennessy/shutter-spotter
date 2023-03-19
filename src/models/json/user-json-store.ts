@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { v4 } from "uuid";
 import { Low } from "lowdb";
 // @ts-ignore

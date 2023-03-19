@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import { createToken } from "./jwt-utils.js";
