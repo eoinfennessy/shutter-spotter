@@ -57,7 +57,6 @@ suite("Authentication API tests", async () => {
       await shutterSpotterService.deleteAllUsers();
       assert.fail("Route not protected");
     } catch (error: any) {
-      console.log(error);
       assert.equal(error.response.data.statusCode, 401);
     }
   });
