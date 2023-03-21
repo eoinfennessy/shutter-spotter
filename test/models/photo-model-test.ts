@@ -2,11 +2,12 @@ import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { suite, setup, test, teardown } from "mocha";
 import { maggie, waterford, testPhotos, birdPhoto } from "../fixtures.js";
-import { DbTypes, Photo } from "../../src/models/store-types.js";
+import { Photo } from "../../src/types/schemas.js";
+import { DbTypes } from "../../src/types/store-specs.js";
 import { assertSubset } from "../test-utils.js";
 import { readFileSync } from "fs";
-import { imageStore } from "../../src/models/file-storage/image-store.js";
-import { isDbType } from "../../src/utils/type-gaurds.js";
+import { imageStore } from "../../src/models/image-store.js";
+import { isDbType } from "../../src/types/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();

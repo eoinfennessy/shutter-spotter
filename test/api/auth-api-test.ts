@@ -4,9 +4,9 @@ import { suite, setup, test, teardown } from "mocha";
 import { decodeToken } from "../../src/api/jwt-utils.js";
 import { maggie } from "../fixtures.js";
 import { db } from "../../src/models/db.js";
-import { isDbType } from "../../src/utils/type-gaurds.js";
+import { isDbType } from "../../src/types/type-gaurds.js";
 import dotenv from "dotenv";
-import { DbTypes } from "../../src/models/store-types.js";
+import { DbTypes } from "../../src/types/store-specs.js";
 
 const result = dotenv.config();
 if (result.error) {

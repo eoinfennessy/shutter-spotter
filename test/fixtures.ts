@@ -1,4 +1,4 @@
-import { NewLocation } from "../src/models/store-types";
+import { NewLocation } from "../src/types/schemas.js";
 
 export const serviceUrl = "http://localhost:3000";
 

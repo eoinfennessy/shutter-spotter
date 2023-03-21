@@ -4,9 +4,10 @@ import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, testLocations, superAdmin } from "../fixtures.js";
 import { testPhotos, birdPhoto } from "../api-fixtures.js";
-import { User, Location, Photo, DbTypes } from "../../src/models/store-types.js";
+import { DbTypes } from "../../src/types/store-specs.js";
+import { User, Location, Photo } from "../../src/types/schemas.js";
 import { db } from "../../src/models/db.js";
-import { isDbType } from "../../src/utils/type-gaurds.js";
+import { isDbType } from "../../src/types/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();

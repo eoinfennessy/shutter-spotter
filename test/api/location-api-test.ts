@@ -3,9 +3,10 @@ import { shutterSpotterService } from "./shutter-spotter-service.js";
 import { suite, setup, test, teardown } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { maggie, superAdmin, testLocations, waterford } from "../fixtures.js";
-import { DbTypes, Location, User } from "../../src/models/store-types.js";
+import { DbTypes } from "../../src/types/store-specs.js";
+import { Location, User } from "../../src/types/schemas.js";
 import { db } from "../../src/models/db.js";
-import { isDbType } from "../../src/utils/type-gaurds.js";
+import { isDbType } from "../../src/types/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();

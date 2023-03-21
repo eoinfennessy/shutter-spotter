@@ -1,6 +1,6 @@
 import axios from "axios";
 import { serviceUrl } from "../fixtures.js";
-import { NewUser, NewLocationWithUserId, UserCredentials, Name, Email, Password, PhotoApiPayload } from "../../src/models/store-types.js";
+import { NewUser, NewLocationWithUserId, UserCredentials, Name, Email, Password, PhotoApiPayload } from "../../src/types/schemas.js";
 
 export const shutterSpotterService = {
   shutterSpotterUrl: serviceUrl,

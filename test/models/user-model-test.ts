@@ -2,9 +2,10 @@ import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { suite, setup, test, teardown } from "mocha";
 import { maggie, testUsers } from "../fixtures.js";
-import { DbTypes, User } from "../../src/models/store-types.js";
+import { User } from "../../src/types/schemas.js";
+import { DbTypes } from "../../src/types/store-specs.js";
 import { assertSubset } from "../test-utils.js";
-import { isDbType } from "../../src/utils/type-gaurds.js";
+import { isDbType } from "../../src/types/type-gaurds.js";
 import dotenv from "dotenv";
 
 const result = dotenv.config();
