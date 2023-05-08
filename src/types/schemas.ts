@@ -1,5 +1,7 @@
 export type Id = string;
 
+export type Timestamp = string;
+
 export type MongooseVersion = { __v: number };
 
 export type JwtPayload = {
@@ -27,6 +29,7 @@ export type NewUser = UserCredentials & Name;
 
 export type User = NewUser & {
   _id: Id;
+  timeCreated: Timestamp;
   scope: string[];
 };
 

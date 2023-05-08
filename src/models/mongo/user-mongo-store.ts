@@ -34,8 +34,9 @@ export const userMongoStore: UserStore = {
   },
 
   async addUser(user: NewUser): Promise<User> {
-    const id = new Types.ObjectId();
-    const newUser = new UserMongoose({ ...user, _id: id, scope: ["user", `user-${id.toHexString()}`] });
+    const _id = new Types.ObjectId();
+    const timeCreated = new Date().toISOString();
+    const newUser = new UserMongoose({ ...user, _id, timeCreated, scope: ["user", `user-${_id.toHexString()}`] });
     const docUser = await newUser.save();
     const leanUser = docUser.toObject();
     return convertLeanUserToUser(leanUser);

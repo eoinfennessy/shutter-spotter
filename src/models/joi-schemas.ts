@@ -2,6 +2,8 @@ import Joi from "joi";
 
 export const IdSpec = Joi.string().required().label("IdSpec");
 
+export const TimestampSpec = Joi.string().required().label("TimestampSpec");
+
 export const JwtAuth = Joi.object()
   .keys({
     success: Joi.boolean().example("true").required(),
@@ -40,6 +42,7 @@ export const NewUserSpec = UserCredentialsSpec.concat(NameSpec).label("NewUserSp
 
 export const UserSpec = NewUserSpec.keys({
   _id: IdSpec,
+  timeCreated: TimestampSpec,
   scope: Joi.array().items(Joi.string()).required().example(["user", "user-1234asdf", "admin"]),
 }).label("UserSpec");
 

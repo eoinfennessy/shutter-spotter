@@ -9,8 +9,9 @@ export const userMemStore = {
   },
 
   async addUser(user: NewUser): Promise<User> {
-    const id = v4();
-    const userWithId: User = { ...user, _id: id, scope: ["user", `user-${id}`] };
+    const _id = v4();
+    const timeCreated = new Date().toISOString();
+    const userWithId: User = { ...user, _id, timeCreated, scope: ["user", `user-${_id}`] };
     users.push(userWithId);
     return userWithId;
   },
