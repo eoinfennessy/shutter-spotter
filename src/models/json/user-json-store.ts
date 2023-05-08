@@ -4,8 +4,6 @@ import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
 import { Email, Name, NewUser, Password, User } from "../../types/schemas";
-import { UserStore } from "../../types/store-specs.js";
-
 
 interface LowUser extends Low {
   data: { users: User[] };
@@ -14,7 +12,7 @@ interface LowUser extends Low {
 const db = new Low(new JSONFile("./src/models/json/users.json")) as LowUser;
 db.data = { users: [] };
 
-export const userJsonStore: UserStore = {
+export const userJsonStore = {
   async getAllUsers(): Promise<User[]> {
     await db.read();
     return db.data.users;

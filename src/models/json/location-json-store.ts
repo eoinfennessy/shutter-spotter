@@ -4,7 +4,6 @@ import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
 import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
-import { LocationStore } from "../../types/store-specs.js";
 
 interface LowLocation extends Low {
   data: { locations: Location[] };
@@ -13,7 +12,7 @@ interface LowLocation extends Low {
 const db = new Low(new JSONFile("./src/models/json/locations.json")) as LowLocation;
 db.data = { locations: [] };
 
-export const locationJsonStore: LocationStore = {
+export const locationJsonStore = {
   async getAllLocations(): Promise<Location[]> {
     await db.read();
     return db.data.locations;

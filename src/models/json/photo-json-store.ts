@@ -4,7 +4,6 @@ import { Low } from "lowdb";
 // @ts-ignore
 import { JSONFile } from "lowdb/node";
 import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
-import { PhotoStore } from "../../types/store-specs.js";
 
 interface LowPhoto extends Low {
   data: { photos: Photo[] };
@@ -13,7 +12,7 @@ interface LowPhoto extends Low {
 const db = new Low(new JSONFile("./src/models/json/photos.json")) as LowPhoto;
 db.data = { photos: [] };
 
-export const photoJsonStore: PhotoStore = {
+export const photoJsonStore = {
   async getAllPhotos(): Promise<Photo[]> {
     await db.read();
     return db.data.photos;

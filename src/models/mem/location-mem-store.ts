@@ -1,10 +1,9 @@
 import { v4 } from "uuid";
 import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
-import { LocationStore } from "../../types/store-specs.js";
 
 let locations: Location[] = [];
 
-export const locationMemStore: LocationStore = {
+export const locationMemStore = {
   async getAllLocations(): Promise<Location[]> {
     return locations;
   },

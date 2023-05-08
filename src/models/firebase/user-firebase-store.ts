@@ -2,11 +2,10 @@ import { v4 } from "uuid";
 import { FieldValue } from "firebase-admin/firestore";
 import { firestore } from "../init-firebase.js";
 import { Email, Name, NewUser, Password, User } from "../../types/schemas.js";
-import { UserStore } from "../../types/store-specs.js";
 
 const usersRef = firestore.collection("accounts");
 
-export const userFirebaseStore: UserStore = {
+export const userFirebaseStore = {
   async getAllUsers(): Promise<User[]> {
     const usersSnapshot = await usersRef.get();
     const users: User[] = [];

@@ -1,10 +1,9 @@
 import { v4 } from "uuid";
 import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
-import { PhotoStore } from "../../types/store-specs.js";
 
 let photos: Photo[] = [];
 
-export const photoMemStore: PhotoStore = {
+export const photoMemStore = {
   async getAllPhotos(): Promise<Photo[]> {
     return photos;
   },

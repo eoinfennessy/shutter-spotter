@@ -1,10 +1,9 @@
 import { v4 } from "uuid";
 import { Email, Name, NewUser, Password, User } from "../../types/schemas.js";
-import { UserStore } from "../../types/store-specs.js";
 
 let users: User[] = [];
 
-export const userMemStore: UserStore = {
+export const userMemStore = {
   async getAllUsers(): Promise<User[]> {
     return users;
   },

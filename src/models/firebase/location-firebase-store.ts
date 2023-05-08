@@ -1,11 +1,10 @@
 import { v4 } from "uuid";
 import { Location, LocationCategory, NewLocationWithUserId } from "../../types/schemas.js";
-import { LocationStore } from "../../types/store-specs.js"
 import { firestore } from "../init-firebase.js";
 
 const locationsRef = firestore.collection("locations");
 
-export const locationFirebaseStore: LocationStore = {
+export const locationFirebaseStore = {
   async getAllLocations(): Promise<Location[]> {
     const locationsSnapshot = await locationsRef.get();
     const locations: Location[] = [];

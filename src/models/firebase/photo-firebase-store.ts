@@ -1,11 +1,10 @@
 import { v4 } from "uuid";
 import { firestore } from "../init-firebase.js";
 import { BasePhoto, NewPhoto, Photo } from "../../types/schemas.js";
-import { PhotoStore } from "../../types/store-specs.js"
 
 const photosRef = firestore.collection("photos");
 
-export const photoFirebaseStore: PhotoStore = {
+export const photoFirebaseStore = {
   async getAllPhotos(): Promise<Photo[]> {
     const photosSnapshot = await photosRef.get();
     const photos: Photo[] = [];
