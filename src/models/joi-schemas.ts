@@ -40,11 +40,16 @@ export const UserCredentialsSpec = EmailSpec.concat(PasswordSpec).label("UserCre
 
 export const NewUserSpec = UserCredentialsSpec.concat(NameSpec).label("NewUserSpec");
 
-export const UserSpec = NewUserSpec.keys({
-  _id: IdSpec,
-  timeCreated: TimestampSpec,
-  scope: Joi.array().items(Joi.string()).required().example(["user", "user-1234asdf", "admin"]),
-}).label("UserSpec");
+export const NewGithubUserSpec = NameSpec.concat(EmailSpec).label("NewGithubUserSpec");
+
+export const UserSpec = NameSpec.concat(EmailSpec)
+  .keys({
+    _id: IdSpec,
+    password: Joi.string().optional().example("topsecret"),
+    timeCreated: TimestampSpec,
+    scope: Joi.array().items(Joi.string()).required().example(["user", "user-1234asdf", "admin"]),
+  })
+  .label("UserSpec");
 
 export const UserArray = Joi.array().items(UserSpec).label("UserArray");
 

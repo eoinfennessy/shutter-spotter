@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { UserMongoose } from "./user.js";
-import { User, NewUser, Name, Email, Password } from "../../types/schemas.js";
+import { User, NewUser, Name, Email, Password, NewGitHubUser } from "../../types/schemas.js";
 import { UserStore } from "../../types/store-specs.js";
 
 
@@ -33,7 +33,7 @@ export const userMongoStore: UserStore = {
     return user;
   },
 
-  async addUser(user: NewUser): Promise<User> {
+  async addUser(user: NewUser | NewGitHubUser): Promise<User> {
     const _id = new Types.ObjectId();
     const timeCreated = new Date().toISOString();
     const newUser = new UserMongoose({ ...user, _id, timeCreated, scope: ["user", `user-${_id.toHexString()}`] });

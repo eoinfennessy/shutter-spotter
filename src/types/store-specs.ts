@@ -5,6 +5,7 @@ import {
   Location,
   LocationCategory,
   Name,
+  NewGitHubUser,
   NewLocationWithUserId,
   NewPhoto,
   NewUser,
@@ -15,7 +16,7 @@ import {
 
 export type UserStore = {
   getAllUsers: () => Promise<User[]>;
-  addUser: (user: NewUser) => Promise<User>;
+  addUser: (user: NewUser | NewGitHubUser) => Promise<User>;
   getUserById: (id: Id) => Promise<User | null>;
   getUserByEmail: (email: string) => Promise<User | null>;
   deleteUserById: (id: Id) => Promise<void>;

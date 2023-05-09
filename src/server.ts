@@ -1,6 +1,7 @@
 import Vision from "@hapi/vision";
 import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
+import Bell from "@hapi/bell";
 import dotenv from "dotenv";
 import path from "path";
 import HapiSwagger from "hapi-swagger";
@@ -45,10 +46,12 @@ async function init() {
     port: 3000,
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     host: process.env.HOST || "localhost",
+    routes: { cors: true },
   });
 
   await server.register(Vision);
   await server.register(Cookie);
+  await server.register(Bell);
   await server.register(Inert);
   await server.register(jwt);
   // @ts-ignore
@@ -68,6 +71,16 @@ async function init() {
     isCached: false,
   });
 
+  const bellAuthOptions = {
+    provider: "github",
+    password: process.env.GITHUB_ENCRYPTION_PASSWORD,
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    isSecure: false,
+  };
+
+  server.auth.strategy("github-oauth", "bell", bellAuthOptions);
+
   server.auth.strategy("session", "cookie", {
     cookie: {
       name: process.env.COOKIE_NAME,
@@ -77,11 +90,13 @@ async function init() {
     redirectTo: "/",
     validate: accountsController.validate,
   });
+
   server.auth.strategy("jwt", "jwt", {
     key: process.env.COOKIE_PASSWORD,
     validate: validate,
     verifyOptions: { algorithms: ["HS256"] },
   });
+
   server.auth.default("session");
 
   if (isDbType(process.env.DB_TYPE)) {

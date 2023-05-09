@@ -27,8 +27,14 @@ export type UserCredentials = {
 
 export type NewUser = UserCredentials & Name;
 
-export type User = NewUser & {
+export type NewGitHubUser = Name & {
+  email: Email;
+};
+
+export type User = Name & {
   _id: Id;
+  email: Email;
+  password?: Password;
   timeCreated: Timestamp;
   scope: string[];
 };

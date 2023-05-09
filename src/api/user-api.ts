@@ -14,12 +14,8 @@ export const userApi = {
       const payload = request.payload as UserCredentials;
       try {
         const user = await db.userStore.getUserByEmail(payload.email);
-        if (!user) {
-          return Boom.unauthorized("User not found");
-        }
-        if (user.password !== payload.password) {
-          return Boom.unauthorized("Invalid password");
-        }
+        if (!user) return Boom.unauthorized("User not found");
+        if (user.password !== payload.password) return Boom.unauthorized("Invalid password");
         const token = createToken(user);
         return h.response({ success: true, token: token }).code(201);
       } catch (err) {
@@ -31,6 +27,26 @@ export const userApi = {
     notes: "Creates and return a JWT token if user's credentials are valid; otherwise returns 401 error.",
     validate: { payload: UserCredentialsSpec, options: { stripUnknown: true }, failAction: validationError },
     response: { schema: JwtAuth, failAction: validationError },
+  },
+
+  authenticateWithGithub: {
+    auth: "github-oauth",
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      if (!request.auth.isAuthenticated) return Boom.unauthorized();
+      try {
+        const profile = request.auth.credentials.profile as any;
+        const user = await db.userStore.getUserByEmail(profile.email);
+        if (!user) return Boom.unauthorized("User not found");
+        const token = createToken(user);
+        return h.response({ success: true, token: token }).code(201);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Authenticates a User using Github OAuth",
+    notes: "Creates and return a JWT token if user is signed in to GitHub and has an account; otherwise returns 401 error.",
+    // response: { schema: JwtAuth, failAction: validationError },
   },
 
   create: {
@@ -49,6 +65,24 @@ export const userApi = {
     notes: "Returns the newly created user",
     validate: { payload: NewUserSpec, options: { stripUnknown: true }, failAction: validationError },
     response: { schema: UserSpec, failAction: validationError },
+  },
+
+  createWithGithub: {
+    auth: "github-oauth",
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      try {
+        const profile = request.auth.credentials.profile as any;
+        const [ firstName, lastName ] = profile.displayName.split(" ");
+        const newUser = { firstName, lastName, email: profile.email };
+        const user = await db.userStore.addUser(newUser);
+        return h.response(user).code(201);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Create a User using GitHub OAuth",
+    notes: "Returns the newly created user",
   },
 
   find: {
