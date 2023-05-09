@@ -24,6 +24,7 @@ export type UserStore = {
   updateName: (id: Id, name: Name) => Promise<User | null>;
   updateEmail: (id: Id, email: Email) => Promise<User | null>;
   updatePassword: (id: Id, password: Password) => Promise<User | null>;
+  updateAvatarSrc: (id: Id, avatarSrc: string) => Promise<User | null>;
   addScope: (id: Id, scope: string) => Promise<void>;
   count: () => Promise<number>;
 };

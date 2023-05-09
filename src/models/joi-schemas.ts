@@ -48,6 +48,7 @@ export const UserSpec = NameSpec.concat(EmailSpec)
     password: Joi.string().optional().example("topsecret"),
     timeCreated: TimestampSpec,
     scope: Joi.array().items(Joi.string()).required().example(["user", "user-1234asdf", "admin"]),
+    avatarSrc: Joi.string().example("http://my-fs.com/my-avatar/"),
   })
   .label("UserSpec");
 

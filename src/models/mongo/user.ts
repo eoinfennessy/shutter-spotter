@@ -11,6 +11,7 @@ const userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String },
   timeCreated: { type: String, required: true },
+  avatarSrc: { type: String }
 });
 
 export const UserMongoose = Mongoose.model<User & MongooseVersion>("User", userSchema);

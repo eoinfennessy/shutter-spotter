@@ -37,6 +37,7 @@ export type User = Name & {
   password?: Password;
   timeCreated: Timestamp;
   scope: string[];
+  avatarSrc?: string;
 };
 
 // Location

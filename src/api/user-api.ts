@@ -74,7 +74,8 @@ export const userApi = {
         const profile = request.auth.credentials.profile as any;
         const [ firstName, lastName ] = profile.displayName.split(" ");
         const newUser = { firstName, lastName, email: profile.email };
-        const user = await db.userStore.addUser(newUser);
+        let user = await db.userStore.addUser(newUser);
+        user = db.userStore.updateAvatarSrc(user._id, profile.raw.avatar_url)
         return h.response(user).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");

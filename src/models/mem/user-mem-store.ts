@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Email, Name, NewUser, Password, User } from "../../types/schemas.js";
+import { Email, Name, NewGitHubUser, NewUser, Password, User } from "../../types/schemas.js";
 
 let users: User[] = [];
 
@@ -8,7 +8,7 @@ export const userMemStore = {
     return users;
   },
 
-  async addUser(user: NewUser): Promise<User> {
+  async addUser(user: NewUser | NewGitHubUser): Promise<User> {
     const _id = v4();
     const timeCreated = new Date().toISOString();
     const userWithId: User = { ...user, _id, timeCreated, scope: ["user", `user-${_id}`] };

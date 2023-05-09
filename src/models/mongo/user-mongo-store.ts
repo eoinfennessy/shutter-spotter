@@ -98,6 +98,18 @@ export const userMongoStore: UserStore = {
     return convertLeanUserToUser(user);
   },
 
+  async updateAvatarSrc(id: string, avatarSrc: string): Promise<User | null> {
+    if (!Types.ObjectId.isValid(id)) {
+      console.error(`Bad ID: "${id}"`);
+      return null;
+    }
+    const user = await UserMongoose.findByIdAndUpdate(id, { avatarSrc: avatarSrc }, { new: true, lean: true });
+    if (user === null) {
+      return null;
+    }
+    return convertLeanUserToUser(user);
+  },
+
   async addScope(id: string, scope: string): Promise<void> {
     if (!Types.ObjectId.isValid(id)) {
       console.error(`Bad ID: "${id}"`);
