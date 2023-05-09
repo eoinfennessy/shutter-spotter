@@ -33,7 +33,8 @@ export const locationMongoStore: LocationStore = {
   },
 
   async addLocation(location: NewLocationWithUserId): Promise<Location> {
-    const newLocation = new LocationMongoose(location);
+    const timeCreated = new Date().toISOString();
+    const newLocation = new LocationMongoose({ ...location, timeCreated });
     const docLocation = await newLocation.save();
     const leanLocation = docLocation.toObject();
     return convertLeanLocationToLocation(leanLocation);

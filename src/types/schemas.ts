@@ -58,6 +58,7 @@ export type NewLocationWithUserId = NewLocation & {
 
 export type Location = NewLocationWithUserId & {
   _id: Id;
+  timeCreated: Timestamp;
 };
 
 // Photo
@@ -92,11 +93,12 @@ export type NewPhoto = BasePhoto & {
   userId: Id;
   img: string;
   tags: string[];
-  comments: Comment[];
-  voteScore: number;
-  votes: Vote[];
 };
 
 export type Photo = NewPhoto & {
   _id: Id;
+  timeCreated: Timestamp;
+  comments: Comment[];
+  voteScore: number;
+  votes: Vote[];
 };

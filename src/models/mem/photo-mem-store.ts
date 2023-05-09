@@ -9,7 +9,14 @@ export const photoMemStore = {
   },
 
   async addPhoto(photo: NewPhoto): Promise<Photo> {
-    const photoWithId: Photo = { ...photo, _id: v4() };
+    const photoWithId: Photo = {
+      ...photo,
+      _id: v4(),
+      timeCreated: new Date().toISOString(),
+      comments: [],
+      voteScore: 0,
+      votes: [],
+    };
     photos.push(photoWithId);
     return photoWithId;
   },

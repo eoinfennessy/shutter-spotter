@@ -14,6 +14,7 @@ const locationSchema = new Schema({
   category: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
+  timeCreated: { type: String, required: true },
 });
 
 export const LocationMongoose = Mongoose.model<NewLocation & MongooseVersion>("Location", locationSchema);

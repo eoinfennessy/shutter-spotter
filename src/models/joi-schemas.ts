@@ -72,6 +72,7 @@ export const NewLocationWithUserIdSpec = NewLocationSpec.keys({
 
 export const LocationSpec = NewLocationWithUserIdSpec.keys({
   _id: IdSpec,
+  timeCreated: TimestampSpec,
 }).label("LocationSpec");
 
 export const LocationArray = Joi.array().items(LocationSpec).label("LocationArray");
@@ -114,13 +115,14 @@ export const NewPhotoSpec = BasePhotoSpec.keys({
   userId: IdSpec,
   img: Joi.string().required().example("https://www.my-photos.com/cat.jpeg"), // .uri()
   tags: Joi.array().items(Joi.string()).example(["Landscape", "Sunset", "Waterford"]),
-  comments: Joi.array().items(CommentSpec).required(),
-  voteScore: Joi.number().required().example(42).description("Current score of photo"),
-  votes: Joi.array().items(VoteSpec).required(),
 }).label("NewPhotoSpec");
 
 export const PhotoSpec = NewPhotoSpec.keys({
   _id: IdSpec,
+  comments: Joi.array().items(CommentSpec).required(),
+  voteScore: Joi.number().required().example(42).description("Current score of photo"),
+  votes: Joi.array().items(VoteSpec).required(),
+  timeCreated: TimestampSpec,
 }).label("PhotoSpec");
 
 export const PhotoArray = Joi.array().items(PhotoSpec).label("PhotoArray");

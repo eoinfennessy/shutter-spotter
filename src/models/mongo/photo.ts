@@ -39,6 +39,7 @@ const photoSchema = new Schema({
     },
   ],
   voteScore: { type: Number, required: true },
+  timeCreated: { type: String, required: true },
 });
 
 export const PhotoMongoose = Mongoose.model<NewPhoto & MongooseVersion>("Photo", photoSchema);

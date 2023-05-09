@@ -38,7 +38,7 @@ suite("Location API tests", () => {
     await shutterSpotterService.clearAuth();
     testSuperAdmin = await shutterSpotterService.createUser(superAdmin);
     await db.userStore.addScope(testSuperAdmin._id, "super-admin");
-    await shutterSpotterService.authenticate(testSuperAdmin);
+    await shutterSpotterService.authenticate(superAdmin);
   });
 
   teardown(async () => {

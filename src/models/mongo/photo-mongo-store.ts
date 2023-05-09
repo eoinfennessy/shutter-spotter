@@ -23,7 +23,13 @@ export const photoMongoStore: PhotoStore = {
   },
 
   async addPhoto(photo: NewPhoto): Promise<Photo> {
-    const newPhoto = new PhotoMongoose(photo);
+    const newPhoto = new PhotoMongoose({
+      ...photo,
+      timeCreated: new Date().toISOString(),
+      comments: [],
+      voteScore: 0,
+      votes: [],
+    });
     const docPhoto = await newPhoto.save();
     const objPhoto = docPhoto.toObject();
     return convertLeanPhotoToPhoto(objPhoto);

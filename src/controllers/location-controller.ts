@@ -57,9 +57,6 @@ export const locationController = {
         userId: request.auth.credentials._id,
         img: imgUri,
         tags: payload.tags !== "" ? payload.tags.split(" ") : [],
-        comments: [],
-        voteScore: 0,
-        votes: [],
       } as NewPhoto;
       await db.photoStore.addPhoto(newPhoto);
       return h.redirect(`/location/${location._id}`);

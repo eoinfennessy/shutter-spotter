@@ -30,9 +30,6 @@ export const photoApi = {
           userId: photoPayload.userId,
           img: imgUri,
           tags: photoPayload.tags !== "" ? photoPayload.tags.split(" ") : [],
-          comments: [],
-          voteScore: 0,
-          votes: [],
         } as NewPhoto;
         const photo = await db.photoStore.addPhoto(newPhoto);
         return h.response(photo).code(201);
