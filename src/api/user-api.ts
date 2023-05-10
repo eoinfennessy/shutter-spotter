@@ -17,7 +17,7 @@ export const userApi = {
         if (!user) return Boom.unauthorized("User not found");
         if (user.password !== payload.password) return Boom.unauthorized("Invalid password");
         const token = createToken(user);
-        return h.response({ success: true, token: token }).code(201);
+        return h.response({ success: true, token: token, _id: user._id }).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
@@ -38,7 +38,7 @@ export const userApi = {
         const user = await db.userStore.getUserByEmail(profile.email);
         if (!user) return Boom.unauthorized("User not found");
         const token = createToken(user);
-        return h.response({ success: true, token: token }).code(201);
+        return h.response({ success: true, token: token, _id: user._id }).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }

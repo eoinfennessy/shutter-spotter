@@ -9,7 +9,8 @@ export const locationMemStore = {
   },
 
   async addLocation(location: NewLocationWithUserId): Promise<Location> {
-    const locationWithId: Location = { ...location, _id: v4() };
+    const timeCreated = new Date().toISOString();
+    const locationWithId: Location = { ...location, timeCreated, _id: v4() };
     locations.push(locationWithId);
     return locationWithId;
   },
