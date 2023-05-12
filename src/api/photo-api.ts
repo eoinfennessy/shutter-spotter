@@ -124,7 +124,7 @@ export const photoApi = {
   deleteOne: {
     auth: {
       strategy: "jwt",
-      scope: ["user-{payload.userId}", "admin", "super-admin"],
+      scope: ["user-{params.userId}", "admin", "super-admin"],
     },
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
