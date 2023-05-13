@@ -74,6 +74,7 @@ export const NewLocationWithUserIdSpec = NewLocationSpec.keys({
 export const LocationSpec = NewLocationWithUserIdSpec.keys({
   _id: IdSpec,
   timeCreated: TimestampSpec,
+  currentWeather: Joi.object().optional(),
 }).label("LocationSpec");
 
 export const LocationArray = Joi.array().items(LocationSpec).label("LocationArray");
