@@ -1,10 +1,12 @@
 // @ts-nocheck
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
+import Joi from "joi";
 import { db } from "../models/db.js";
 import { IdSpec, LocationArray, LocationSpec, NewLocationWithUserIdSpec } from "../models/joi-schemas.js";
 import { NewLocationWithUserId } from "../types/schemas.js";
 import { validationError } from "./logger.js";
+import { openWeatherMap } from "../services/open-weather-map.js";
 
 export const locationApi = {
   create: {
@@ -56,6 +58,14 @@ export const locationApi = {
         if (!location) {
           return Boom.notFound("No Location with this id");
         }
+        if (request.query.includeweather === true) {
+          const currentWeatherResponse = await openWeatherMap.getCurrentWeather(
+            location.latitude, location.longitude, process.env.OPEN_WEATHER_MAP_API_KEY
+          );
+          // TODO: Better error handling
+          if (!currentWeatherResponse.success) return Boom.serverUnavailable("Error getting location's weather data")
+          location.currentWeather = await currentWeatherResponse.data;
+        }
         return h.response(location).code(200);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
@@ -64,7 +74,11 @@ export const locationApi = {
     tags: ["api"],
     description: "Get a specific location",
     notes: "Returns details of location matching specified ID",
-    validate: { params: { id: IdSpec }, failAction: validationError },
+    validate: {
+      params: { id: IdSpec },
+      query: { includeweather: Joi.bool() },
+      failAction: validationError
+    },
     response: { schema: LocationSpec, failAction: validationError },
   },
 

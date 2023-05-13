@@ -59,6 +59,7 @@ export type NewLocationWithUserId = NewLocation & {
 export type Location = NewLocationWithUserId & {
   _id: Id;
   timeCreated: Timestamp;
+  currentWeather?: Record<string, any>;
 };
 
 // Photo
