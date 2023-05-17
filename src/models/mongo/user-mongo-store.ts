@@ -3,7 +3,6 @@ import { UserMongoose } from "./user.js";
 import { User, NewUser, Name, Email, Password, NewGitHubUser } from "../../types/schemas.js";
 import { UserStore } from "../../types/store-specs.js";
 
-
 function convertLeanUserToUser(user: Record<string, any>) {
   user._id = String(user._id);
   delete user.__v;
@@ -121,5 +120,10 @@ export const userMongoStore: UserStore = {
   async count(): Promise<number> {
     const count = await UserMongoose.countDocuments();
     return count;
+  },
+
+  async getAllUserCreationTimes(): Promise<string[]> {
+    const times = await UserMongoose.find().select(["timeCreated", "-_id"]);
+    return times.map((time) => time.timeCreated);
   },
 };

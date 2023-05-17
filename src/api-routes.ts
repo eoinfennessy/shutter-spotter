@@ -1,6 +1,7 @@
 import { userApi } from "./api/user-api.js";
 import { locationApi } from "./api/location-api.js";
 import { photoApi } from "./api/photo-api.js";
+import { analyticsApi } from "./api/analytics-api.js";
 
 export const apiRoutes = [
   { method: "GET", path: "/api/users", config: userApi.find },
@@ -28,4 +29,10 @@ export const apiRoutes = [
   { method: "POST", path: "/api/photos", config: photoApi.create },
   { method: "DELETE", path: "/api/photos", config: photoApi.deleteAll },
   { method: "DELETE", path: "/api/users/{userId}/photos/{id}", config: photoApi.deleteOne },
+
+  { method: "GET", path: "/api/analytics/user-count", config: analyticsApi.getUserCount },
+  { method: "GET", path: "/api/analytics/location-count", config: analyticsApi.getLocationCount },
+  { method: "GET", path: "/api/analytics/location-count-by-category", config: analyticsApi.getLocationCountByCategory },
+  { method: "GET", path: "/api/analytics/photo-count", config: analyticsApi.getPhotoCount },
+  { method: "GET", path: "/api/analytics/user-creation-times", config: analyticsApi.getAllUserCreationTimes },
 ];
