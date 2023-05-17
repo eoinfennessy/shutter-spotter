@@ -27,6 +27,7 @@ export type UserStore = {
   updateAvatarSrc: (id: Id, avatarSrc: string) => Promise<User | null>;
   addScope: (id: Id, scope: string) => Promise<void>;
   count: () => Promise<number>;
+  getAllUserCreationTimes: () => Promise<any>;
 };
 
 export type LocationStore = {

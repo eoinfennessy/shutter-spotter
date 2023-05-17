@@ -1,11 +1,13 @@
 // @ts-nocheck
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
+import Joi from "joi";
 import { createToken } from "./jwt-utils.js";
 import { db } from "../models/db.js";
 import { EmailSpec, IdSpec, JwtAuth, NameSpec, NewUserSpec, PasswordSpec, UserArray, UserCredentialsSpec, UserSpec } from "../models/joi-schemas.js";
 import { Email, Name, NewUser, Password, UserCredentials } from "../types/schemas.js";
 import { validationError } from "./logger.js";
+import { githubOauth } from "../services/github-oauth.js";
 
 export const userApi = {
   authenticate: {
@@ -68,22 +70,35 @@ export const userApi = {
   },
 
   createWithGithub: {
-    auth: "github-oauth",
+    auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
       try {
-        const profile = request.auth.credentials.profile as any;
-        const [ firstName, lastName ] = profile.displayName.split(" ");
-        const newUser = { firstName, lastName, email: profile.email };
+        const code = request.payload.code as string;
+        const tokenRes = await githubOauth.getToken(code, process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
+        if (!tokenRes.success) {
+          return new Boom(tokenRes.error ?? "Error when requesting token", { statusCode: tokenRes.status ?? 500 });
+        }
+
+        const profileRes = await githubOauth.getUserProfile(tokenRes.tokenData.access_token);
+        if (!profileRes.success) {
+          return new Boom(profileRes.error ?? "Error when requesting user profile", { statusCode: profileRes.status ?? 500 });
+        }
+
+        const profile = profileRes.profile as any;
+        const [firstName, lastName] = profile.name.split(" ");
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        const newUser = { firstName, lastName, email: profile.email || `${profile.login}@github.user` };
         let user = await db.userStore.addUser(newUser);
-        user = db.userStore.updateAvatarSrc(user._id, profile.raw.avatar_url)
+        user = await db.userStore.updateAvatarSrc(user._id, profile.avatar_url);
         return h.response(user).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    validate: { payload: Joi.object().keys({ code: Joi.string() }), options: { stripUnknown: true }, failAction: validationError },
     tags: ["api"],
     description: "Create a User using GitHub OAuth",
-    notes: "Returns the newly created user",
+    notes: "Takes a one-time use GitHub OAuth code and uses it to get token and then the user's profile. A user is then created and returned",
   },
 
   find: {
