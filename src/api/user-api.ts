@@ -32,23 +32,33 @@ export const userApi = {
   },
 
   authenticateWithGithub: {
-    auth: "github-oauth",
+    auth: false,
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
-      if (!request.auth.isAuthenticated) return Boom.unauthorized();
       try {
-        const profile = request.auth.credentials.profile as any;
-        const user = await db.userStore.getUserByEmail(profile.email);
+        const code = request.payload.code as string;
+        const tokenRes = await githubOauth.getToken(code, process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET);
+        if (!tokenRes.success) {
+          return new Boom(tokenRes.error ?? "Error when requesting token", { statusCode: tokenRes.status ?? 500 });
+        }
+
+        const profileRes = await githubOauth.getUserProfile(tokenRes.tokenData.access_token);
+        if (!profileRes.success) {
+          return new Boom(profileRes.error ?? "Error when requesting user profile", { statusCode: profileRes.status ?? 500 });
+        }
+        
+        const profile = profileRes.profile as any;
+        const user = await db.userStore.getUserByEmail(`${profile.login}@github.user`);
         if (!user) return Boom.unauthorized("User not found");
         const token = createToken(user);
-        return h.response({ success: true, token: token, _id: user._id }).code(201);
+        return h.response({ success: true, token: token, _id: user._id, email: user.email }).code(201);
       } catch (err) {
         return Boom.serverUnavailable("Database Error");
       }
     },
+    validate: { payload: Joi.object().keys({ code: Joi.string() }), options: { stripUnknown: true }, failAction: validationError },
     tags: ["api"],
-    description: "Authenticates a User using Github OAuth",
-    notes: "Creates and return a JWT token if user is signed in to GitHub and has an account; otherwise returns 401 error.",
-    // response: { schema: JwtAuth, failAction: validationError },
+    description: "Log in a User using GitHub OAuth",
+    notes: "Takes a one-time use GitHub OAuth code and uses it to get token and then the user's profile. A JWT is then created and returned",
   },
 
   create: {
@@ -86,8 +96,7 @@ export const userApi = {
 
         const profile = profileRes.profile as any;
         const [firstName, lastName] = profile.name.split(" ");
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        const newUser = { firstName, lastName, email: profile.email || `${profile.login}@github.user` };
+        const newUser = { firstName, lastName, email: `${profile.login}@github.user` };
         let user = await db.userStore.addUser(newUser);
         user = await db.userStore.updateAvatarSrc(user._id, profile.avatar_url);
         return h.response(user).code(201);
