@@ -35,6 +35,19 @@ export const photoMongoStore: PhotoStore = {
     return convertLeanPhotoToPhoto(objPhoto);
   },
 
+  async getPhotosByUserId(id: string): Promise<Photo[]> {
+    if (!Types.ObjectId.isValid(id)) {
+      console.error(`Bad ID: "${id}"`);
+      return [];
+    }
+    const leanPhotos = await PhotoMongoose.find({ userId: id }).lean();
+    const photos: Photo[] = [];
+    leanPhotos.forEach((leanPhoto) => {
+      photos.push(convertLeanPhotoToPhoto(leanPhoto));
+    });
+    return photos;
+  },
+
   async getPhotosByLocationId(id: string): Promise<Photo[]> {
     if (!Types.ObjectId.isValid(id)) {
       console.error(`Bad ID: "${id}"`);

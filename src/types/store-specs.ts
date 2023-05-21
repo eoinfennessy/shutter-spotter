@@ -44,6 +44,7 @@ export type LocationStore = {
 export type PhotoStore = {
   getAllPhotos: () => Promise<Photo[]>;
   addPhoto: (photo: NewPhoto) => Promise<Photo>;
+  getPhotosByUserId: (id: Id) => Promise<Photo[]>;
   getPhotosByLocationId: (id: Id) => Promise<Photo[]>;
   getPhotoById: (id: Id) => Promise<Photo | null>;
   deletePhoto: (id: Id) => Promise<void>;

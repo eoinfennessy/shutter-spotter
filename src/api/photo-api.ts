@@ -84,6 +84,25 @@ export const photoApi = {
     response: { schema: PhotoSpec, failAction: validationError },
   },
 
+  findUserPhotos: {
+    auth: {
+      strategy: "jwt",
+    },
+    handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject | Boom.Boom<string>> {
+      try {
+        const locations = await db.photoStore.getPhotosByUserId(request.params.id);
+        return h.response(locations).code(200);
+      } catch (err) {
+        return Boom.serverUnavailable("Database Error");
+      }
+    },
+    tags: ["api"],
+    description: "Get all photos created by a user",
+    notes: "Returns details of all photos matching specified user ID",
+    validate: { params: { id: IdSpec }, failAction: validationError },
+    response: { schema: PhotoArray, failAction: validationError },
+  },
+
   findLocationPhotos: {
     auth: {
       strategy: "jwt",
