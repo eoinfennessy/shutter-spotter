@@ -2,6 +2,7 @@ import Vision from "@hapi/vision";
 import Hapi from "@hapi/hapi";
 import Cookie from "@hapi/cookie";
 import Bell from "@hapi/bell";
+import * as disinfect from "disinfect"
 import dotenv from "dotenv";
 import path from "path";
 import HapiSwagger from "hapi-swagger";
@@ -56,6 +57,14 @@ async function init() {
   await server.register(jwt);
   // @ts-ignore
   await server.register([Inert, Vision, { plugin: HapiSwagger, options: swaggerOptions }]);
+  await server.register({
+    plugin: disinfect,
+    options: {
+        disinfectQuery: true,
+        disinfectParams: true,
+        disinfectPayload: true
+    }
+  });
 
   server.validator(Joi);
 
