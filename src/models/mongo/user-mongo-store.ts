@@ -1,7 +1,10 @@
+import bcrypt from "bcrypt"
 import { Types } from "mongoose";
 import { UserMongoose } from "./user.js";
 import { User, NewUser, Name, Email, Password, NewGitHubUser } from "../../types/schemas.js";
 import { UserStore } from "../../types/store-specs.js";
+
+const saltRounds = 10;
 
 function convertLeanUserToUser(user: Record<string, any>) {
   user._id = String(user._id);
@@ -35,6 +38,8 @@ export const userMongoStore: UserStore = {
   async addUser(user: NewUser | NewGitHubUser): Promise<User> {
     const _id = new Types.ObjectId();
     const timeCreated = new Date().toISOString();
+    // @ts-ignore
+    if (user.password !== undefined) user.password = await bcrypt.hash(user.password, saltRounds);
     const newUser = new UserMongoose({ ...user, _id, timeCreated, scope: ["user", `user-${_id.toHexString()}`] });
     const docUser = await newUser.save();
     const leanUser = docUser.toObject();
@@ -90,7 +95,8 @@ export const userMongoStore: UserStore = {
       console.error(`Bad ID: "${id}"`);
       return null;
     }
-    const user = await UserMongoose.findByIdAndUpdate(id, { password: password }, { new: true, lean: true });
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = await UserMongoose.findByIdAndUpdate(id, { password: hashedPassword }, { new: true, lean: true });
     if (user === null) {
       return null;
     }

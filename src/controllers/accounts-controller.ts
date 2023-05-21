@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt"
 import { ResponseObject, ResponseToolkit, Request } from "@hapi/hapi";
 import { UserCredentialsSpec, NewUserSpec } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
@@ -65,9 +66,9 @@ export const accountsController = {
     handler: async function (request: Request, h: ResponseToolkit): Promise<ResponseObject> {
       const payload = request.payload as UserCredentials;
       const user = await db.userStore.getUserByEmail(payload.email);
-      if (!user || user.password !== payload.password) {
-        return h.redirect("/");
-      }
+      if (!user) return h.redirect("/");
+      const passwordsMatch: boolean = await bcrypt.compare(payload.password, user.password);
+      if (!passwordsMatch) return h.redirect("/");
       request.cookieAuth.set({ id: user._id });
       return h.redirect("/dashboard");
     },

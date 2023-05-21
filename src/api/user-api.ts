@@ -1,4 +1,5 @@
 // @ts-nocheck
+import bcrypt from "bcrypt"
 import Boom from "@hapi/boom";
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 import Joi from "joi";
@@ -17,7 +18,8 @@ export const userApi = {
       try {
         const user = await db.userStore.getUserByEmail(payload.email);
         if (!user) return Boom.unauthorized("User not found");
-        if (user.password !== payload.password) return Boom.unauthorized("Invalid password");
+        const passwordsMatch: boolean = await bcrypt.compare(payload.password, user.password);
+        if (!passwordsMatch) return Boom.unauthorized("Invalid password");
         const token = createToken(user);
         return h.response({ success: true, token: token, _id: user._id }).code(201);
       } catch (err) {
