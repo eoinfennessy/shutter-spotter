@@ -49,7 +49,7 @@ export const userApi = {
         }
         
         const profile = profileRes.profile as any;
-        const user = await db.userStore.getUserByEmail(`${profile.login}@github.user`);
+        const user = await db.userStore.getUserByEmail(`${profile.login}@github-user.shutter-spotter.com`);
         if (!user) return Boom.unauthorized("User not found");
         const token = createToken(user);
         return h.response({ success: true, token: token, _id: user._id, email: user.email }).code(201);
@@ -98,7 +98,7 @@ export const userApi = {
 
         const profile = profileRes.profile as any;
         const [firstName, lastName] = profile.name.split(" ");
-        const newUser = { firstName, lastName, email: `${profile.login}@github.user` };
+        const newUser = { firstName, lastName, email: `${profile.login}@github-user.shutter-spotter.com` };
         let user = await db.userStore.addUser(newUser);
         user = await db.userStore.updateAvatarSrc(user._id, profile.avatar_url);
         return h.response(user).code(201);
